@@ -7,10 +7,11 @@ import {
     AmDuongNamNu ,
     GioiTinh,
     ChinhTinh,
-    VongTruongSinh
+    VongTruongSinh,
+    PhuTinh
 } from "../constant/constant";
 
-const mod = (n, m) => ((n % m) + m) % m;
+import solarlunar from 'solarlunar'
 
 
 /*
@@ -380,9 +381,144 @@ export function anVongTruongSinh(yinBirthDate) {
     return result;
 }
 
-/* 
-    Functions 
+export function anSaoVongLocTon(yinBirthDate) {
+    const result = {};
+  
+    // Lấy can năm sinh
+    const { canKey } = anCanChi(yinBirthDate);
+  
+    // Xác định cung Lộc Tồn theo Thiên Can
+    const locTonStart = {
+      GIAP: "DAN",
+      AT: "MAO",
+      BINH: "TY_SNAKE",
+      DINH: "NGO",
+      MAU: "TY_SNAKE",
+      KY: "NGO",
+      CANH: "THAN",
+      TAN: "DAU",
+      NHAM: "HOI",
+      QUY: "TY"
+    };
+    const startCungKey = locTonStart[canKey];
+    if (!startCungKey) return null;
+  
+    // Xác định chiều thuận hay nghịch
+    const amDuongNamNu = anAmDuongNamNu(yinBirthDate);
+    const clockwise =
+      amDuongNamNu === "DUONG_NAM" || amDuongNamNu === "AM_NU";
+  
+    // Thứ tự cung theo kim đồng hồ
+    const CUNG_KIM_DONG_HO = [
+      "TY", "SUU", "DAN", "MAO", "THIN", "TY_SNAKE",
+      "NGO", "MUI", "THAN", "DAU", "TUAT", "HOI"
+    ];
+  
+    // Thứ tự sao vòng Lộc Tồn (sau Lộc Tồn và Bác Sĩ)
+    const saoVongLTKeys = [
+      "LUC_SI", "THANH_LONG", "TIEU_HAO", "TUONG_QUAN",
+      "TAU_THU", "PHI_LIEM", "HI_THANH", "BENH_PHU",
+      "DAI_HAO", "PHUC_BINH", "QUAN_PHU"
+    ];
+  
+    // An Lộc Tồn
+    let idx = CUNG_KIM_DONG_HO.indexOf(startCungKey);
+    result[PhuTinh.LOC_TON.name] = ConGiap[CUNG_KIM_DONG_HO[idx]];
+  
+    // An Bác Sĩ cùng cung với Lộc Tồn
+    result[PhuTinh.BAC_SI.name] = ConGiap[CUNG_KIM_DONG_HO[idx]];
+  
+    // An các sao còn lại
+    saoVongLTKeys.forEach(starKey => {
+      idx = mod(idx + (clockwise ? 1 : -1), 12);
+      result[PhuTinh[starKey].name] = ConGiap[CUNG_KIM_DONG_HO[idx]];
+    });
+  
+    return result;
+}
+
+export function anSaoVongThaiTue(yinBirthDate) {
+    const result = {};
+  
+    // Xác định cung Thái Tuế theo địa chi năm sinh
+    const { chiKey } = anCanChi(yinBirthDate); // lấy chi năm sinh
+    if (!chiKey) return null;
+  
+    // Thứ tự cung theo kim đồng hồ
+    const CUNG_KIM_DONG_HO = [
+      "TY", "SUU", "DAN", "MAO", "THIN", "TY_SNAKE",
+      "NGO", "MUI", "THAN", "DAU", "TUAT", "HOI"
+    ];
+  
+    // Thứ tự các sao vòng Thái Tuế (theo thứ tự an)
+    const saoVongThaiTueKeys = [
+      "THIEU_DUONG",
+      "TANG_MON",
+      "THIEU_AM",
+      "QUAN_PHU_TT",
+      "TU_PHU",
+      "TUE_PHA",
+      "LONG_DUC",
+      "BACH_HO",
+      "PHUC_DUC_TT",
+      "DIEU_KHACH",
+      "TRUC_PHU"
+    ];
+  
+    // An Thái Tuế
+    let idx = CUNG_KIM_DONG_HO.indexOf(chiKey);
+    result[PhuTinh.THAI_TUE.name] = ConGiap[CUNG_KIM_DONG_HO[idx]];
+  
+    // An các sao còn lại theo chiều thuận kim đồng hồ
+    saoVongThaiTueKeys.forEach(starKey => {
+      idx = mod(idx + 1, 12);
+      result[PhuTinh[starKey].name] = ConGiap[CUNG_KIM_DONG_HO[idx]];
+    });
+  
+    return result;
+}
+/*
+    Utils functions
 */
+
+export function convertBirthToYin(birthDate) {
+    const solarYear = parseInt(birthDate.year);
+    const solarMonth = parseInt(birthDate.month);
+    const solarDay = parseInt(birthDate.day);
+  
+    const lunarDate = solarlunar.solar2lunar(solarYear, solarMonth, solarDay);
+  
+    let lunarMonth = lunarDate.lMonth;
+  
+    const gender = birthDate.gender;
+  
+    // Nếu tháng nhuận
+    if (lunarDate.isLeap) {
+      const middleDay = 15; // nửa tháng ~ ngày 15
+      if (lunarDate.lDay > middleDay) {
+        // nửa sau tháng nhuận => chuyển sang tháng sau
+        lunarMonth = lunarMonth + 1;
+      }
+      // nửa đầu thì giữ nguyên lunarMonth
+    }
+  
+    return {
+      day: lunarDate.lDay,
+      month: lunarMonth,
+      year: lunarDate.lYear,
+      hours: parseInt(birthDate.hours),
+      minutes: parseInt(birthDate.minutes),
+      isLeap: lunarDate.isLeap,
+      gender: gender
+    };
+}
+  
+
+/* 
+    Internal functions 
+*/
+
+const mod = (n, m) => ((n % m) + m) % m;
 
 function getConGiapByNumber(num) {
   const normalized = mod(num - 1, 12) + 1;

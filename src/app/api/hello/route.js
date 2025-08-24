@@ -1,6 +1,6 @@
-import solarlunar from 'solarlunar'
 import { GioiTinh } from '../../constant/constant'
 import { 
+    convertBirthToYin,
     anMenh, 
     anThan, 
     anCung, 
@@ -10,7 +10,9 @@ import {
     anDaiVan,
     anSaoTuVi,
     anChinhTinh,
-    anVongTruongSinh
+    anVongTruongSinh,
+    anSaoVongLocTon,
+    anSaoVongThaiTue
 } from '../../utils/utils'
 
 export async function GET(request) {
@@ -70,6 +72,8 @@ export async function GET(request) {
     // Create response data
     const data = {
       viTriTuVi: anSaoTuVi(yinBirthday),
+      saoVongLocTon: anSaoVongLocTon(yinBirthday),
+      saoVongThaiTue: anSaoVongThaiTue(yinBirthday),
       vongTruongSinh: anVongTruongSinh(yinBirthday),
       chinhTinh: anChinhTinh(yinBirthday),
       birthDate: birthDate.toISOString(),
@@ -93,36 +97,4 @@ export async function GET(request) {
       { status: 400 }
     );
   }
-}
-
-function convertBirthToYin(birthDate) {
-  const solarYear = parseInt(birthDate.year);
-  const solarMonth = parseInt(birthDate.month);
-  const solarDay = parseInt(birthDate.day);
-
-  const lunarDate = solarlunar.solar2lunar(solarYear, solarMonth, solarDay);
-
-  let lunarMonth = lunarDate.lMonth;
-
-  const gender = birthDate.gender;
-
-  // Nếu tháng nhuận
-  if (lunarDate.isLeap) {
-    const middleDay = 15; // nửa tháng ~ ngày 15
-    if (lunarDate.lDay > middleDay) {
-      // nửa sau tháng nhuận => chuyển sang tháng sau
-      lunarMonth = lunarMonth + 1;
-    }
-    // nửa đầu thì giữ nguyên lunarMonth
-  }
-
-  return {
-    day: lunarDate.lDay,
-    month: lunarMonth,
-    year: lunarDate.lYear,
-    hours: parseInt(birthDate.hours),
-    minutes: parseInt(birthDate.minutes),
-    isLeap: lunarDate.isLeap,
-    gender: gender
-  };
 }

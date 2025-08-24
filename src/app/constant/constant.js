@@ -319,5 +319,36 @@ export const VongTruongSinh = {
     THAI: { name: "Thai" },
     DUONG: { name: "Dưỡng" }
 }
+
+export const PhuTinh = {
+    // Vòng Lộc Tồn
+    LOC_TON: { name: "Lộc Tồn" },
+    BAC_SI: { name: "Bác Sĩ" },
+    LUC_SI: { name: "Lực Sĩ" },
+    THANH_LONG: { name: "Thanh Long" },
+    TIEU_HAO: { name: "Tiểu Hao" },
+    TUONG_QUAN: { name: "Tướng Quân" },
+    TAU_THU: { name: "Tấu Thư" },
+    PHI_LIEM: { name: "Phi Liêm" },
+    HI_THANH: { name: "Hỷ Thần" },
+    BENH_PHU: { name: "Bệnh Phù" },
+    DAI_HAO: { name: "Đại Hao" },
+    PHUC_BINH: { name: "Phục Binh" },
+    QUAN_PHU: { name: "Quan Phủ" },
+  
+    // Vòng Thái Tuế
+    THAI_TUE: { name: "Thái Tuế" },
+    THIEU_DUONG: { name: "Thiếu Dương" },
+    TANG_MON: { name: "Tang Môn" },
+    THIEU_AM: { name: "Thiếu Âm" },
+    QUAN_PHU_TT: { name: "Quan Phù" },
+    TU_PHU: { name: "Tử Phù" },
+    TUE_PHA: { name: "Tuế Phá" },
+    LONG_DUC: { name: "Long Đức" },
+    BACH_HO: { name: "Bạch Hổ" },
+    PHUC_DUC_TT: { name: "Phúc Đức" },
+    DIEU_KHACH: { name: "Điếu Khách" },
+    TRUC_PHU: { name: "Trực Phù" }
+}
   
   
