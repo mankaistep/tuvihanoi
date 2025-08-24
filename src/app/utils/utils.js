@@ -318,7 +318,7 @@ export function anChinhTinh(yinBirthDate) {
       currentKey = cungKey;
     });
   
-    // 2️⃣ An các sao từ Thiên Phủ (thuận kim đồng hồ)
+    // 2️⃣ An các sao từ Thiên Phủ (thuận)
     currentKey = thienPhuKey;
     const saoThienPhuOrder = [
       { star: ChinhTinh.THAI_AM, skip: 0 },
