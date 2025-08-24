@@ -1,95 +1,244 @@
-import Image from "next/image";
+"use client";
+import { useState } from "react";
 import styles from "./page.module.css";
 
 export default function Home() {
+  const [formData, setFormData] = useState({
+    day: "",
+    month: "",
+    year: "",
+    hours: "12",
+    minutes: "00",
+    gender: "Nam", // default
+  });
+  const [apiData, setApiData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const params = new URLSearchParams(formData);
+      const response = await fetch(`/api/hello?${params}`);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to fetch data");
+      }
+
+      setApiData(data);
+    } catch (err) {
+      console.error("Error:", err);
+      setError(err.message || "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Generate options
+  const days = Array.from({ length: 31 }, (_, i) => i + 1);
+  const months = [
+    "January","February","March","April","May","June",
+    "July","August","September","October","November","December"
+  ];
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
+  const hours = Array.from({ length: 24 }, (_, i) =>
+    i.toString().padStart(2, "0")
+  );
+  const minutes = Array.from({ length: 60 }, (_, i) =>
+    i.toString().padStart(2, "0")
+  );
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+        <h1>Birth Date Analyzer</h1>
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "15px",
+            maxWidth: "500px",
+            margin: "0 auto",
+            padding: "20px",
+            border: "1px solid #ddd",
+            borderRadius: "8px",
+            backgroundColor: "#fff",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+          }}
+        >
+          <h2>Enter Your Birth Details</h2>
+
+          {/* Day */}
+          <div>
+            <label>Day:</label>
+            <select
+              name="day"
+              value={formData.day}
+              onChange={handleChange}
+              required
+              style={selectStyle}
+            >
+              <option value="">Select day</option>
+              {days.map((day) => (
+                <option key={day} value={day}>
+                  {day}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Month */}
+          <div>
+            <label>Month:</label>
+            <select
+              name="month"
+              value={formData.month}
+              onChange={handleChange}
+              required
+              style={selectStyle}
+            >
+              <option value="">Select month</option>
+              {months.map((month, index) => (
+                <option key={index} value={index + 1}>
+                  {month}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Year */}
+          <div>
+            <label>Year:</label>
+            <select
+              name="year"
+              value={formData.year}
+              onChange={handleChange}
+              required
+              style={selectStyle}
+            >
+              <option value="">Select year</option>
+              {years.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Time */}
+          <div style={{ display: "flex", gap: "10px" }}>
+            <div style={{ flex: 1 }}>
+              <label>Hour:</label>
+              <select
+                name="hours"
+                value={formData.hours}
+                onChange={handleChange}
+                style={selectStyle}
+              >
+                {hours.map((hour) => (
+                  <option key={hour} value={hour}>
+                    {hour}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div style={{ flex: 1 }}>
+              <label>Minute:</label>
+              <select
+                name="minutes"
+                value={formData.minutes}
+                onChange={handleChange}
+                style={selectStyle}
+              >
+                {minutes.map((minute) => (
+                  <option key={minute} value={minute}>
+                    {minute}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Gender */}
+          <div>
+            <label>Gender:</label>
+            <select
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              style={selectStyle}
+            >
+              <option value="NAM">Nam</option>
+              <option value="NU">Nữ</option>
+            </select>
+          </div>
+
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={loading}
+            style={{
+              padding: "12px",
+              fontSize: "16px",
+              backgroundColor: "#0070f3",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: loading ? "not-allowed" : "pointer",
+              marginTop: "10px",
+            }}
           >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
+            {loading ? "Analyzing..." : "Analyze Birth Details"}
+          </button>
+
+          {error && <div style={{ color: "red" }}>{error}</div>}
+        </form>
+
+        {/* Show raw JSON */}
+        {apiData && !error && (
+          <pre
+            style={{
+              marginTop: "30px",
+              padding: "20px",
+              border: "1px solid #eaeaea",
+              borderRadius: "8px",
+              maxWidth: "600px",
+              textAlign: "left",
+              backgroundColor: "#f9f9f9",
+              fontSize: "14px",
+              whiteSpace: "pre-wrap",
+              wordWrap: "break-word",
+            }}
           >
-            Read our docs
-          </a>
-        </div>
+            {JSON.stringify(apiData, null, 2)}
+          </pre>
+        )}
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }
+
+// Small helper styles
+const selectStyle = {
+  width: "100%",
+  padding: "8px",
+  marginTop: "5px",
+  border: "1px solid #ddd",
+  borderRadius: "4px",
+  fontSize: "16px",
+};
