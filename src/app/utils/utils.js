@@ -6,7 +6,8 @@ import {
     BanMenh,
     AmDuongNamNu ,
     GioiTinh,
-    ChinhTinh
+    ChinhTinh,
+    VongTruongSinh
 } from "../constant/constant";
 
 const mod = (n, m) => ((n % m) + m) % m;
@@ -342,7 +343,42 @@ export function anChinhTinh(yinBirthDate) {
   
     return result;
 }
+
+export function anVongTruongSinh(yinBirthDate) {
+    const result = {};
   
+    const cucObj = anCuc(yinBirthDate);
+    if (!cucObj) return null;
+    const cucNumber = cucObj.cuc.number;
+  
+    const amDuongNamNu = anAmDuongNamNu(yinBirthDate);
+    const clockwise =
+      amDuongNamNu === "DUONG_NAM" || amDuongNamNu === "AM_NU";
+  
+    const TruongSinhStart = {
+      2: "THAN",    // Thủy Nhị Cục
+      5: "THAN",    // Thổ Ngũ Cục
+      6: "DAN",     // Hỏa Lục Cục
+      3: "HOI",     // Mộc Tam Cục
+      4: "TY_SNAKE" // Kim Tứ Cục
+    };
+    const startCungKey = TruongSinhStart[cucNumber];
+    if (!startCungKey) return null;
+  
+    const CUNG_KIM_DONG_HO = [
+      "TY", "SUU", "DAN", "MAO", "THIN", "TY_SNAKE",
+      "NGO", "MUI", "THAN", "DAU", "TUAT", "HOI"
+    ];
+  
+    let idx = CUNG_KIM_DONG_HO.indexOf(startCungKey);
+    const saoVongTSKeys = Object.keys(VongTruongSinh); // Dùng constant
+    saoVongTSKeys.forEach(starKey => {
+      result[VongTruongSinh[starKey].name] = ConGiap[CUNG_KIM_DONG_HO[idx]];
+      idx = mod(idx + (clockwise ? 1 : -1), 12);
+    });
+  
+    return result;
+}
 
 /* 
     Functions 

@@ -9,7 +9,8 @@ import {
     anAmDuongNamNu,
     anDaiVan,
     anSaoTuVi,
-    anChinhTinh
+    anChinhTinh,
+    anVongTruongSinh
 } from '../../utils/utils'
 
 export async function GET(request) {
@@ -69,6 +70,7 @@ export async function GET(request) {
     // Create response data
     const data = {
       viTriTuVi: anSaoTuVi(yinBirthday),
+      vongTruongSinh: anVongTruongSinh(yinBirthday),
       chinhTinh: anChinhTinh(yinBirthday),
       birthDate: birthDate.toISOString(),
       age,

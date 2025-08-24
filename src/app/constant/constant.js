@@ -304,5 +304,20 @@ export const ChinhTinh = {
     THAT_SAT: { name: "Thất Sát" },
     PHA_QUAN: { name: "Phá Quân" },
 }
+
+export const VongTruongSinh = {
+    TRUONG_SINH: { name: "Trường Sinh" },
+    MOC_DUC: { name: "Mộc Dục" },
+    QUAN_DOI: { name: "Quan Đới" },
+    LAM_QUAN: { name: "Lâm Quan" },
+    DE_VUONG: { name: "Đế Vượng" },
+    SUY: { name: "Suy" },
+    BENH: { name: "Bệnh" },
+    TU: { name: "Tử" },
+    MO: { name: "Mộ" },
+    TUYET: { name: "Tuyệt" },
+    THAI: { name: "Thai" },
+    DUONG: { name: "Dưỡng" }
+}
   
   
