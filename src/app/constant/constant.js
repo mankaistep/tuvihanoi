@@ -348,7 +348,48 @@ export const PhuTinh = {
     BACH_HO: { name: "Bạch Hổ" },
     PHUC_DUC_TT: { name: "Phúc Đức" },
     DIEU_KHACH: { name: "Điếu Khách" },
-    TRUC_PHU: { name: "Trực Phù" }
+    TRUC_PHU: { name: "Trực Phù" },
+    
+    // Tứ Hóa
+    HOA_LOC: { name: "Hóa Lộc" },
+    HOA_QUYEN: { name: "Hóa Quyền" },
+    HOA_KHOA: { name: "Hóa Khoa" },
+    HOA_KY: { name: "Hóa Kỵ" },
+
+    // Tuần Không
+    TUAN_KHONG: { name: "Tuần Không" },
+
+    // Các sao theo Thiên Can
+    DA_LA: { name: "Đà La" },
+    KINH_DUONG: { name: "Kình Dương" },
+    LUU_HA: { name: "Lưu Hà" },
+    QUOC_AN: { name: "Quốc Ấn" },
+    DUONG_PHU: { name: "Đường Phù" },
+    VAN_TINH: { name: "Văn Tinh" },
+    THIEN_KHOI: { name: "Thiên Khôi" },
+    THIEN_VIET: { name: "Thiên Việt" },
+    THIEN_QUAN: { name: "Thiên Quan" },
+    THIEN_PHUC: { name: "Thiên Phúc" },
+    THIEN_TRU: { name: "Thiên Trù" },
+    TRIET_KHONG: { name: "Triệt Không" },
+
+    // Sao theo Địa Chi
+    PHUONG_CAC: { name: "Phượng Các" },
+    GIAI_THAN: { name: "Giải Thần" },
+    LONG_TRI: { name: "Long Trì" },
+    NGUYET_DUC: { name: "Nguyệt Đức" },
+    THIEN_DUC: { name: "Thiên Đức" },
+    THIEN_HY: { name: "Thiên Hỷ" },
+    THIEN_MA: { name: "Thiên Mã" },
+    THIEN_KHOC: { name: "Thiên Khốc" },
+    THIEN_HU: { name: "Thiên Hư" },
+    DAO_HOA: { name: "Đào Hoa" },
+    HONG_LOAN: { name: "Hồng Loan" },
+    HOA_CAI: { name: "Hoa Cái" },
+    KIEP_SAT: { name: "Kiếp Sát" },
+    PHA_TOAI: { name: "Phá Toái" },
+    CO_THAN: { name: "Cô Thần" },
+    QUA_TU: { name: "Quả Tú" }
 }
   
   

@@ -477,6 +477,274 @@ export function anSaoVongThaiTue(yinBirthDate) {
   
     return result;
 }
+
+// 4.1 An sao tử vi theo Thiên Can tuổi
+export function anSaoTheoThienCan(yinBirthDate) {
+    const result = {};
+    const { canKey } = anCanChi(yinBirthDate); // lấy Thiên can năm sinh
+    if (!canKey) return null;
+  
+    // 1️⃣ Tứ Hóa theo Thiên Can
+    const tuHoaTable = {
+      GIAP: { HOA_LOC: ChinhTinh.LIEM_TRINH, HOA_QUYEN: ChinhTinh.PHA_QUAN, HOA_KHOA: ChinhTinh.VU_KHUC, HOA_KY: ChinhTinh.THAI_DUONG },
+      AT:   { HOA_LOC: ChinhTinh.THIEN_CO, HOA_QUYEN: ChinhTinh.THIEN_LUONG, HOA_KHOA: ChinhTinh.TU_VI, HOA_KY: ChinhTinh.THAI_AM },
+      BING: { HOA_LOC: ChinhTinh.THIEN_DONG, HOA_QUYEN: ChinhTinh.THIEN_CO, HOA_KHOA: ChinhTinh.VAN_XUONG, HOA_KY: ChinhTinh.LIEM_TRINH },
+      DINH: { HOA_LOC: ChinhTinh.THAI_AM, HOA_QUYEN: ChinhTinh.THIEN_DONG, HOA_KHOA: ChinhTinh.THIEN_CO, HOA_KY: ChinhTinh.CU_MON },
+      MAU:  { HOA_LOC: ChinhTinh.THAM_LANG, HOA_QUYEN: ChinhTinh.THAI_AM, HOA_KHOA: ChinhTinh.THAI_DUONG, HOA_KY: ChinhTinh.THIEN_CO },
+      KY:   { HOA_LOC: ChinhTinh.VU_KHUC, HOA_QUYEN: ChinhTinh.THAM_LANG, HOA_KHOA: ChinhTinh.THIEN_LUONG, HOA_KY: ChinhTinh.VAN_KHUC },
+      CANH: { HOA_LOC: ChinhTinh.THAI_DUONG, HOA_QUYEN: ChinhTinh.VU_KHUC, HOA_KHOA: ChinhTinh.THIEN_DONG, HOA_KY: ChinhTinh.THIEN_TUONG },
+      TAN:  { HOA_LOC: ChinhTinh.CU_MON, HOA_QUYEN: ChinhTinh.THAI_DUONG, HOA_KHOA: ChinhTinh.VAN_KHUC, HOA_KY: ChinhTinh.VAN_XUONG },
+      NHAM: { HOA_LOC: ChinhTinh.THIEN_LUONG, HOA_QUYEN: ChinhTinh.TU_VI, HOA_KHOA: ChinhTinh.TA_PHU, HOA_KY: ChinhTinh.VU_KHUC },
+      QUY:  { HOA_LOC: ChinhTinh.PHA_QUAN, HOA_QUYEN: ChinhTinh.CU_MON, HOA_KHOA: ChinhTinh.THAI_AM, HOA_KY: ChinhTinh.THAM_LANG }
+    };
+  
+    const tuHoa = tuHoaTable[canKey];
+    if (tuHoa) {
+      Object.entries(tuHoa).forEach(([key, star]) => {
+        result[PhuTinh[key].name] = star;
+      });
+    }
+  
+    // 2️⃣ Sao theo Thiên Can (theo bảng chuẩn)
+    const saoCanTable = {
+        GIAP: {
+            DA_LA: "SUU",
+            KINH_DUONG: "MAO",
+            LUU_HA: "DAU",
+            QUOC_AN: "TUAT",
+            DUONG_PHU: "MUI",
+            VAN_TINH: "TY_SNAKE",
+            THIEN_KHOI: "SUU",
+            THIEN_VIET: "MUI",
+            THIEN_QUAN: "MUI",
+            THIEN_PHUC: "DAU",
+            THIEN_TRU: "TY_SNAKE",
+            TRIET_KHONG: ["THAN", "DAU"]
+        },
+        AT: {
+            DA_LA: "DAN",
+            KINH_DUONG: "THIN",
+            LUU_HA: "TUAT",
+            QUOC_AN: "HOI",
+            DUONG_PHU: "THAN",
+            VAN_TINH: "NGO",
+            THIEN_KHOI: "TY",
+            THIEN_VIET: "THAN",
+            THIEN_QUAN: "THIN",
+            THIEN_PHUC: "THAN",
+            THIEN_TRU: "NGO",
+            TRIET_KHONG: ["NGO", "MUI"]
+        },
+        BINH: {
+            DA_LA: "THIN",
+            KINH_DUONG: "NGO",
+            LUU_HA: "MUI",
+            QUOC_AN: "SUU",
+            DUONG_PHU: "TUAT",
+            VAN_TINH: "THAN",
+            THIEN_KHOI: "HOI",
+            THIEN_VIET: "DAU",
+            THIEN_QUAN: "TY_SNAKE",
+            THIEN_PHUC: "TY",
+            THIEN_TRU: "TY",
+            TRIET_KHONG: ["THIN", "TY_SNAKE"]
+        },
+        DINH: {
+            DA_LA: "TY_SNAKE",
+            KINH_DUONG: "MUI",
+            LUU_HA: "THIN",
+            QUOC_AN: "DAN",
+            DUONG_PHU: "HOI",
+            VAN_TINH: "DAU",
+            THIEN_KHOI: "HOI",
+            THIEN_VIET: "DAU",
+            THIEN_QUAN: "DAN",
+            THIEN_PHUC: "HOI",
+            THIEN_TRU: "TY_SNAKE",
+            TRIET_KHONG: ["DAN", "MAO"]
+        },
+        MAU: {
+            DA_LA: "THIN",
+            KINH_DUONG: "NGO",
+            LUU_HA: "TY_SNAKE",
+            QUOC_AN: "SUU",
+            DUONG_PHU: "TUAT",
+            VAN_TINH: "THAN",
+            THIEN_KHOI: "SUU",
+            THIEN_VIET: "MUI",
+            THIEN_QUAN: "MAO",
+            THIEN_PHUC: "MAO",
+            THIEN_TRU: "NGO",
+            TRIET_KHONG: ["TY", "SUU"]
+        },
+        KY: {
+            DA_LA: "TY_SNAKE",
+            KINH_DUONG: "MUI",
+            LUU_HA: "NGO",
+            QUOC_AN: "DAN",
+            DUONG_PHU: "HOI",
+            VAN_TINH: "DAU",
+            THIEN_KHOI: "TY",
+            THIEN_VIET: "THAN",
+            THIEN_QUAN: "DAU",
+            THIEN_PHUC: "DAN",
+            THIEN_TRU: "THAN",
+            TRIET_KHONG: ["THAN", "DAU"]
+        },
+        CANH: {
+            DA_LA: "MUI",
+            KINH_DUONG: "DAU",
+            LUU_HA: "THAN",
+            QUOC_AN: "THIN",
+            DUONG_PHU: "SUU",
+            VAN_TINH: "HOI",
+            THIEN_KHOI: "NGO",
+            THIEN_VIET: "DAN",
+            THIEN_QUAN: "HOI",
+            THIEN_PHUC: "NGO",
+            THIEN_TRU: "DAN",
+            TRIET_KHONG: ["NGO", "MUI"]
+        },
+        TAN: {
+            DA_LA: "THAN",
+            KINH_DUONG: "TUAT",
+            LUU_HA: "MAO",
+            QUOC_AN: "TY_SNAKE",
+            DUONG_PHU: "DAN",
+            VAN_TINH: "TY",
+            THIEN_KHOI: "NGO",
+            THIEN_VIET: "DAN",
+            THIEN_QUAN: "DAU",
+            THIEN_PHUC: "TY_SNAKE",
+            THIEN_TRU: "NGO",
+            TRIET_KHONG: ["THIN", "TY_SNAKE"]
+        },
+        NHAM: {
+            DA_LA: "TUAT",
+            KINH_DUONG: "TY",
+            LUU_HA: "HOI",
+            QUOC_AN: "MUI",
+            DUONG_PHU: "THIN",
+            VAN_TINH: "DAU",
+            THIEN_KHOI: "TY",
+            THIEN_VIET: "THAN",
+            THIEN_QUAN: "TUAT",
+            THIEN_PHUC: "NGO",
+            THIEN_TRU: "DAU",
+            TRIET_KHONG: ["DAN", "MAO"]
+        },
+        QUY: {
+            DA_LA: "HOI",
+            KINH_DUONG: "SUU",
+            LUU_HA: "DAN",
+            QUOC_AN: "THAN",
+            DUONG_PHU: "TY_SNAKE",
+            VAN_TINH: "MAO",
+            THIEN_KHOI: "MAO",
+            THIEN_VIET: "TY_SNAKE",
+            THIEN_QUAN: "NGO",
+            THIEN_PHUC: "TY_SNAKE",
+            THIEN_TRU: "TUAT",
+            TRIET_KHONG: ["TY", "SUU"]
+        }
+    };
+  
+    const saoCan = saoCanTable[canKey];
+    if (saoCan) {
+      Object.entries(saoCan).forEach(([key, chi]) => {
+        if (Array.isArray(chi)) {
+          result[PhuTinh[key].name] = chi.map(c => ConGiap[c]); // Triệt: 2 cung
+        } else {
+          result[PhuTinh[key].name] = ConGiap[chi];
+        }
+      });
+    }
+  
+    return result;
+  }
+  
+
+
+export function anSaoTheoDiaChi(yinBirthDate) {
+    const result = {};
+    const { chiKey } = anCanChi(yinBirthDate); // lấy Địa chi năm sinh
+    if (!chiKey) return null;
+  
+    // Bảng tra theo địa chi tuổi (16 sao)
+    const diaChiTable = {
+      TY: {
+        PHUONG_CAC: "TUAT", GIAI_THAN: "TUAT", LONG_TRI: "THIN", NGUYET_DUC: "TY", THIEN_DUC: "DAU",
+        THIEN_HY: "DAU", THIEN_MA: "DAN", THIEN_KHOC: "NGO", THIEN_HU: "NGO", DAO_HOA: "DAU",
+        HONG_LOAN: "MAO", HOA_CAI: "THIN", KIEP_SAT: "TY", PHA_TOAI: "TY", CO_THAN: "DAN", QUA_TU: "TUAT"
+      },
+      SUU: {
+        PHUONG_CAC: "DAU", GIAI_THAN: "DAU", LONG_TRI: "TY", NGUYET_DUC: "NGO", THIEN_DUC: "TUAT",
+        THIEN_HY: "THAN", THIEN_MA: "HOI", THIEN_KHOC: "TY", THIEN_HU: "MUI", DAO_HOA: "NGO",
+        HONG_LOAN: "DAN", HOA_CAI: "SUU", KIEP_SAT: "DAN", PHA_TOAI: "SUU", CO_THAN: "DAN", QUA_TU: "TUAT"
+      },
+      DAN: {
+        PHUONG_CAC: "THAN", GIAI_THAN: "THAN", LONG_TRI: "NGO", NGUYET_DUC: "MUI", THIEN_DUC: "HOI",
+        THIEN_HY: "MUI", THIEN_MA: "THAN", THIEN_KHOC: "THIN", THIEN_HU: "THAN", DAO_HOA: "MAO",
+        HONG_LOAN: "SUU", HOA_CAI: "TUAT", KIEP_SAT: "HOI", PHA_TOAI: "DAU", CO_THAN: "TY", QUA_TU: "SUU"
+      },
+      MAO: {
+        PHUONG_CAC: "MUI", GIAI_THAN: "MUI", LONG_TRI: "MUI", NGUYET_DUC: "THAN", THIEN_DUC: "TY",
+        THIEN_HY: "NGO", THIEN_MA: "TY", THIEN_KHOC: "MAO", THIEN_HU: "DAU", DAO_HOA: "TY",
+        HONG_LOAN: "TY", HOA_CAI: "MUI", KIEP_SAT: "THAN", PHA_TOAI: "TY", CO_THAN: "TY", QUA_TU: "SUU"
+      },
+      THIN: {
+        PHUONG_CAC: "NGO", GIAI_THAN: "NGO", LONG_TRI: "THAN", NGUYET_DUC: "DAU", THIEN_DUC: "SUU",
+        THIEN_HY: "TY", THIEN_MA: "DAN", THIEN_KHOC: "DAN", THIEN_HU: "TUAT", DAO_HOA: "DAU",
+        HONG_LOAN: "HOI", HOA_CAI: "THIN", KIEP_SAT: "TY", PHA_TOAI: "SUU", CO_THAN: "TY", QUA_TU: "SUU"
+      },
+      TY: {
+        PHUONG_CAC: "TY", GIAI_THAN: "TY", LONG_TRI: "DAU", NGUYET_DUC: "TUAT", THIEN_DUC: "DAN",
+        THIEN_HY: "THIN", THIEN_MA: "HOI", THIEN_KHOC: "SUU", THIEN_HU: "HOI", DAO_HOA: "NGO",
+        HONG_LOAN: "TUAT", HOA_CAI: "SUU", KIEP_SAT: "DAN", PHA_TOAI: "DAU", CO_THAN: "THAN", QUA_TU: "THIN"
+      },
+      NGO: {
+        PHUONG_CAC: "THIN", GIAI_THAN: "THIN", LONG_TRI: "TUAT", NGUYET_DUC: "HOI", THIEN_DUC: "MAO",
+        THIEN_HY: "MAO", THIEN_MA: "THAN", THIEN_KHOC: "TY", THIEN_HU: "TY", DAO_HOA: "MAO",
+        HONG_LOAN: "DAU", HOA_CAI: "TUAT", KIEP_SAT: "HOI", PHA_TOAI: "TY", CO_THAN: "THAN", QUA_TU: "THIN"
+      },
+      MUI: {
+        PHUONG_CAC: "MAO", GIAI_THAN: "MAO", LONG_TRI: "HOI", NGUYET_DUC: "TY", THIEN_DUC: "THIN",
+        THIEN_HY: "DAN", THIEN_MA: "TY", THIEN_KHOC: "HOI", THIEN_HU: "SUU", DAO_HOA: "TY",
+        HONG_LOAN: "THAN", HOA_CAI: "MUI", KIEP_SAT: "THAN", PHA_TOAI: "SUU", CO_THAN: "THAN", QUA_TU: "THIN"
+      },
+      THAN: {
+        PHUONG_CAC: "DAN", GIAI_THAN: "DAN", LONG_TRI: "TY", NGUYET_DUC: "SUU", THIEN_DUC: "TY",
+        THIEN_HY: "SUU", THIEN_MA: "DAN", THIEN_KHOC: "TUAT", THIEN_HU: "DAN", DAO_HOA: "DAU",
+        HONG_LOAN: "MUI", HOA_CAI: "THIN", KIEP_SAT: "TY", PHA_TOAI: "DAU", CO_THAN: "HOI", QUA_TU: "MUI"
+      },
+      DAU: {
+        PHUONG_CAC: "SUU", GIAI_THAN: "SUU", LONG_TRI: "SUU", NGUYET_DUC: "DAN", THIEN_DUC: "NGO",
+        THIEN_HY: "TY", THIEN_MA: "HOI", THIEN_KHOC: "DAU", THIEN_HU: "MAO", DAO_HOA: "NGO",
+        HONG_LOAN: "NGO", HOA_CAI: "SUU", KIEP_SAT: "DAN", PHA_TOAI: "TY", CO_THAN: "HOI", QUA_TU: "MUI"
+      },
+      TUAT: {
+        PHUONG_CAC: "TY", GIAI_THAN: "TY", LONG_TRI: "DAN", NGUYET_DUC: "MAO", THIEN_DUC: "MUI",
+        THIEN_HY: "HOI", THIEN_MA: "THAN", THIEN_KHOC: "THAN", THIEN_HU: "THIN", DAO_HOA: "MAO",
+        HONG_LOAN: "TY", HOA_CAI: "TUAT", KIEP_SAT: "HOI", PHA_TOAI: "SUU", CO_THAN: "HOI", QUA_TU: "MUI"
+      },
+      HOI: {
+        PHUONG_CAC: "HOI", GIAI_THAN: "HOI", LONG_TRI: "MAO", NGUYET_DUC: "THIN", THIEN_DUC: "THAN",
+        THIEN_HY: "TUAT", THIEN_MA: "TY", THIEN_KHOC: "MUI", THIEN_HU: "TY", DAO_HOA: "TY",
+        HONG_LOAN: "THIN", HOA_CAI: "MUI", KIEP_SAT: "THAN", PHA_TOAI: "DAU", CO_THAN: "DAN", QUA_TU: "TUAT"
+      }
+    };
+  
+    const saoChi = diaChiTable[chiKey];
+    if (saoChi) {
+      Object.entries(saoChi).forEach(([key, cung]) => {
+        result[PhuTinh[key].name] = ConGiap[cung];
+      });
+    }
+  
+    return result;
+}
+    
+
 /*
     Utils functions
 */
