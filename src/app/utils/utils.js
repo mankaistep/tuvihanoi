@@ -853,6 +853,98 @@ export function anSaoTheoGioSinh(yinBirthDate) {
   
     return result;
 }
+
+export function anSaoHoaLinh(yinBirthDate) {
+    const result = {};
+    const { year, hours, gender } = yinBirthDate;
+    if (!year || hours == null) return null;
+  
+    // 1️⃣ Can Chi năm sinh
+    const thienCan = year % 10;
+    const diaChi   = year % 12;
+  
+    const canList = ["CANH","TAN","NHAM","QUY","GIAP","AT","BINH","DINH","MAU","KY"];
+    const chiList = ["TY","SUU","DAN","MAO","THIN","TY_SNAKE","NGO","MUI","THAN","DAU","TUAT","HOI"];
+  
+    const can = canList[thienCan];
+    const chi = chiList[diaChi];
+  
+    // 2️⃣ Giờ sinh (địa chi)
+    const gioAmMap = [
+      "TY","SUU","DAN","MAO","THIN","TY_SNAKE",
+      "NGO","MUI","THAN","DAU","TUAT","HOI"
+    ];
+    let gioIndex;
+    if (hours >= 23 || hours < 1) gioIndex = 0;
+    else if (hours < 3) gioIndex = 1;
+    else if (hours < 5) gioIndex = 2;
+    else if (hours < 7) gioIndex = 3;
+    else if (hours < 9) gioIndex = 4;
+    else if (hours < 11) gioIndex = 5;
+    else if (hours < 13) gioIndex = 6;
+    else if (hours < 15) gioIndex = 7;
+    else if (hours < 17) gioIndex = 8;
+    else if (hours < 19) gioIndex = 9;
+    else if (hours < 21) gioIndex = 10;
+    else gioIndex = 11;
+  
+    // 3️⃣ Bảng khởi sao theo chi năm sinh
+    const khoiTable = {
+      "DAN":   { HOA: "SUU", LINH: "MAO" },
+      "NGO":   { HOA: "SUU", LINH: "MAO" },
+      "TUAT":  { HOA: "SUU", LINH: "MAO" },
+      "THAN":  { HOA: "DAN", LINH: "TUAT" },
+      "TY":    { HOA: "DAN", LINH: "TUAT" },
+      "THIN":  { HOA: "DAN", LINH: "TUAT" },
+      "TY_SNAKE": { HOA: "MAO", LINH: "TUAT" },
+      "DAU":   { HOA: "MAO", LINH: "TUAT" },
+      "SUU":   { HOA: "MAO", LINH: "TUAT" },
+      "HOI":   { HOA: "DAU", LINH: "TUAT" },
+      "MAO":   { HOA: "DAU", LINH: "TUAT" },
+      "MUI":   { HOA: "DAU", LINH: "TUAT" }
+    };
+    const khoi = khoiTable[chi];
+    if (!khoi) return null;
+  
+    // 4️⃣ Âm/Dương can + giới tính
+    const duongCan = ["GIAP","BINH","MAU","CANH","NHAM"];
+    const isDuong = duongCan.includes(can);
+  
+    const isDuongNam = gender.name.toLowerCase() === "nam" && isDuong;
+    const isAmNam   = gender.name.toLowerCase() === "nam" && !isDuong;
+    const isDuongNu = gender.name.toLowerCase() === "nữ"  && isDuong;
+    const isAmNu    = gender.name.toLowerCase() === "nữ"  && !isDuong;
+  
+    // 5️⃣ Hàm dịch chuyển
+    function moveFrom(startChi, steps, direction) {
+      const startIndex = chiList.indexOf(startChi);
+      const n = chiList.length;
+      if (startIndex === -1) return null;
+      let idx;
+      if (direction === "forward") {
+        idx = (startIndex + steps) % n;
+      } else {
+        idx = (startIndex - steps + n) % n;
+      }
+      return chiList[idx];
+    }
+  
+    // 6️⃣ Xác định vị trí sao
+    let hoaChi, linhChi;
+    if (isDuongNam || isAmNu) {
+      // Hỏa thuận, Linh nghịch
+      hoaChi  = moveFrom(khoi.HOA, gioIndex, "forward");
+      linhChi = moveFrom(khoi.LINH, gioIndex, "backward");
+    } else if (isAmNam || isDuongNu) {
+      // Hỏa nghịch, Linh thuận
+      hoaChi  = moveFrom(khoi.HOA, gioIndex, "backward");
+      linhChi = moveFrom(khoi.LINH, gioIndex, "forward");
+    }
+  
+    result[PhuTinh.HOA_TINH.name] = ConGiap[hoaChi];
+    result[PhuTinh.LINH_TINH.name] = ConGiap[linhChi];
+    return result;
+}
   
 
 /*

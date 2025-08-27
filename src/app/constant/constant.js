@@ -407,7 +407,11 @@ export const PhuTinh = {
     DIA_KHONG: { name: "Địa Không" },
     DIA_KIEP:  { name: "Địa Kiếp" },
     THAI_PHU:  { name: "Thai Phụ" },
-    PHONG_CAO: { name: "Phong Cáo" }
+    PHONG_CAO: { name: "Phong Cáo" },
+
+    // Hoa Linh
+    HOA_TINH: { name: "Hỏa Tinh" },
+    LINH_TINH: { name: "Linh Tinh" }
 }
   
   
