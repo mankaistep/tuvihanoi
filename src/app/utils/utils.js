@@ -797,7 +797,63 @@ export function anSaoTheoThangSinh(yinBirthDate) {
     });
   
     return result;
-}    
+}
+
+export function anSaoTheoGioSinh(yinBirthDate) {
+    const result = {};
+    const { hours } = yinBirthDate;
+    if (hours == null || hours < 0 || hours > 23) return null;
+  
+    // 1️⃣ Map giờ dương -> giờ âm (theo canh giờ 2 tiếng)
+    const gioAmMap = [
+      "TY",    // 23h–1h
+      "SUU",   // 1h–3h
+      "DAN",   // 3h–5hs
+      "MAO",   // 5h–7h
+      "THIN",  // 7h–9h
+      "TY_SNAKE", // 9h–11h
+      "NGO",   // 11h–13h
+      "MUI",   // 13h–15h
+      "THAN",  // 15h–17h
+      "DAU",   // 17h–19h
+      "TUAT",  // 19h–21h
+      "HOI"    // 21h–23h
+    ];
+  
+    // xác định giờ âm
+    let gioIndex;
+    if (hours >= 23 || hours < 1) gioIndex = 0;
+    else if (hours < 3) gioIndex = 1;
+    else if (hours < 5) gioIndex = 2;
+    else if (hours < 7) gioIndex = 3;
+    else if (hours < 9) gioIndex = 4;
+    else if (hours < 11) gioIndex = 5;
+    else if (hours < 13) gioIndex = 6;
+    else if (hours < 15) gioIndex = 7;
+    else if (hours < 17) gioIndex = 8;
+    else if (hours < 19) gioIndex = 9;
+    else if (hours < 21) gioIndex = 10;
+    else gioIndex = 11;
+  
+    // 2️⃣ Bảng an sao theo giờ sinh
+    const saoGioTable = {
+      VAN_XUONG: ["TUAT", "DAU", "THAN", "MUI", "NGO", "TY_SNAKE", "THIN", "MAO", "DAN", "SUU", "TY", "HOI"],
+      VAN_KHUC:  ["THIN", "TY_SNAKE", "NGO", "MUI", "THAN", "DAU", "TUAT", "HOI", "TY", "SUU", "DAN", "MAO"],
+      DIA_KHONG: ["HOI", "TUAT", "DAU", "THAN", "MUI", "NGO", "TY_SNAKE", "THIN", "MAO", "DAN", "SUU", "TY"],
+      DIA_KIEP:  ["HOI", "TY", "SUU", "DAN", "MAO", "THIN", "TY_SNAKE", "NGO", "MUI", "THAN", "DAU", "TUAT"],
+      THAI_PHU: ["NGO", "MUI", "THAN", "DAU", "TUAT", "HOI", "TY", "SUU", "DAN", "MAO", "THIN", "TY_SNAKE"],
+      PHONG_CAO:["DAN", "MAO", "THIN", "TY_SNAKE", "NGO", "MUI", "THAN", "DAU", "TUAT", "HOI", "TY", "SUU"]
+    };
+  
+    // 3️⃣ Gán sao
+    Object.entries(saoGioTable).forEach(([sao, arr]) => {
+      const chi = arr[gioIndex];
+      result[PhuTinh[sao].name] = ConGiap[chi];
+    });
+  
+    return result;
+}
+  
 
 /*
     Utils functions

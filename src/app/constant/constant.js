@@ -392,18 +392,22 @@ export const PhuTinh = {
     CO_THAN: { name: "Cô Thần" },
     QUA_TU: { name: "Quả Tú" },
 
-    // Tu hoa
-    VAN_XUONG: { name: "Văn Xương" },
-    VAN_KHUC: { name: "Văn Khúc" },
-    TA_PHU: { name: "Tả Phù" },
-
     // Thang sinh
+    TA_PHU: { name: "Tả Phù" },
     HUU_BAT: { name: "Hữu Bật" },
     THIEN_HINH: { name: "Thiên Hình" },
     THIEN_RIEU: { name: "Thiên Riêu" },
     THIEN_Y: { name: "Thiên Y" },
     THIEN_GIAI: { name: "Thiên Giải" },
-    DIA_GIAI: { name: "Địa Giải" }
+    DIA_GIAI: { name: "Địa Giải" },
+
+    // Gio sinh
+    VAN_XUONG: { name: "Văn Xương" },
+    VAN_KHUC:  { name: "Văn Khúc" },
+    DIA_KHONG: { name: "Địa Không" },
+    DIA_KIEP:  { name: "Địa Kiếp" },
+    THAI_PHU:  { name: "Thai Phụ" },
+    PHONG_CAO: { name: "Phong Cáo" }
 }
   
   
