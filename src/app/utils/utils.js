@@ -478,7 +478,6 @@ export function anSaoVongThaiTue(yinBirthDate) {
     return result;
 }
 
-// 4.1 An sao tử vi theo Thiên Can tuổi
 export function anSaoTheoThienCan(yinBirthDate) {
     const result = {};
     const { canKey } = anCanChi(yinBirthDate); // lấy Thiên can năm sinh
@@ -488,13 +487,13 @@ export function anSaoTheoThienCan(yinBirthDate) {
     const tuHoaTable = {
       GIAP: { HOA_LOC: ChinhTinh.LIEM_TRINH, HOA_QUYEN: ChinhTinh.PHA_QUAN, HOA_KHOA: ChinhTinh.VU_KHUC, HOA_KY: ChinhTinh.THAI_DUONG },
       AT:   { HOA_LOC: ChinhTinh.THIEN_CO, HOA_QUYEN: ChinhTinh.THIEN_LUONG, HOA_KHOA: ChinhTinh.TU_VI, HOA_KY: ChinhTinh.THAI_AM },
-      BING: { HOA_LOC: ChinhTinh.THIEN_DONG, HOA_QUYEN: ChinhTinh.THIEN_CO, HOA_KHOA: ChinhTinh.VAN_XUONG, HOA_KY: ChinhTinh.LIEM_TRINH },
+      BING: { HOA_LOC: ChinhTinh.THIEN_DONG, HOA_QUYEN: ChinhTinh.THIEN_CO, HOA_KHOA: PhuTinh.VAN_XUONG, HOA_KY: ChinhTinh.LIEM_TRINH },
       DINH: { HOA_LOC: ChinhTinh.THAI_AM, HOA_QUYEN: ChinhTinh.THIEN_DONG, HOA_KHOA: ChinhTinh.THIEN_CO, HOA_KY: ChinhTinh.CU_MON },
       MAU:  { HOA_LOC: ChinhTinh.THAM_LANG, HOA_QUYEN: ChinhTinh.THAI_AM, HOA_KHOA: ChinhTinh.THAI_DUONG, HOA_KY: ChinhTinh.THIEN_CO },
       KY:   { HOA_LOC: ChinhTinh.VU_KHUC, HOA_QUYEN: ChinhTinh.THAM_LANG, HOA_KHOA: ChinhTinh.THIEN_LUONG, HOA_KY: ChinhTinh.VAN_KHUC },
       CANH: { HOA_LOC: ChinhTinh.THAI_DUONG, HOA_QUYEN: ChinhTinh.VU_KHUC, HOA_KHOA: ChinhTinh.THIEN_DONG, HOA_KY: ChinhTinh.THIEN_TUONG },
-      TAN:  { HOA_LOC: ChinhTinh.CU_MON, HOA_QUYEN: ChinhTinh.THAI_DUONG, HOA_KHOA: ChinhTinh.VAN_KHUC, HOA_KY: ChinhTinh.VAN_XUONG },
-      NHAM: { HOA_LOC: ChinhTinh.THIEN_LUONG, HOA_QUYEN: ChinhTinh.TU_VI, HOA_KHOA: ChinhTinh.TA_PHU, HOA_KY: ChinhTinh.VU_KHUC },
+      TAN:  { HOA_LOC: ChinhTinh.CU_MON, HOA_QUYEN: ChinhTinh.THAI_DUONG, HOA_KHOA: PhuTinh.VAN_KHUC, HOA_KY: PhuTinh.VAN_XUONG },
+      NHAM: { HOA_LOC: ChinhTinh.THIEN_LUONG, HOA_QUYEN: ChinhTinh.TU_VI, HOA_KHOA: PhuTinh.TA_PHU, HOA_KY: ChinhTinh.VU_KHUC },
       QUY:  { HOA_LOC: ChinhTinh.PHA_QUAN, HOA_QUYEN: ChinhTinh.CU_MON, HOA_KHOA: ChinhTinh.THAI_AM, HOA_KY: ChinhTinh.THAM_LANG }
     };
   
@@ -661,9 +660,7 @@ export function anSaoTheoThienCan(yinBirthDate) {
     }
   
     return result;
-  }
-  
-
+}
 
 export function anSaoTheoDiaChi(yinBirthDate) {
     const result = {};
@@ -697,7 +694,7 @@ export function anSaoTheoDiaChi(yinBirthDate) {
         THIEN_HY: "TY", THIEN_MA: "DAN", THIEN_KHOC: "DAN", THIEN_HU: "TUAT", DAO_HOA: "DAU",
         HONG_LOAN: "HOI", HOA_CAI: "THIN", KIEP_SAT: "TY", PHA_TOAI: "SUU", CO_THAN: "TY", QUA_TU: "SUU"
       },
-      TY: {
+      TY_SNAKE: {
         PHUONG_CAC: "TY", GIAI_THAN: "TY", LONG_TRI: "DAU", NGUYET_DUC: "TUAT", THIEN_DUC: "DAN",
         THIEN_HY: "THIN", THIEN_MA: "HOI", THIEN_KHOC: "SUU", THIEN_HU: "HOI", DAO_HOA: "NGO",
         HONG_LOAN: "TUAT", HOA_CAI: "SUU", KIEP_SAT: "DAN", PHA_TOAI: "DAU", CO_THAN: "THAN", QUA_TU: "THIN"
@@ -741,6 +738,41 @@ export function anSaoTheoDiaChi(yinBirthDate) {
       });
     }
   
+    // 3️⃣ Tuần Không
+    // Bảng Tuần Không theo năm Giáp
+    const tuanKhongTable = {
+        GIAP_TY:   ["TUAT", "HOI"],
+        GIAP_DAN:  ["TY", "SUU"],
+        GIAP_THIN: ["MAO", "DAN"],
+        GIAP_NGO:  ["THIN", "TY_SNAKE"],
+        GIAP_THAN: ["NGO", "MUI"],
+        GIAP_TUAT: ["THAN", "DAU"]
+    };
+
+    // Tìm năm Giáp gần nhất <= năm sinh
+    const year = yinBirthDate.year;
+    const cycle = 60; // lục thập hoa giáp
+    let offset = (year - 4) % cycle; // 1984 là Giáp Tý (offset 0)
+    let nearestGiapOffset = offset - (offset % 10); // lùi về can Giáp gần nhất
+    const giapIndex = nearestGiapOffset % cycle;
+
+    const giapKeyList = ["GIAP_TY", "GIAP_DAN", "GIAP_THIN", "GIAP_NGO", "GIAP_THAN", "GIAP_TUAT"];
+    const chiIndex = giapIndex % 12; // địa chi trong năm Giáp đó
+    let giapKey;
+    switch (chiIndex) {
+        case 0: giapKey = "GIAP_TY"; break;
+        case 2: giapKey = "GIAP_DAN"; break;
+        case 4: giapKey = "GIAP_THIN"; break;
+        case 6: giapKey = "GIAP_NGO"; break;
+        case 8: giapKey = "GIAP_THAN"; break;
+        case 10: giapKey = "GIAP_TUAT"; break;
+        default: giapKey = null;
+    }
+
+    if (giapKey && tuanKhongTable[giapKey]) {
+        result[PhuTinh.TUAN_KHONG.name] = tuanKhongTable[giapKey].map(c => ConGiap[c]);
+    }
+
     return result;
 }
     

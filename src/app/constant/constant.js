@@ -372,6 +372,7 @@ export const PhuTinh = {
     THIEN_PHUC: { name: "Thiên Phúc" },
     THIEN_TRU: { name: "Thiên Trù" },
     TRIET_KHONG: { name: "Triệt Không" },
+    TUAN_KHONG: { name: "Tuần Không"},
 
     // Sao theo Địa Chi
     PHUONG_CAC: { name: "Phượng Các" },
@@ -389,7 +390,12 @@ export const PhuTinh = {
     KIEP_SAT: { name: "Kiếp Sát" },
     PHA_TOAI: { name: "Phá Toái" },
     CO_THAN: { name: "Cô Thần" },
-    QUA_TU: { name: "Quả Tú" }
+    QUA_TU: { name: "Quả Tú" },
+
+    // Tu hoa
+    VAN_XUONG: { name: "Văn Xương" },
+    VAN_KHUC: { name: "Văn Khúc" },
+    TA_PHU: { name: "Tả Phù" }
 }
   
   
