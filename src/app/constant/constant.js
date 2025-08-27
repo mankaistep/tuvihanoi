@@ -395,7 +395,15 @@ export const PhuTinh = {
     // Tu hoa
     VAN_XUONG: { name: "Văn Xương" },
     VAN_KHUC: { name: "Văn Khúc" },
-    TA_PHU: { name: "Tả Phù" }
+    TA_PHU: { name: "Tả Phù" },
+
+    // Thang sinh
+    HUU_BAT: { name: "Hữu Bật" },
+    THIEN_HINH: { name: "Thiên Hình" },
+    THIEN_RIEU: { name: "Thiên Riêu" },
+    THIEN_Y: { name: "Thiên Y" },
+    THIEN_GIAI: { name: "Thiên Giải" },
+    DIA_GIAI: { name: "Địa Giải" }
 }
   
   

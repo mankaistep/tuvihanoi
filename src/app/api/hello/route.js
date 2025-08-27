@@ -14,7 +14,8 @@ import {
     anSaoVongLocTon,
     anSaoVongThaiTue,
     anSaoTheoThienCan,
-    anSaoTheoDiaChi
+    anSaoTheoDiaChi,
+    anSaoTheoThangSinh 
 } from '../../utils/utils'
 
 export async function GET(request) {
@@ -74,6 +75,7 @@ export async function GET(request) {
     // Create response data
     const data = {
       viTriTuVi: anSaoTuVi(yinBirthday),
+      anSaoTheoThangSinh: anSaoTheoThangSinh(yinBirthday),
       saoTheoDiaChi: anSaoTheoDiaChi(yinBirthday),
       saoTheoThienCan: anSaoTheoThienCan(yinBirthday),
       saoVongLocTon: anSaoVongLocTon(yinBirthday),

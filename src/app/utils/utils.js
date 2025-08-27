@@ -775,7 +775,29 @@ export function anSaoTheoDiaChi(yinBirthDate) {
 
     return result;
 }
-    
+
+export function anSaoTheoThangSinh(yinBirthDate) {
+    const result = {};
+    const { month } = yinBirthDate; // giả sử yinBirthDate có field month = tháng âm lịch
+    if (!month || month < 1 || month > 12) return null;
+  
+    const saoThangTable = {
+      TA_PHU:    ["THIN", "TY_SNAKE", "NGO", "MUI", "THAN", "DAU", "TUAT", "HOI", "TY", "SUU", "DAN", "MAO"],
+      HUU_BAT:   ["TUAT", "DAU", "THAN", "MUI", "NGO", "TY_SNAKE", "THIN", "MAO", "DAN", "SUU", "TY", "HOI"],
+      THIEN_HINH:["DAU", "TUAT", "HOI", "TY", "SUU", "DAN", "MAO", "THIN", "TY_SNAKE", "NGO", "MUI", "THAN"],
+      THIEN_RIEU:["SUU", "DAN", "MAO", "THIN", "TY_SNAKE", "NGO", "MUI", "THAN", "DAU", "TUAT", "HOI", "TY"],
+      THIEN_Y:   ["SUU", "DAN", "MAO", "THIN", "TY_SNAKE", "NGO", "MUI", "THAN", "DAU", "TUAT", "HOI", "TY"],
+      THIEN_GIAI:["THAN", "DAU", "TUAT", "HOI", "TY", "SUU", "DAN", "MAO", "THIN", "TY_SNAKE", "NGO", "MUI"],
+      DIA_GIAI:  ["MUI", "THAN", "DAU", "TUAT", "HOI", "TY", "SUU", "DAN", "MAO", "THIN", "TY_SNAKE", "NGO"]
+    };
+  
+    Object.entries(saoThangTable).forEach(([sao, arr]) => {
+      const chi = arr[month - 1]; // tháng 1 -> index 0
+      result[PhuTinh[sao].name] = ConGiap[chi];
+    });
+  
+    return result;
+}    
 
 /*
     Utils functions
