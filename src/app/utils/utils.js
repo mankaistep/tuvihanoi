@@ -964,12 +964,11 @@ export function anSaoHoaLinh(yinBirthDate) {
 /*
     Lap la so
 */
-
-export function lapLaSoTuVi(yinBirthDate) {
+export function lapLaSo(yinBirthDate) {
     // 1️⃣ Thông tin Mệnh bàn tổng quát
-    const menh = anMenh(yinBirthDate);          // ví dụ: Mệnh tại Tý
-    const cuc = anCuc(yinBirthDate);            // ví dụ: Thủy Nhị Cục
-    const banMenh = anBanMenh(yinBirthDate);    // ví dụ: Hải Trung Kim
+    const menh = anMenh(yinBirthDate);          
+    const cuc = anCuc(yinBirthDate);            
+    const banMenh = anBanMenh(yinBirthDate);    
     const amDuongNamNu = anAmDuongNamNu(yinBirthDate);
   
     const menhBan = { menh, cuc, banMenh, amDuongNamNu };
@@ -1000,13 +999,13 @@ export function lapLaSoTuVi(yinBirthDate) {
       const truongSinhTrongCung = [];
   
       function collectSao(saoMap, targetArr) {
-        Object.entries(saoMap).forEach(([saoName, val]) => {
+        Object.entries(saoMap).forEach(([saoKey, val]) => {
           if (Array.isArray(val)) {
             if (val.find(v => v.key === chi.key)) {
-              targetArr.push(saoName);
+              targetArr.push(saoKey);
             }
           } else if (val?.key === chi.key) {
-            targetArr.push(saoName);
+            targetArr.push(saoKey);
           }
         });
       }
@@ -1016,24 +1015,65 @@ export function lapLaSoTuVi(yinBirthDate) {
       collectSao(phuTinhMap, phuTinhTrongCung);
       collectSao(vongTruongSinhMap, truongSinhTrongCung);
   
+      // 5.1️⃣ Chính tinh (map sang key constant trong ChinhTinh)
+      const chinhTinhExpanded = chinhTinhTrongCung.reduce((acc, saoName) => {
+        const foundKey = Object.keys(ChinhTinh).find(k => ChinhTinh[k].name === saoName);
+        if (foundKey) {
+          acc[foundKey] = { ...ChinhTinh[foundKey] };
+        } else {
+          acc[saoName] = {};
+        }
+        return acc;
+      }, {});
+  
+      // 5.2️⃣ Phụ tinh (map sang key constant trong PhuTinh + phân loại cat/sat)
+      let catTinh = {};
+      let satTinh = {};
+  
+      const phuTinhExpanded = phuTinhTrongCung.reduce((acc, saoName) => {
+        const foundKey = Object.keys(PhuTinh).find(k => PhuTinh[k].name === saoName);
+        if (foundKey) {
+          acc[foundKey] = { ...PhuTinh[foundKey] };
+          if (PhuTinh[foundKey].type === "cat") {
+            catTinh[foundKey] = { ...PhuTinh[foundKey] };
+          } else if (PhuTinh[foundKey].type === "sat") {
+            satTinh[foundKey] = { ...PhuTinh[foundKey] };
+          }
+        } else {
+          acc[saoName] = {};
+        }
+        return acc;
+      }, {});
+  
+      // 5.3️⃣ Vòng Trường Sinh (map sang key constant trong VongTruongSinh)
+      const truongSinhExpanded = truongSinhTrongCung.reduce((acc, saoName) => {
+        const foundKey = Object.keys(VongTruongSinh).find(k => VongTruongSinh[k].name === saoName);
+        if (foundKey) {
+          acc[foundKey] = { ...VongTruongSinh[foundKey] };
+        } else {
+          acc[saoName] = {};
+        }
+        return acc;
+      }, {});
+  
       // Đại vận ứng với cung này
       const daiVan = daiVanList.find(dv => dv.chi.key === chi.key);
   
       cungResult[cungKey] = {
-        cung: cung.name,            // Mệnh, Phụ Mẫu…
-        chi: chi.name,              // Tý, Sửu…
-        chinhTinh: chinhTinhTrongCung,
-        phuTinh: phuTinhTrongCung,
-        vongTruongSinh: truongSinhTrongCung,  // 👈 tách riêng
+        cung: cung.name,
+        chi: chi.name,
+        chinhTinh: chinhTinhExpanded,   // { TU_VI: {...}, THIEN_PHU: {...} }
+        phuTinh: phuTinhExpanded,       // { LOC_TON: {...}, DAI_HAO: {...} }
+        vongTruongSinh: truongSinhExpanded, // { TRUONG_SINH: {...}, MOC_DUC: {...} }
+        catTinh,
+        satTinh,
         daiVan: daiVan || null
       };
     });
   
     // 6️⃣ Trả về cả Mệnh bàn + các cung
     return { menhBan, cung: cungResult };
-}
-  
-  
+}  
 
 /*
     Utils functions
@@ -1070,7 +1110,6 @@ export function convertBirthToYin(birthDate) {
       gender: gender
     };
 }
-  
 
 /* 
     Internal functions 

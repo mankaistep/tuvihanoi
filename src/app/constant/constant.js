@@ -322,96 +322,96 @@ export const VongTruongSinh = {
 
 export const PhuTinh = {
     // Vòng Lộc Tồn
-    LOC_TON: { name: "Lộc Tồn" },
-    BAC_SI: { name: "Bác Sĩ" },
-    LUC_SI: { name: "Lực Sĩ" },
-    THANH_LONG: { name: "Thanh Long" },
-    TIEU_HAO: { name: "Tiểu Hao" },
-    TUONG_QUAN: { name: "Tướng Quân" },
-    TAU_THU: { name: "Tấu Thư" },
-    PHI_LIEM: { name: "Phi Liêm" },
-    HI_THANH: { name: "Hỷ Thần" },
-    BENH_PHU: { name: "Bệnh Phù" },
-    DAI_HAO: { name: "Đại Hao" },
-    PHUC_BINH: { name: "Phục Binh" },
-    QUAN_PHU: { name: "Quan Phủ" },
+    LOC_TON:   { name: "Lộc Tồn", type: "cat" },
+    BAC_SI:    { name: "Bác Sĩ", type: "cat" },
+    LUC_SI:    { name: "Lực Sĩ", type: "cat" },
+    THANH_LONG:{ name: "Thanh Long", type: "cat" },
+    TIEU_HAO:  { name: "Tiểu Hao", type: "sat" },
+    TUONG_QUAN:{ name: "Tướng Quân", type: "cat" },
+    TAU_THU:   { name: "Tấu Thư", type: "cat" },
+    PHI_LIEM:  { name: "Phi Liêm", type: "sat" },
+    HI_THANH:  { name: "Hỷ Thần", type: "cat" },
+    BENH_PHU:  { name: "Bệnh Phù", type: "sat" },
+    DAI_HAO:   { name: "Đại Hao", type: "sat" },
+    PHUC_BINH: { name: "Phục Binh", type: "sat" },
+    QUAN_PHU:  { name: "Quan Phủ", type: "sat" },
   
     // Vòng Thái Tuế
-    THAI_TUE: { name: "Thái Tuế" },
-    THIEU_DUONG: { name: "Thiếu Dương" },
-    TANG_MON: { name: "Tang Môn" },
-    THIEU_AM: { name: "Thiếu Âm" },
-    QUAN_PHU_TT: { name: "Quan Phù" },
-    TU_PHU: { name: "Tử Phù" },
-    TUE_PHA: { name: "Tuế Phá" },
-    LONG_DUC: { name: "Long Đức" },
-    BACH_HO: { name: "Bạch Hổ" },
-    PHUC_DUC_TT: { name: "Phúc Đức" },
-    DIEU_KHACH: { name: "Điếu Khách" },
-    TRUC_PHU: { name: "Trực Phù" },
-    
+    THAI_TUE:    { name: "Thái Tuế", type: "sat" },
+    THIEU_DUONG: { name: "Thiếu Dương", type: "cat" },
+    TANG_MON:    { name: "Tang Môn", type: "sat" },
+    THIEU_AM:    { name: "Thiếu Âm", type: "cat" },
+    QUAN_PHU_TT: { name: "Quan Phù", type: "sat" },
+    TU_PHU:      { name: "Tử Phù", type: "sat" },
+    TUE_PHA:     { name: "Tuế Phá", type: "sat" },
+    LONG_DUC:    { name: "Long Đức", type: "cat" },
+    BACH_HO:     { name: "Bạch Hổ", type: "sat" },
+    PHUC_DUC_TT: { name: "Phúc Đức", type: "cat" },
+    DIEU_KHACH:  { name: "Điếu Khách", type: "sat" },
+    TRUC_PHU:    { name: "Trực Phù", type: "sat" },
+  
     // Tứ Hóa
-    HOA_LOC: { name: "Hóa Lộc" },
-    HOA_QUYEN: { name: "Hóa Quyền" },
-    HOA_KHOA: { name: "Hóa Khoa" },
-    HOA_KY: { name: "Hóa Kỵ" },
-
+    HOA_LOC:   { name: "Hóa Lộc", type: "cat" },
+    HOA_QUYEN: { name: "Hóa Quyền", type: "cat" },
+    HOA_KHOA:  { name: "Hóa Khoa", type: "cat" },
+    HOA_KY:    { name: "Hóa Kỵ", type: "sat" },
+  
     // Tuần Không
-    TUAN_KHONG: { name: "Tuần Không" },
-
+    TUAN_KHONG:{ name: "Tuần Không", type: "sat" },
+    TRIET_KHONG:{ name: "Triệt Không", type: "sat" },
+  
     // Các sao theo Thiên Can
-    DA_LA: { name: "Đà La" },
-    KINH_DUONG: { name: "Kình Dương" },
-    LUU_HA: { name: "Lưu Hà" },
-    QUOC_AN: { name: "Quốc Ấn" },
-    DUONG_PHU: { name: "Đường Phù" },
-    VAN_TINH: { name: "Văn Tinh" },
-    THIEN_KHOI: { name: "Thiên Khôi" },
-    THIEN_VIET: { name: "Thiên Việt" },
-    THIEN_QUAN: { name: "Thiên Quan" },
-    THIEN_PHUC: { name: "Thiên Phúc" },
-    THIEN_TRU: { name: "Thiên Trù" },
-    TRIET_KHONG: { name: "Triệt Không" },
-    TUAN_KHONG: { name: "Tuần Không"},
-
+    DA_LA:     { name: "Đà La", type: "sat" },
+    KINH_DUONG:{ name: "Kình Dương", type: "sat" },
+    LUU_HA:    { name: "Lưu Hà", type: "sat" },
+    QUOC_AN:   { name: "Quốc Ấn", type: "cat" },
+    DUONG_PHU: { name: "Đường Phù", type: "cat" },
+    VAN_TINH:  { name: "Văn Tinh", type: "cat" },
+    THIEN_KHOI:{ name: "Thiên Khôi", type: "cat" },
+    THIEN_VIET:{ name: "Thiên Việt", type: "cat" },
+    THIEN_QUAN:{ name: "Thiên Quan", type: "cat" },
+    THIEN_PHUC:{ name: "Thiên Phúc", type: "cat" },
+    THIEN_TRU: { name: "Thiên Trù", type: "cat" },
+  
     // Sao theo Địa Chi
-    PHUONG_CAC: { name: "Phượng Các" },
-    GIAI_THAN: { name: "Giải Thần" },
-    LONG_TRI: { name: "Long Trì" },
-    NGUYET_DUC: { name: "Nguyệt Đức" },
-    THIEN_DUC: { name: "Thiên Đức" },
-    THIEN_HY: { name: "Thiên Hỷ" },
-    THIEN_MA: { name: "Thiên Mã" },
-    THIEN_KHOC: { name: "Thiên Khốc" },
-    THIEN_HU: { name: "Thiên Hư" },
-    DAO_HOA: { name: "Đào Hoa" },
-    HONG_LOAN: { name: "Hồng Loan" },
-    HOA_CAI: { name: "Hoa Cái" },
-    KIEP_SAT: { name: "Kiếp Sát" },
-    PHA_TOAI: { name: "Phá Toái" },
-    CO_THAN: { name: "Cô Thần" },
-    QUA_TU: { name: "Quả Tú" },
-
-    // Thang sinh
-    TA_PHU: { name: "Tả Phù" },
-    HUU_BAT: { name: "Hữu Bật" },
-    THIEN_HINH: { name: "Thiên Hình" },
-    THIEN_RIEU: { name: "Thiên Riêu" },
-    THIEN_Y: { name: "Thiên Y" },
-    THIEN_GIAI: { name: "Thiên Giải" },
-    DIA_GIAI: { name: "Địa Giải" },
-
-    // Gio sinh
-    VAN_XUONG: { name: "Văn Xương" },
-    VAN_KHUC:  { name: "Văn Khúc" },
-    DIA_KHONG: { name: "Địa Không" },
-    DIA_KIEP:  { name: "Địa Kiếp" },
-    THAI_PHU:  { name: "Thai Phụ" },
-    PHONG_CAO: { name: "Phong Cáo" },
-
-    // Hoa Linh
-    HOA_TINH: { name: "Hỏa Tinh" },
-    LINH_TINH: { name: "Linh Tinh" }
+    PHUONG_CAC:{ name: "Phượng Các", type: "cat" },
+    GIAI_THAN: { name: "Giải Thần", type: "cat" },
+    LONG_TRI:  { name: "Long Trì", type: "cat" },
+    NGUYET_DUC:{ name: "Nguyệt Đức", type: "cat" },
+    THIEN_DUC: { name: "Thiên Đức", type: "cat" },
+    THIEN_HY:  { name: "Thiên Hỷ", type: "cat" },
+    THIEN_MA:  { name: "Thiên Mã", type: "cat" },
+    THIEN_KHOC:{ name: "Thiên Khốc", type: "sat" },
+    THIEN_HU:  { name: "Thiên Hư", type: "sat" },
+    DAO_HOA:   { name: "Đào Hoa", type: "binh" }, // tình duyên, trung tính
+    HONG_LOAN: { name: "Hồng Loan", type: "binh" },
+    HOA_CAI:   { name: "Hoa Cái", type: "binh" },
+    KIEP_SAT:  { name: "Kiếp Sát", type: "sat" },
+    PHA_TOAI:  { name: "Phá Toái", type: "sat" },
+    CO_THAN:   { name: "Cô Thần", type: "sat" },
+    QUA_TU:    { name: "Quả Tú", type: "sat" },
+  
+    // Tháng sinh
+    TA_PHU:    { name: "Tả Phù", type: "cat" },
+    HUU_BAT:   { name: "Hữu Bật", type: "cat" },
+    THIEN_HINH:{ name: "Thiên Hình", type: "sat" },
+    THIEN_RIEU:{ name: "Thiên Riêu", type: "sat" },
+    THIEN_Y:   { name: "Thiên Y", type: "cat" },
+    THIEN_GIAI:{ name: "Thiên Giải", type: "cat" },
+    DIA_GIAI:  { name: "Địa Giải", type: "cat" },
+  
+    // Giờ sinh
+    VAN_XUONG: { name: "Văn Xương", type: "cat" },
+    VAN_KHUC:  { name: "Văn Khúc", type: "cat" },
+    DIA_KHONG: { name: "Địa Không", type: "sat" },
+    DIA_KIEP:  { name: "Địa Kiếp", type: "sat" },
+    THAI_PHU:  { name: "Thai Phụ", type: "cat" },
+    PHONG_CAO: { name: "Phong Cáo", type: "cat" },
+  
+    // Hỏa Linh
+    HOA_TINH:  { name: "Hỏa Tinh", type: "sat" },
+    LINH_TINH: { name: "Linh Tinh", type: "sat" }
 }
+  
   
   
