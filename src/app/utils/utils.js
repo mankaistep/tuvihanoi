@@ -960,6 +960,79 @@ export function anSaoHoaLinh(yinBirthDate) {
     result[PhuTinh.LINH_TINH.name] = ConGiap[linhChi];
     return result;
 }
+
+/*
+    Lap la so
+*/
+
+export function lapLaSoTuVi(yinBirthDate) {
+    // 1️⃣ Thông tin Mệnh bàn tổng quát
+    const menh = anMenh(yinBirthDate);          // ví dụ: Mệnh tại Tý
+    const cuc = anCuc(yinBirthDate);            // ví dụ: Thủy Nhị Cục
+    const banMenh = anBanMenh(yinBirthDate);    // ví dụ: Hải Trung Kim
+    const amDuongNamNu = anAmDuongNamNu(yinBirthDate);
+  
+    const menhBan = { menh, cuc, banMenh, amDuongNamNu };
+  
+    // 2️⃣ Xác định cung -> con giáp (theo thứ tự chuẩn từ cung Mệnh)
+    const cungMap = anCung(yinBirthDate);
+  
+    // 3️⃣ An đại vận
+    const daiVanList = anDaiVan(yinBirthDate);
+  
+    // 4️⃣ An sao
+    const chinhTinhMap = anChinhTinh(yinBirthDate) || {};
+    const vongTruongSinhMap = anVongTruongSinh(yinBirthDate) || {};
+    const phuTinhMap = {
+      ...anSaoVongLocTon(yinBirthDate),
+      ...anSaoVongThaiTue(yinBirthDate),
+      ...anSaoTheoThienCan(yinBirthDate)
+    };
+  
+    // 5️⃣ Gom thông tin từng cung
+    const cungResult = {};
+    Object.keys(cungMap).forEach(cungKey => {
+      const chi = cungMap[cungKey];
+      const cung = Cung[cungKey];
+  
+      const chinhTinhTrongCung = [];
+      const phuTinhTrongCung = [];
+      const truongSinhTrongCung = [];
+  
+      function collectSao(saoMap, targetArr) {
+        Object.entries(saoMap).forEach(([saoName, val]) => {
+          if (Array.isArray(val)) {
+            if (val.find(v => v.key === chi.key)) {
+              targetArr.push(saoName);
+            }
+          } else if (val?.key === chi.key) {
+            targetArr.push(saoName);
+          }
+        });
+      }
+  
+      // phân loại
+      collectSao(chinhTinhMap, chinhTinhTrongCung);
+      collectSao(phuTinhMap, phuTinhTrongCung);
+      collectSao(vongTruongSinhMap, truongSinhTrongCung);
+  
+      // Đại vận ứng với cung này
+      const daiVan = daiVanList.find(dv => dv.chi.key === chi.key);
+  
+      cungResult[cungKey] = {
+        cung: cung.name,            // Mệnh, Phụ Mẫu…
+        chi: chi.name,              // Tý, Sửu…
+        chinhTinh: chinhTinhTrongCung,
+        phuTinh: phuTinhTrongCung,
+        vongTruongSinh: truongSinhTrongCung,  // 👈 tách riêng
+        daiVan: daiVan || null
+      };
+    });
+  
+    // 6️⃣ Trả về cả Mệnh bàn + các cung
+    return { menhBan, cung: cungResult };
+}
+  
   
 
 /*
