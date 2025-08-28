@@ -66,17 +66,32 @@ export function anThan(yinBirthDate) {
 }
 
 export function anCung(yinBirthDate) {
-    const hourBranch = getConGiapByHour(yinBirthDate.hours);
+    // 1️⃣ Xác định cung Mệnh
+    const menhBranch = anMenh(yinBirthDate); // ConGiap[...] object
+    const menhNum = menhBranch.number;
   
-    // Starting position: Mệnh = hour branch
-    const menhNum = hourBranch.number;
+    // 2️⃣ Thứ tự các cung (theo vòng 12 cung Tử Vi)
+    const cungOrder = [
+      "MENH",
+      "PHU_MAU",
+      "PHUC_DUC",
+      "DIEN_TRACH",
+      "QUAN_LOC",
+      "NO_BOC",
+      "THIEN_DI",
+      "TAT_ACH",
+      "TAI_BACH",
+      "TU_TUC",
+      "PHU_THE",
+      "HUYNH_DE"
+    ];
   
-    const cungNames = Object.keys(Cung);
+    // 3️⃣ Lập kết quả
     const result = {};
-  
-    cungNames.forEach((cungName, idx) => {
-      const giapNum = mod(menhNum - 1 + idx, 12) + 1;
-      result[cungName] = getConGiapByNumber(giapNum);
+    cungOrder.forEach((cungKey, idx) => {
+      // Đi thuận chiều (cộng thêm idx)
+      const giapNum = mod((menhNum - 1) + idx, 12) + 1;
+      result[cungKey] = getConGiapByNumber(giapNum);
     });
   
     return result;

@@ -76,27 +76,8 @@ export async function GET(request) {
 
     // Create response data
     const data = {
-      viTriTuVi: anSaoTuVi(yinBirthday),
-      anSaoHoaLinh: anSaoHoaLinh(yinBirthday),
-      anSaoTheoGioSinh: anSaoTheoGioSinh(yinBirthday),
-      anSaoTheoThangSinh: anSaoTheoThangSinh(yinBirthday),
-      saoTheoDiaChi: anSaoTheoDiaChi(yinBirthday),
-      saoTheoThienCan: anSaoTheoThienCan(yinBirthday),
-      saoVongLocTon: anSaoVongLocTon(yinBirthday),
-      saoVongThaiTue: anSaoVongThaiTue(yinBirthday),
-      vongTruongSinh: anVongTruongSinh(yinBirthday),
-      chinhTinh: anChinhTinh(yinBirthday),
-      birthDate: birthDate.toISOString(),
-      age,
-      status: 'success',
-      yinBirthday: yinBirthday,
-      amDuongNamNu: anAmDuongNamNu(yinBirthday),
-      menh: anMenh(yinBirthday),
-      than: anThan(yinBirthday),
-      cuc: anCuc(yinBirthday),
-      banMenh: anBanMenh(yinBirthday),
-      daiVan: anDaiVan(yinBirthday),
       cung: anCung(yinBirthday),
+      daiVan: anDaiVan(yinBirthday),
     };
 
     return Response.json(data);
