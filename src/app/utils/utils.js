@@ -1076,7 +1076,7 @@ export function lapLaSo(yinBirthDate) {
 }  
 
 /*
-    Utils functions
+    Utils function
 */
 
 export function convertBirthToYin(birthDate) {
