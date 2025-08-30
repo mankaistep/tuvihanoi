@@ -981,7 +981,7 @@ export function lapLaSo(yinBirthDate) {
   
     const menhBan = { menh, cuc, banMenh, amDuongNamNu };
   
-    // 2️⃣ Xác định cung -> con giáp (theo thứ tự chuẩn từ cung Mệnh)
+    // 2️⃣ Xác định cung -> con giáp
     const cungMap = anCung(yinBirthDate);
   
     // 3️⃣ An đại vận
@@ -1023,49 +1023,33 @@ export function lapLaSo(yinBirthDate) {
       collectSao(phuTinhMap, phuTinhTrongCung);
       collectSao(vongTruongSinhMap, truongSinhTrongCung);
   
-      // 5.1️⃣ Chính tinh (map sang key constant trong ChinhTinh + thêm độ sáng)
-      const chinhTinhExpanded = chinhTinhTrongCung.reduce((acc, saoName) => {
+      // 5.1️⃣ Chính tinh -> list + độ sáng
+      const chinhTinhExpanded = chinhTinhTrongCung.map(saoName => {
         const foundKey = Object.keys(ChinhTinh).find(k => ChinhTinh[k].name === saoName);
         if (foundKey) {
-          acc[foundKey] = { 
-            ...ChinhTinh[foundKey], 
-            doSang: getDoSangForStar(foundKey, chi.key)   // ⬅️ thêm độ sáng
+          return {
+            key: foundKey,
+            ...ChinhTinh[foundKey],
+            doSang: getDoSangForStar(foundKey, chi.key)  // ⭐ thêm độ sáng
           };
-        } else {
-          acc[saoName] = {};
         }
-        return acc;
-      }, {});
+        return { key: saoName, name: saoName, doSang: null };
+      });
   
-      // 5.2️⃣ Phụ tinh (map sang key constant trong PhuTinh + phân loại cat/sat)
-      let catTinh = {};
-      let satTinh = {};
-  
-      const phuTinhExpanded = phuTinhTrongCung.reduce((acc, saoName) => {
+      // 5.2️⃣ Phụ tinh -> list
+      const phuTinhExpanded = phuTinhTrongCung.map(saoName => {
         const foundKey = Object.keys(PhuTinh).find(k => PhuTinh[k].name === saoName);
-        if (foundKey) {
-          acc[foundKey] = { ...PhuTinh[foundKey] };
-          if (PhuTinh[foundKey].type === "cat") {
-            catTinh[foundKey] = { ...PhuTinh[foundKey] };
-          } else if (PhuTinh[foundKey].type === "sat") {
-            satTinh[foundKey] = { ...PhuTinh[foundKey] };
-          }
-        } else {
-          acc[saoName] = {};
-        }
-        return acc;
-      }, {});
+        return foundKey ? { key: foundKey, ...PhuTinh[foundKey] } : { key: saoName, name: saoName };
+      });
   
-      // 5.3️⃣ Vòng Trường Sinh (map sang key constant trong VongTruongSinh)
-      const truongSinhExpanded = truongSinhTrongCung.reduce((acc, saoName) => {
+      const catTinh = phuTinhExpanded.filter(s => s.type === "cat");
+      const satTinh = phuTinhExpanded.filter(s => s.type === "sat");
+  
+      // 5.3️⃣ Vòng Trường Sinh -> list
+      const truongSinhExpanded = truongSinhTrongCung.map(saoName => {
         const foundKey = Object.keys(VongTruongSinh).find(k => VongTruongSinh[k].name === saoName);
-        if (foundKey) {
-          acc[foundKey] = { ...VongTruongSinh[foundKey] };
-        } else {
-          acc[saoName] = {};
-        }
-        return acc;
-      }, {});
+        return foundKey ? { key: foundKey, ...VongTruongSinh[foundKey] } : { key: saoName, name: saoName };
+      });
   
       // Đại vận ứng với cung này
       const daiVan = daiVanList.find(dv => dv.chi.key === chi.key);
@@ -1073,18 +1057,20 @@ export function lapLaSo(yinBirthDate) {
       cungResult[cungKey] = {
         cung: cung.name,
         chi: chi.name,
-        chinhTinh: chinhTinhExpanded,   // { TU_VI: {..., doSang: {...}}, ... }
-        phuTinh: phuTinhExpanded,       
-        vongTruongSinh: truongSinhExpanded, 
-        catTinh,
-        satTinh,
+        chinhTinh: chinhTinhExpanded,       // list (có doSang)
+        phuTinh: phuTinhExpanded,           // list
+        vongTruongSinh: truongSinhExpanded, // list
+        catTinh,                            // list
+        satTinh,                            // list
         daiVan: daiVan || null
       };
     });
   
     // 6️⃣ Trả về cả Mệnh bàn + các cung
     return { menhBan, cung: cungResult };
-}
+  }
+  
+  
    
 
 /*
