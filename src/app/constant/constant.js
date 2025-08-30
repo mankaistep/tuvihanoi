@@ -425,7 +425,8 @@ export const PhuTinh = {
     THIEN_KHONG: { key: "THIEN_KHONG", name: "Thiên Không", type: "sat" },
     TAM_THAI: { key: "TAM_THAI", name: "Tam Thai", type: "cat" },
     BAT_TOA: { key: "BAT_TOA", name: "Bát Toạ", type: "cat" },
-    DAU_QUAN: { key: "DAU_QUAN", name: "Đẩu Quân", type: "sat"}
+    DAU_QUAN: { key: "DAU_QUAN", name: "Đẩu Quân", type: "sat"},
+    THIEN_THUONG: { key: "THIEN_THUONG", name: "Thiên Thương", type: "sat"}
 
   };
   

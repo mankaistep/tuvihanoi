@@ -1154,6 +1154,11 @@ export function anSaoKhac(yinBirthDate) {
         result[PhuTinh.THIEN_SU.name] = { ...cungMap["TAT_ACH"] };
     }
 
+    // ⭐ Thiên Thương luôn ở cung Nô Bộc
+    if (cungMap["NO_BOC"]) {
+        result[PhuTinh.THIEN_THUONG.name] = { ...cungMap["NO_BOC"] };
+    }
+
     // 4) Lấy vòng Thái Tuế để đặt Thiên Không (đặt cùng Thiếu Dương)
     const thaiTueMap = anSaoVongThaiTue(yinBirthDate) || {};
     const thieuDuongCung = thaiTueMap[PhuTinh.THIEU_DUONG.name];
