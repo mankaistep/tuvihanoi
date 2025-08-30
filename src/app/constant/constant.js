@@ -412,7 +412,17 @@ export const PhuTinh = {
   
     // Hỏa Linh
     HOA_TINH:  { key: "HOA_TINH", name: "Hỏa Tinh", type: "sat" },
-    LINH_TINH: { key: "LINH_TINH", name: "Linh Tinh", type: "sat" }
+    LINH_TINH: { key: "LINH_TINH", name: "Linh Tinh", type: "sat" },
+
+    // Khác
+    THIEN_LA:  { key: "THIEN_LA", name: "Thiên La", type: "sat" },
+    DIA_VONG:  { key: "DIA_VONG", name: "Địa Võng", type: "sat" },
+    THIEN_SU:  { key: "THIEN_SU", name: "Thiên Sứ", type: "sat" },
+    THIEN_TAI: { key: "THIEN_TAI", name: "Thiên Tài", type: "cat" },
+    THIEN_THO: { key: "THIEN_THO", name: "Thiên Thọ", type: "cat" },
+    AN_QUANG:  { key: "AN_QUANG", name: "Ân Quang", type: "cat" },
+    THIEN_QUY: { key: "THIEN_QUY", name: "Thiên Quý", type: "cat" }
+
   };
   
 

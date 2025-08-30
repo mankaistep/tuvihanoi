@@ -984,6 +984,179 @@ export function anSaoHoaLinh(yinBirthDate) {
     return result;
 }
 
+export function anSaoThienTaiTho(yinBirthDate) {
+    const result = {};
+    const { year } = yinBirthDate;
+    if (!year) return null;
+  
+    // 1️⃣ Lấy 12 cung
+    const cungMap = anCung(yinBirthDate);
+  
+    // 2️⃣ Xác định chi năm sinh
+    const chiList = [
+      "TY","SUU","DAN","MAO","THIN","TY_SNAKE",
+      "NGO","MUI","THAN","DAU","TUAT","HOI"
+    ];
+    const diaChiIndex = year % 12;
+    const diaChi = chiList[diaChiIndex];
+  
+    // 3️⃣ Hàm xác định vị trí sao theo nguyên tắc "coi cung gốc = Tý"
+    function findCung(startCung) {
+      const startNum = startCung.number; // số cung gốc
+      const targetIndex = chiList.indexOf(diaChi); // index chi năm
+      if (targetIndex === -1) return null;
+  
+      // chạy thuận chiều từ cung gốc đến địa chi
+      const giapNum = mod((startNum - 1) + targetIndex, 12) + 1;
+      return getConGiapByNumber(giapNum);
+    }
+  
+    // 4️⃣ An Thiên Tài (dựa vào cung Mệnh)
+    const menhCung = cungMap["MENH"];
+    if (menhCung) {
+      result[PhuTinh.THIEN_TAI.name] = findCung(menhCung);
+    }
+  
+    // 5️⃣ An Thiên Thọ (dựa vào cung Thân)
+    const thanCung = cungMap["PHU_THE"]; // ⚠️ cần thay bằng hàm anThan nếu có
+    if (thanCung) {
+      result[PhuTinh.THIEN_THO.name] = findCung(thanCung);
+    }
+  
+    return result;
+}
+
+export function anSaoQuangQuy(yinBirthDate) {
+    const result = {};
+    const { day, hours } = yinBirthDate;
+  
+    if (!day || hours == null) return null;
+  
+    // =======================
+    // 12 Địa Chi (must match ConGiap keys!)
+    // =======================
+    const chiList = [
+      "TY",        // Tý
+      "SUU",       // Sửu
+      "DAN",       // Dần
+      "MAO",       // Mão
+      "THIN",      // Thìn
+      "TY_SNAKE",  // Tỵ
+      "NGO",       // Ngọ
+      "MUI",       // Mùi
+      "THAN",      // Thân
+      "DAU",       // Dậu
+      "TUAT",      // Tuất
+      "HOI"        // Hợi
+    ];
+  
+    // =======================
+    // Đổi giờ sinh về chi
+    // =======================
+    function getHourChi(hours) {
+      if (hours >= 23 || hours < 1) return "TY";
+      if (hours < 3) return "SUU";
+      if (hours < 5) return "DAN";
+      if (hours < 7) return "MAO";
+      if (hours < 9) return "THIN";
+      if (hours < 11) return "TY_SNAKE";
+      if (hours < 13) return "NGO";
+      if (hours < 15) return "MUI";
+      if (hours < 17) return "THAN";
+      if (hours < 19) return "DAU";
+      if (hours < 21) return "TUAT";
+      return "HOI";
+    }
+  
+    const gioChi = getHourChi(hours);
+    const gioIndex = chiList.indexOf(gioChi);
+    if (gioIndex === -1) {
+      console.error("Invalid gioChi:", gioChi);
+      return null;
+    }
+  
+    // =======================
+    // Di chuyển trên vòng 12 chi
+    // =======================
+    function moveFrom(startChi, steps, direction) {
+        const startIndex = chiList.indexOf(startChi);
+        if (startIndex === -1) {
+          console.error("Invalid startChi:", startChi);
+          return null;
+        }
+      
+        const n = chiList.length;
+        let idx;
+      
+        if (direction === "forward") {
+          idx = (startIndex + steps) % n;
+        } else {
+          idx = ((startIndex - steps) % n + n) % n;  // 🔥 fix here
+        }
+      
+        return chiList[idx];
+    }  
+  
+    // ====================
+    // ⭐ An Ân Quang
+    // ====================
+    // B1: Tuất = giờ Tý → chạy ngược tới giờ sinh
+    const posNgay1_AQ = moveFrom("TUAT", gioIndex, "backward");
+  
+    // B2: từ ngày1 chạy thuận tới ngày sinh
+    const posNgayX_AQ = moveFrom(posNgay1_AQ, (day - 1), "forward");
+  
+    // B3: lùi 1 ô
+    const final_AQ = moveFrom(posNgayX_AQ, 1, "backward");
+    if (final_AQ) {
+      result[PhuTinh.AN_QUANG.name] = ConGiap[final_AQ];
+    }
+  
+    // ====================
+    // ⭐ An Thiên Quý
+    // ====================
+    // B1: Thìn = giờ Tý → chạy thuận tới giờ sinh
+    const posNgay1_TQ = moveFrom("THIN", gioIndex, "forward");
+  
+    // B2: từ ngày1 chạy ngược tới ngày sinh
+    const posNgayX_TQ = moveFrom(posNgay1_TQ, (day - 1), "backward");
+  
+    // B3: tiến 1 ô
+    const final_TQ = moveFrom(posNgayX_TQ, 1, "forward");
+
+    if (final_TQ) {
+      result[PhuTinh.THIEN_QUY.name] = ConGiap[final_TQ];
+    }
+  
+    return result;
+  }
+  
+  
+export function anSaoKhac(yinBirthDate) {
+    const result = {};
+  
+    // Thiên La tại Thìn
+    result[PhuTinh.THIEN_LA.name] = {
+      ...ConGiap["THIN"]
+    };
+  
+    // Địa Võng tại Tuất
+    result[PhuTinh.DIA_VONG.name] = {
+      ...ConGiap["TUAT"]
+    };
+
+    const cungMap = anCung(yinBirthDate);
+    if (!cungMap) return null;
+
+    // Thiên Sứ luôn ở cung Tật Ách
+    result[PhuTinh.THIEN_SU.name] = {
+        ...cungMap["TAT_ACH"]
+    };
+  
+    return result;
+  }
+  
+
 /*
     Lap la so
 */
