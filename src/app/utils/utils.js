@@ -1273,23 +1273,6 @@ function getDoSangForStar(starKey, cungKey) {
     return DoSang.HAM;
 }
 
-function attachStarInfo(starDef, cungKey, doSang = null, extra = {}) {
-    return {
-      key: starDef.key,
-      name: starDef.name,
-      type: starDef.type,
-      ...(extra.isTuHoa ? { isTuHoa: true, target: extra.target } : {}),
-      cung: cungKey
-        ? {
-            ...ConGiap[cungKey],
-            ...(doSang ? { doSang } : {})
-          }
-        : null
-    };
-  }
-  
-  
-
 const ThienPhuMap = {
     TY: "THIN",
     SUU: "MAO",
