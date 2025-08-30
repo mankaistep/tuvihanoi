@@ -989,42 +989,38 @@ export function anSaoThienTaiTho(yinBirthDate) {
     const { year } = yinBirthDate;
     if (!year) return null;
   
-    // 1️⃣ Lấy 12 cung
-    const cungMap = anCung(yinBirthDate);
+    // 1️⃣ Lấy thông tin 12 cung (theo năm sinh)
+    const cungMap = anCung(yinBirthDate);   // object MENH, PHU_MAU, ..., each is ConGiap
+    const thanCung = anThan(yinBirthDate);  // ConGiap object của Thân
   
-    // 2️⃣ Xác định chi năm sinh
+    // 2️⃣ Lấy địa chi của năm sinh
+    const chiIndex = (year - 4) % 12; // 0 = Tý (năm 4 = Giáp Tý), 1 = Sửu, ...
     const chiList = [
-      "TY","SUU","DAN","MAO","THIN","TY_SNAKE",
-      "NGO","MUI","THAN","DAU","TUAT","HOI"
+      "TY", "SUU", "DAN", "MAO", "THIN", "TY_SNAKE",
+      "NGO", "MUI", "THAN", "DAU", "TUAT", "HOI"
     ];
-    const diaChiIndex = year % 12;
-    const diaChi = chiList[diaChiIndex];
+    const namChi = chiList[chiIndex];
   
-    // 3️⃣ Hàm xác định vị trí sao theo nguyên tắc "coi cung gốc = Tý"
-    function findCung(startCung) {
-      const startNum = startCung.number; // số cung gốc
-      const targetIndex = chiList.indexOf(diaChi); // index chi năm
-      if (targetIndex === -1) return null;
-  
-      // chạy thuận chiều từ cung gốc đến địa chi
-      const giapNum = mod((startNum - 1) + targetIndex, 12) + 1;
-      return getConGiapByNumber(giapNum);
+    // 3️⃣ Hàm chạy thuận (MENH/THAN coi như Tý)
+    function moveFromBase(baseCung, targetChi) {
+      const baseNum = baseCung.number;              // số 1..12 của cung base
+      const targetNum = getConGiapByKey(targetChi).number; // số 1..12 theo chi
+      // tính khoảng cách thuận
+      const steps = (targetNum - 1); // vì base coi là Tý = 1
+      const finalNum = mod((baseNum - 1) + steps, 12) + 1;
+      return getConGiapByNumber(finalNum);
     }
   
-    // 4️⃣ An Thiên Tài (dựa vào cung Mệnh)
-    const menhCung = cungMap["MENH"];
-    if (menhCung) {
-      result[PhuTinh.THIEN_TAI.name] = findCung(menhCung);
-    }
+    // 4️⃣ An Thiên Tài (từ Mệnh)
+    const menhCung = cungMap.MENH;
+    result["Thiên Tài"] = moveFromBase(menhCung, namChi);
   
-    // 5️⃣ An Thiên Thọ (dựa vào cung Thân)
-    const thanCung = cungMap["PHU_THE"]; // ⚠️ cần thay bằng hàm anThan nếu có
-    if (thanCung) {
-      result[PhuTinh.THIEN_THO.name] = findCung(thanCung);
-    }
+    // 5️⃣ An Thiên Thọ (từ Thân)
+    result["Thiên Thọ"] = moveFromBase(thanCung, namChi);
   
     return result;
 }
+  
 
 export function anSaoQuangQuy(yinBirthDate) {
     const result = {};
@@ -1334,6 +1330,10 @@ function getConGiapByHour(hour) {
   return null;
 }
 
+export function getConGiapByKey(key) {
+    return ConGiap[key] || null;
+  }
+
 function getThienPhuKey(tuViKey) {
     return ThienPhuMap[tuViKey] || null;
 }
@@ -1461,4 +1461,3 @@ const ThienPhuMap = {
     TUAT: "NGO",
     HOI: "TY_SNAKE"
 };
-    
