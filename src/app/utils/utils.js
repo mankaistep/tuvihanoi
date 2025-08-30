@@ -353,17 +353,14 @@ export function anChinhTinh(yinBirthDate) {
     ];
   
     saoThienPhuOrder.forEach(({ star, skip }) => {
-      const skipKeys = [];
-      for (let i = 0; i < skip; i++) {
-        skipKeys.push(nextCung(currentKey, 1, true));
-      }
-      const cungKey = nextCung(currentKey, 1, true, skipKeys);
-      result[star.name] = {
-        ...ConGiap[cungKey],
-        doSang: getDoSangForStar(star.key, cungKey)
-      };
-      currentKey = cungKey;
-    });
+        const cungKey = nextCung(currentKey, skip + 1, true); 
+        result[star.name] = {
+          ...ConGiap[cungKey],
+          doSang: getDoSangForStar(star.key, cungKey)
+        };
+        currentKey = cungKey;
+      });
+      
   
     return result;
 }
@@ -440,7 +437,7 @@ export function anSaoVongLocTon(yinBirthDate) {
     // Thứ tự sao vòng Lộc Tồn (sau Lộc Tồn và Bác Sĩ)
     const saoVongLTKeys = [
       "LUC_SI", "THANH_LONG", "TIEU_HAO", "TUONG_QUAN",
-      "TAU_THU", "PHI_LIEM", "HI_THANH", "BENH_PHU",
+      "TAU_THU", "PHI_LIEM", "HI_THAN", "BENH_PHU",
       "DAI_HAO", "PHUC_BINH", "QUAN_PHU"
     ];
   
@@ -483,7 +480,7 @@ export function anSaoVongThaiTue(yinBirthDate) {
       "TUE_PHA",
       "LONG_DUC",
       "BACH_HO",
-      "PHUC_DUC_TT",
+      "PHUC_DUC",
       "DIEU_KHACH",
       "TRUC_PHU"
     ];
@@ -1010,7 +1007,11 @@ export function lapLaSo(yinBirthDate) {
     const phuTinhMap = {
       ...anSaoVongLocTon(yinBirthDate),
       ...anSaoVongThaiTue(yinBirthDate),
-      ...anSaoTheoThienCan(yinBirthDate) // ⭐ bao gồm cả Tứ Hóa
+      ...anSaoTheoThienCan(yinBirthDate),
+      ...anSaoTheoDiaChi(yinBirthDate),
+      ...anSaoTheoThangSinh(yinBirthDate),
+      ...anSaoTheoGioSinh(yinBirthDate),
+      ...anSaoHoaLinh(yinBirthDate),
     };
   
     // 5️⃣ Gom thông tin từng cung
