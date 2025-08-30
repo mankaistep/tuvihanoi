@@ -1021,7 +1021,6 @@ export function anSaoThienTaiTho(yinBirthDate) {
     return result;
 }
   
-
 export function anSaoQuangQuy(yinBirthDate) {
     const result = {};
     const { day, hours } = yinBirthDate;
@@ -1071,28 +1070,6 @@ export function anSaoQuangQuy(yinBirthDate) {
       return null;
     }
   
-    // =======================
-    // Di chuyển trên vòng 12 chi
-    // =======================
-    function moveFrom(startChi, steps, direction) {
-        const startIndex = chiList.indexOf(startChi);
-        if (startIndex === -1) {
-          console.error("Invalid startChi:", startChi);
-          return null;
-        }
-      
-        const n = chiList.length;
-        let idx;
-      
-        if (direction === "forward") {
-          idx = (startIndex + steps) % n;
-        } else {
-          idx = ((startIndex - steps) % n + n) % n;  // 🔥 fix here
-        }
-      
-        return chiList[idx];
-    }  
-  
     // ====================
     // ⭐ An Ân Quang
     // ====================
@@ -1125,9 +1102,43 @@ export function anSaoQuangQuy(yinBirthDate) {
     }
   
     return result;
+}
+
+export function anSaoTamThaiBatToa(yinBirthDate) {
+    const result = {};
+    const { month, day } = yinBirthDate;
+    if (!month || !day) return null;
+  
+    // ======================
+    // ⭐ An Tam Thai
+    // ======================
+    // B1: Thìn = Tháng 1 → chạy thuận tới tháng sinh
+    const posNgay1_TT = moveFrom("THIN", month - 1, "forward");
+  
+    // B2: từ đó đặt = Ngày 1, chạy thuận tiếp tới ngày sinh
+    const final_TT = moveFrom(posNgay1_TT, day - 1, "forward");
+  
+    result[PhuTinh.TAM_THAI.name] = {
+      ...ConGiap[final_TT]
+    };
+  
+    // ======================
+    // ⭐ An Bat Toa
+    // ======================
+    // B1: Tuất = Tháng 1 → chạy nghịch tới tháng sinh
+    const posNgay1_BT = moveFrom("TUAT", month - 1, "backward");
+  
+    // B2: từ đó đặt = Ngày 1, chạy nghịch tiếp tới ngày sinh
+    const final_BT = moveFrom(posNgay1_BT, day - 1, "backward");
+  
+    result[PhuTinh.BAT_TOA.name] = {
+      ...ConGiap[final_BT]
+    };
+  
+    return result;
   }
   
-  
+    
 export function anSaoKhac(yinBirthDate) {
     const result = {};
   
@@ -1148,9 +1159,20 @@ export function anSaoKhac(yinBirthDate) {
     result[PhuTinh.THIEN_SU.name] = {
         ...cungMap["TAT_ACH"]
     };
+
+    // ⭐ An Thiên Không
+    // Tìm vị trí Thiếu Dương trong vòng Thái Tuế
+    const saoThaiTueMap = anSaoVongThaiTue(yinBirthDate);
+    const thieuDuongCung = saoThaiTueMap[PhuTinh.THIEU_DUONG.name];
+
+    if (thieuDuongCung) {
+        result[PhuTinh.THIEN_KHONG.name] = {
+        ...thieuDuongCung
+        };
+    }
   
     return result;
-  }
+}
   
 
 /*
@@ -1461,3 +1483,27 @@ const ThienPhuMap = {
     TUAT: "NGO",
     HOI: "TY_SNAKE"
 };
+
+function moveFrom(startChi, steps, direction) {
+    const chiList = [
+        "TY", "SUU", "DAN", "MAO", "THIN", "TY_SNAKE",
+        "NGO", "MUI", "THAN", "DAU", "TUAT", "HOI"
+      ];
+
+    const startIndex = chiList.indexOf(startChi);
+    if (startIndex === -1) {
+      console.error("Invalid startChi:", startChi);
+      return null;
+    }
+  
+    const n = chiList.length;
+    let idx;
+  
+    if (direction === "forward") {
+      idx = (startIndex + steps) % n;
+    } else {
+      idx = ((startIndex - steps) % n + n) % n;  // 🔥 fix here
+    }
+  
+    return chiList[idx];
+}  
