@@ -77,6 +77,7 @@ export async function GET(request) {
 
     // Create response data
     const data = {
+      anChinhTinh: anChinhTinh(yinBirthday),
       lapLaSoTuVi: lapLaSo(yinBirthday),
       cung: anCung(yinBirthday),
       daiVan: anDaiVan(yinBirthday),

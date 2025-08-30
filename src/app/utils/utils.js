@@ -8,7 +8,8 @@ import {
     GioiTinh,
     ChinhTinh,
     VongTruongSinh,
-    PhuTinh
+    PhuTinh,
+    DoSang
 } from "../constant/constant";
 
 import solarlunar from 'solarlunar'
@@ -293,18 +294,23 @@ export function anChinhTinh(yinBirthDate) {
   
     const tuVi = anSaoTuVi(yinBirthDate);
     if (!tuVi) return null;
-    result[ChinhTinh.TU_VI.name] = tuVi;
+    result[ChinhTinh.TU_VI.name] = {
+      ...tuVi,
+      doSang: getDoSangForStar("TU_VI", tuVi.key)
+    };
   
     // An Thiên Phủ theo bảng ánh xạ
     const thienPhuKey = getThienPhuKey(tuVi.key);
-    result[ChinhTinh.THIEN_PHU.name] = ConGiap[thienPhuKey];
+    result[ChinhTinh.THIEN_PHU.name] = {
+      ...ConGiap[thienPhuKey],
+      doSang: getDoSangForStar("THIEN_PHU", thienPhuKey)
+    };
   
     const CUNG_KIM_DONG_HO = [
       "TY", "SUU", "DAN", "MAO", "THIN", "TY_SNAKE",
       "NGO", "MUI", "THAN", "DAU", "TUAT", "HOI"
     ];
   
-    // Hàm lấy cung tiếp theo theo chiều kim đồng hồ hoặc ngược
     function nextCung(startKey, step = 1, clockwise = true, skipKeys = []) {
       let idx = CUNG_KIM_DONG_HO.indexOf(startKey);
       while (step > 0) {
@@ -314,7 +320,7 @@ export function anChinhTinh(yinBirthDate) {
       return CUNG_KIM_DONG_HO[idx];
     }
   
-    // 1️⃣ An các sao từ Tử Vi (ngược kim đồng hồ)
+    // 1️⃣ An các sao từ Tử Vi (ngược)
     let currentKey = tuVi.key;
     const saoTuViOrder = [
       { star: ChinhTinh.THIEN_CO, skip: 0 },
@@ -325,15 +331,14 @@ export function anChinhTinh(yinBirthDate) {
     ];
   
     saoTuViOrder.forEach(({ star, skip }) => {
-      // Bỏ cung trước khi an sao
-      const skipKeys = [];
-      for (let i = 0; i < skip; i++) {
-        skipKeys.push(nextCung(currentKey, 1, false));
-      }
-      const cungKey = nextCung(currentKey, 1, false, skipKeys);
-      result[star.name] = ConGiap[cungKey];
-      currentKey = cungKey;
-    });
+        const cungKey = nextCung(currentKey, skip + 1, false);
+        result[star.name] = {
+          ...ConGiap[cungKey],
+          doSang: getDoSangForStar(star.key, cungKey)
+        };
+        currentKey = cungKey;
+      });
+      
   
     // 2️⃣ An các sao từ Thiên Phủ (thuận)
     currentKey = thienPhuKey;
@@ -353,7 +358,10 @@ export function anChinhTinh(yinBirthDate) {
         skipKeys.push(nextCung(currentKey, 1, true));
       }
       const cungKey = nextCung(currentKey, 1, true, skipKeys);
-      result[star.name] = ConGiap[cungKey];
+      result[star.name] = {
+        ...ConGiap[cungKey],
+        doSang: getDoSangForStar(star.key, cungKey)
+      };
       currentKey = cungKey;
     });
   
@@ -1015,11 +1023,14 @@ export function lapLaSo(yinBirthDate) {
       collectSao(phuTinhMap, phuTinhTrongCung);
       collectSao(vongTruongSinhMap, truongSinhTrongCung);
   
-      // 5.1️⃣ Chính tinh (map sang key constant trong ChinhTinh)
+      // 5.1️⃣ Chính tinh (map sang key constant trong ChinhTinh + thêm độ sáng)
       const chinhTinhExpanded = chinhTinhTrongCung.reduce((acc, saoName) => {
         const foundKey = Object.keys(ChinhTinh).find(k => ChinhTinh[k].name === saoName);
         if (foundKey) {
-          acc[foundKey] = { ...ChinhTinh[foundKey] };
+          acc[foundKey] = { 
+            ...ChinhTinh[foundKey], 
+            doSang: getDoSangForStar(foundKey, chi.key)   // ⬅️ thêm độ sáng
+          };
         } else {
           acc[saoName] = {};
         }
@@ -1062,9 +1073,9 @@ export function lapLaSo(yinBirthDate) {
       cungResult[cungKey] = {
         cung: cung.name,
         chi: chi.name,
-        chinhTinh: chinhTinhExpanded,   // { TU_VI: {...}, THIEN_PHU: {...} }
-        phuTinh: phuTinhExpanded,       // { LOC_TON: {...}, DAI_HAO: {...} }
-        vongTruongSinh: truongSinhExpanded, // { TRUONG_SINH: {...}, MOC_DUC: {...} }
+        chinhTinh: chinhTinhExpanded,   // { TU_VI: {..., doSang: {...}}, ... }
+        phuTinh: phuTinhExpanded,       
+        vongTruongSinh: truongSinhExpanded, 
         catTinh,
         satTinh,
         daiVan: daiVan || null
@@ -1073,7 +1084,8 @@ export function lapLaSo(yinBirthDate) {
   
     // 6️⃣ Trả về cả Mệnh bàn + các cung
     return { menhBan, cung: cungResult };
-}  
+}
+   
 
 /*
     Utils function
@@ -1141,6 +1153,116 @@ function getConGiapByHour(hour) {
 function getThienPhuKey(tuViKey) {
     return ThienPhuMap[tuViKey] || null;
 }
+
+// Hàm trả về độ sáng (Miếu/Vượng/Đắc/Hãm) cho sao
+function getDoSangForStar(starKey, cungKey) {
+    // Bảng độ sáng của các sao chính tinh
+    const DoSangMap = {
+      THAI_DUONG: {
+        MIEU: [],
+        VUONG: ["DAN", "NGO", "THIN"],          
+        DAC: ["MAO", "TY_SNAKE", "SUU", "MUI"], 
+        BINH: [],            
+        HAM: ["THAN", "DAU", "TUAT", "HOI", "TY"]      
+      },
+      TU_VI: {
+        MIEU: ["NGO", "DAN", "THAN"],
+        VUONG: ["THIN", "TUAT"],
+        DAC: ["SUU", "MUI"],
+        BINH: ["HOI", "TY", "MAO", "DAU"],
+        HAM: []
+      },
+      LIEM_TRINH: {
+        MIEU: ["THIN", "TUAT"],
+        VUONG: ["TY", "NGO", "DAN", "THAN"],
+        DAC: ["SUU", "MUI"],
+        BINH: [],
+        HAM: ["TY_SNAKE", "HOI", "MAO", "DAU"]
+      },
+      THIEN_DONG: {
+        MIEU: ["DAN", "THAN"],
+        VUONG: ["TY"],
+        DAC: ["MAO", "TY_SNAKE", "HOI"],
+        BINH: [],
+        HAM: ["THIN", "TUAT", "SUU", "MUI", "NGO", "DAU"]
+      },
+      VU_KHUC: {
+        MIEU: ["THIN", "TUAT", "SUU", "MUI"],
+        VUONG: ["DAN", "THAN", "TY", "NGO"],
+        DAC: ["TY", "HOI"],
+        BINH: [],
+        HAM: ["MAO", "DAU"]
+      },
+      THIEN_CO: {
+        MIEU: ["THIN", "TUAT", "MAO", "DAU"],
+        VUONG: ["TY_SNAKE", "THAN"],
+        DAC: ["TY", "NGO", "SUU", "MUI"],
+        BINH: [],
+        HAM: ["DAN", "HOI"]
+      },
+      THIEN_PHU: {
+        MIEU: ["DAN", "THAN", "TY", "NGO"],
+        VUONG: ["THIN", "TUAT"],
+        DAC: ["TY_SNAKE", "SUU", "MUI"],
+        BINH: [],
+        BINH: ["MAO", "DAU", "SUU"]
+      },
+      THAI_AM: {
+        MIEU: ["DAU", "TUAT", "HOI"],
+        VUONG: ["THAN", "TY"],
+        DAC: ["SUU", "MUI"],
+        BINH: [],
+        HAM: ["DAN", "MAO", "THIN", "TY", "NGO"]
+      },
+      THAM_LANG: {
+        MIEU: ["SUU", "MUI"],
+        VUONG: ["THIN", "TUAT"],
+        DAC: ["DAN", "THAN"],
+        BINH: [],
+        HAM: ["TY", "HOI", "TY_SNAKE", "NGO", "MAO", "DAU"]
+      },
+      CU_MON: {
+        MIEU: ["MAO", "DAU"],
+        VUONG: ["TY", "NGO", "DAN"],
+        DAC: ["THAN", "HOI"],
+        BINH: [],
+        HAM: ["THIN", "TUAT", "SUU", "MUI", "TY_SNAKE"]
+      },
+      THIEN_TUONG: {
+        MIEU: ["DAN", "THAN"],
+        VUONG: ["THIN", "TUAT", "TY", "NGO"],
+        DAC: ["SUU", "MUI", "TY_SNAKE", "HOI"],
+        BINH: [],
+        HAM: ["MAO", "DAU"]
+      },
+      THAT_SAT: {
+        MIEU: ["DAN", "THAN", "TY", "NGO"],
+        VUONG: ["TY_SNAKE", "HOI"],
+        DAC: ["SUU", "MUI"],
+        BINH: [],
+        HAM: ["THIN", "TUAT", "MAO", "DAU"]
+      },
+      PHA_QUAN: {
+        MIEU: ["TY", "NGO"],
+        VUONG: ["SUU", "MUI"],
+        DAC: ["THIN", "TUAT"],
+        BINH: [],
+        HAM: ["MAO", "DAU", "DAN", "THAN", "TY_SNAKE", "HOI"]
+      }
+    };
+  
+    const mapping = DoSangMap[starKey];
+    if (!mapping) return DoSang.HAM; // nếu chưa định nghĩa thì coi là Hãm
+  
+    if (mapping.MIEU.includes(cungKey)) return DoSang.MIEU;
+    if (mapping.VUONG.includes(cungKey)) return DoSang.VUONG;
+    if (mapping.DAC.includes(cungKey)) return DoSang.DAC;
+    if (mapping.BINH.includes(cungKey)) return DoSang.BINH;
+    if (mapping.HAM.includes(cungKey)) return DoSang.HAM;
+
+    return DoSang.HAM;
+}
+  
 
 const ThienPhuMap = {
     TY: "THIN",
