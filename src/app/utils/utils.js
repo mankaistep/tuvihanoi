@@ -503,29 +503,47 @@ export function anSaoVongThaiTue(yinBirthDate) {
 
 export function anSaoTheoThienCan(yinBirthDate) {
     const result = {};
-    const { canKey } = anCanChi(yinBirthDate); // lấy Thiên can năm sinh
+    const { canKey } = anCanChi(yinBirthDate);
     if (!canKey) return null;
+
+
+    const chinhTinh = anChinhTinh(yinBirthDate) || {};
+    const theoGio = anSaoTheoGioSinh(yinBirthDate) || {};
+    const theoThang = anSaoTheoThangSinh(yinBirthDate) || {};
   
-    // 1️⃣ Tứ Hóa theo Thiên Can
+    const allStars = { ...chinhTinh, ...theoGio, ...theoThang };
+  
+    // 1) Tứ Hóa theo Thiên Can
     const tuHoaTable = {
       GIAP: { HOA_LOC: ChinhTinh.LIEM_TRINH, HOA_QUYEN: ChinhTinh.PHA_QUAN, HOA_KHOA: ChinhTinh.VU_KHUC, HOA_KY: ChinhTinh.THAI_DUONG },
-      AT:   { HOA_LOC: ChinhTinh.THIEN_CO, HOA_QUYEN: ChinhTinh.THIEN_LUONG, HOA_KHOA: ChinhTinh.TU_VI, HOA_KY: ChinhTinh.THAI_AM },
-      BING: { HOA_LOC: ChinhTinh.THIEN_DONG, HOA_QUYEN: ChinhTinh.THIEN_CO, HOA_KHOA: PhuTinh.VAN_XUONG, HOA_KY: ChinhTinh.LIEM_TRINH },
-      DINH: { HOA_LOC: ChinhTinh.THAI_AM, HOA_QUYEN: ChinhTinh.THIEN_DONG, HOA_KHOA: ChinhTinh.THIEN_CO, HOA_KY: ChinhTinh.CU_MON },
-      MAU:  { HOA_LOC: ChinhTinh.THAM_LANG, HOA_QUYEN: ChinhTinh.THAI_AM, HOA_KHOA: ChinhTinh.THAI_DUONG, HOA_KY: ChinhTinh.THIEN_CO },
-      KY:   { HOA_LOC: ChinhTinh.VU_KHUC, HOA_QUYEN: ChinhTinh.THAM_LANG, HOA_KHOA: ChinhTinh.THIEN_LUONG, HOA_KY: ChinhTinh.VAN_KHUC },
-      CANH: { HOA_LOC: ChinhTinh.THAI_DUONG, HOA_QUYEN: ChinhTinh.VU_KHUC, HOA_KHOA: ChinhTinh.THIEN_DONG, HOA_KY: ChinhTinh.THIEN_TUONG },
-      TAN:  { HOA_LOC: ChinhTinh.CU_MON, HOA_QUYEN: ChinhTinh.THAI_DUONG, HOA_KHOA: PhuTinh.VAN_KHUC, HOA_KY: PhuTinh.VAN_XUONG },
-      NHAM: { HOA_LOC: ChinhTinh.THIEN_LUONG, HOA_QUYEN: ChinhTinh.TU_VI, HOA_KHOA: PhuTinh.TA_PHU, HOA_KY: ChinhTinh.VU_KHUC },
-      QUY:  { HOA_LOC: ChinhTinh.PHA_QUAN, HOA_QUYEN: ChinhTinh.CU_MON, HOA_KHOA: ChinhTinh.THAI_AM, HOA_KY: ChinhTinh.THAM_LANG }
+      AT:   { HOA_LOC: ChinhTinh.THIEN_CO,   HOA_QUYEN: ChinhTinh.THIEN_LUONG, HOA_KHOA: ChinhTinh.TU_VI,    HOA_KY: ChinhTinh.THAI_AM },
+      BINH: { HOA_LOC: ChinhTinh.THIEN_DONG, HOA_QUYEN: ChinhTinh.THIEN_CO,    HOA_KHOA: PhuTinh.VAN_XUONG,  HOA_KY: ChinhTinh.LIEM_TRINH },
+      DINH: { HOA_LOC: ChinhTinh.THAI_AM,    HOA_QUYEN: ChinhTinh.THIEN_DONG,  HOA_KHOA: ChinhTinh.THIEN_CO, HOA_KY: ChinhTinh.CU_MON },
+      MAU:  { HOA_LOC: ChinhTinh.THAM_LANG,  HOA_QUYEN: ChinhTinh.THAI_AM,     HOA_KHOA: ChinhTinh.THAI_DUONG, HOA_KY: ChinhTinh.THIEN_CO },
+      KY:   { HOA_LOC: ChinhTinh.VU_KHUC,    HOA_QUYEN: ChinhTinh.THAM_LANG,   HOA_KHOA: ChinhTinh.THIEN_LUONG, HOA_KY: ChinhTinh.VAN_KHUC },
+      CANH: { HOA_LOC: ChinhTinh.THAI_DUONG, HOA_QUYEN: ChinhTinh.VU_KHUC,     HOA_KHOA: ChinhTinh.THIEN_DONG, HOA_KY: ChinhTinh.THIEN_TUONG },
+      TAN:  { HOA_LOC: ChinhTinh.CU_MON,     HOA_QUYEN: ChinhTinh.THAI_DUONG,  HOA_KHOA: PhuTinh.VAN_KHUC,    HOA_KY: PhuTinh.VAN_XUONG },
+      NHAM: { HOA_LOC: ChinhTinh.THIEN_LUONG, HOA_QUYEN: ChinhTinh.TU_VI,      HOA_KHOA: PhuTinh.TA_PHU,     HOA_KY: ChinhTinh.VU_KHUC },
+      QUY:  { HOA_LOC: ChinhTinh.PHA_QUAN,   HOA_QUYEN: ChinhTinh.CU_MON,      HOA_KHOA: ChinhTinh.THAI_AM,  HOA_KY: ChinhTinh.THAM_LANG }
     };
   
     const tuHoa = tuHoaTable[canKey];
     if (tuHoa) {
-      Object.entries(tuHoa).forEach(([key, star]) => {
-        result[PhuTinh[key].name] = star;
-      });
-    }
+        Object.entries(tuHoa).forEach(([hoaKey, targetStar]) => {
+          const starDef = PhuTinh[hoaKey]; // ví dụ HOA_LOC
+          const targetCung = allStars[targetStar.name];
+      
+          result[starDef.name] = {
+            key: hoaKey,
+            name: starDef.name,
+            type: starDef.type,
+            isTuHoa: true,
+            target: { key: targetStar.key, name: targetStar.name },
+            ...(targetCung ? { ...targetCung } : null)
+          };
+        });
+      }
+      
   
     // 2️⃣ Sao theo Thiên Can (theo bảng chuẩn)
     const saoCanTable = {
@@ -973,27 +991,26 @@ export function anSaoHoaLinh(yinBirthDate) {
     Lap la so
 */
 export function lapLaSo(yinBirthDate) {
-    // 1️⃣ Thông tin Mệnh bàn tổng quát
+    // 1️⃣ Thông tin Mệnh bàn
     const menh = anMenh(yinBirthDate);          
     const cuc = anCuc(yinBirthDate);            
     const banMenh = anBanMenh(yinBirthDate);    
     const amDuongNamNu = anAmDuongNamNu(yinBirthDate);
-  
     const menhBan = { menh, cuc, banMenh, amDuongNamNu };
   
-    // 2️⃣ Xác định cung -> con giáp
+    // 2️⃣ Cung -> con giáp
     const cungMap = anCung(yinBirthDate);
   
-    // 3️⃣ An đại vận
+    // 3️⃣ Đại vận
     const daiVanList = anDaiVan(yinBirthDate);
   
-    // 4️⃣ An sao
+    // 4️⃣ Sao
     const chinhTinhMap = anChinhTinh(yinBirthDate) || {};
     const vongTruongSinhMap = anVongTruongSinh(yinBirthDate) || {};
     const phuTinhMap = {
       ...anSaoVongLocTon(yinBirthDate),
       ...anSaoVongThaiTue(yinBirthDate),
-      ...anSaoTheoThienCan(yinBirthDate)
+      ...anSaoTheoThienCan(yinBirthDate) // ⭐ bao gồm cả Tứ Hóa
     };
   
     // 5️⃣ Gom thông tin từng cung
@@ -1005,6 +1022,7 @@ export function lapLaSo(yinBirthDate) {
       const chinhTinhTrongCung = [];
       const phuTinhTrongCung = [];
       const truongSinhTrongCung = [];
+      const tuHoaTrongCung = [];
   
       function collectSao(saoMap, targetArr) {
         Object.entries(saoMap).forEach(([saoKey, val]) => {
@@ -1030,25 +1048,33 @@ export function lapLaSo(yinBirthDate) {
           return {
             key: foundKey,
             ...ChinhTinh[foundKey],
-            doSang: getDoSangForStar(foundKey, chi.key)  // ⭐ thêm độ sáng
+            doSang: getDoSangForStar(foundKey, chi.key)
           };
         }
         return { key: saoName, name: saoName, doSang: null };
       });
   
-      // 5.2️⃣ Phụ tinh -> list
+      // 5.2️⃣ Phụ tinh (bao gồm cả Tứ Hóa từ constant PhuTinh)
       const phuTinhExpanded = phuTinhTrongCung.map(saoName => {
         const foundKey = Object.keys(PhuTinh).find(k => PhuTinh[k].name === saoName);
         return foundKey ? { key: foundKey, ...PhuTinh[foundKey] } : { key: saoName, name: saoName };
       });
   
+      // 5.3️⃣ Cat tinh & Sat tinh (lọc từ phuTinhExpanded)
       const catTinh = phuTinhExpanded.filter(s => s.type === "cat");
       const satTinh = phuTinhExpanded.filter(s => s.type === "sat");
   
-      // 5.3️⃣ Vòng Trường Sinh -> list
+      // 5.4️⃣ Vòng Trường Sinh
       const truongSinhExpanded = truongSinhTrongCung.map(saoName => {
         const foundKey = Object.keys(VongTruongSinh).find(k => VongTruongSinh[k].name === saoName);
         return foundKey ? { key: foundKey, ...VongTruongSinh[foundKey] } : { key: saoName, name: saoName };
+      });
+  
+      // 5.5️⃣ Tứ Hóa -> list riêng (nhưng lấy từ PhuTinh constant)
+      ["HOA_LOC", "HOA_QUYEN", "HOA_KHOA", "HOA_KY"].forEach(key => {
+        if (phuTinhTrongCung.includes(PhuTinh[key].name)) {
+          tuHoaTrongCung.push({ key, ...PhuTinh[key] });
+        }
       });
   
       // Đại vận ứng với cung này
@@ -1057,21 +1083,19 @@ export function lapLaSo(yinBirthDate) {
       cungResult[cungKey] = {
         cung: cung.name,
         chi: chi.name,
-        chinhTinh: chinhTinhExpanded,       // list (có doSang)
-        phuTinh: phuTinhExpanded,           // list
-        vongTruongSinh: truongSinhExpanded, // list
-        catTinh,                            // list
-        satTinh,                            // list
+        chinhTinh: chinhTinhExpanded,
+        phuTinh: phuTinhExpanded,   // ⭐ đã bao gồm Tứ Hóa từ constant
+        catTinh,
+        satTinh,
+        vongTruongSinh: truongSinhExpanded,
+        tuHoa: tuHoaTrongCung,      // ⭐ list riêng Tứ Hóa
         daiVan: daiVan || null
       };
     });
   
-    // 6️⃣ Trả về cả Mệnh bàn + các cung
     return { menhBan, cung: cungResult };
   }
   
-  
-   
 
 /*
     Utils function
@@ -1248,6 +1272,22 @@ function getDoSangForStar(starKey, cungKey) {
 
     return DoSang.HAM;
 }
+
+function attachStarInfo(starDef, cungKey, doSang = null, extra = {}) {
+    return {
+      key: starDef.key,
+      name: starDef.name,
+      type: starDef.type,
+      ...(extra.isTuHoa ? { isTuHoa: true, target: extra.target } : {}),
+      cung: cungKey
+        ? {
+            ...ConGiap[cungKey],
+            ...(doSang ? { doSang } : {})
+          }
+        : null
+    };
+  }
+  
   
 
 const ThienPhuMap = {
