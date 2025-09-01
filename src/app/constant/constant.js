@@ -289,20 +289,175 @@ export const TuViTable = {
 }
 
 export const ChinhTinh = {
-    TU_VI:       { key: "TU_VI", name: "Tử Vi" },
-    THIEN_PHU:   { key: "THIEN_PHU", name: "Thiên Phủ" },
-    THIEN_CO:    { key: "THIEN_CO", name: "Thiên Cơ" },
-    THAI_DUONG:  { key: "THAI_DUONG", name: "Thái Dương" },
-    VU_KHUC:     { key: "VU_KHUC", name: "Vũ Khúc" },
-    THIEN_DONG:  { key: "THIEN_DONG", name: "Thiên Đồng" },
-    LIEM_TRINH:  { key: "LIEM_TRINH", name: "Liêm Trinh" },
-    THAI_AM:     { key: "THAI_AM", name: "Thái Âm" },
-    THAM_LANG:   { key: "THAM_LANG", name: "Tham Lang" },
-    CU_MON:      { key: "CU_MON", name: "Cự Môn" },
-    THIEN_TUONG: { key: "THIEN_TUONG", name: "Thiên Tướng" },
-    THIEN_LUONG: { key: "THIEN_LUONG", name: "Thiên Lương" },
-    THAT_SAT:    { key: "THAT_SAT", name: "Thất Sát" },
-    PHA_QUAN:    { key: "PHA_QUAN", name: "Phá Quân" }
+    TU_VI: { 
+        key: "TU_VI", 
+        name: "Tử Vi", 
+        am_duong: AmDuong.DUONG, 
+        ngu_hanh: NguHanh.THO,
+        hoa_khi: "Tôn Quý",
+        tinh_chu: [
+            Cung.PHUC_DUC,
+            Cung.QUAN_LOC
+        ],
+        y_nghia: [
+            "Tượng trưng cho quyền lực tối cao, sự uy nghiêm, lãnh đạo và sự cai quản."
+        ]
+    },
+    THIEN_PHU: {
+        key: "THIEN_PHU", 
+        name: "Thiên Phủ", 
+        am_duong: AmDuong.AM, 
+        ngu_hanh: NguHanh.THO,
+        hoa_khi: "Lệnh",
+        tinh_chu: [
+            Cung.TAI_BACH,
+            Cung.DIEN_TRACH
+        ],
+        y_nghia: [
+            "Tượng trưng cho sự ổn định, giàu có, quản lý và bảo vệ tài sản."
+        ]
+    },
+    THIEN_CO: {
+        key: "THIEN_CO",
+        name: "Thiên Cơ",
+        am_duong: AmDuong.AM,
+        ngu_hanh: NguHanh.MOC,
+        hoa_khi: "Thiện",
+        tinh_chu: [
+            Cung.HUYNH_DE
+        ],
+        y_nghia: [
+          "Trưng cho sự sáng tạo, thông minh, khả năng lập kế hoạch và thích nghi."
+        ]
+      },
+    THAI_DUONG: {
+        key: "THAI_DUONG",
+        name: "Thái Dương",
+        am_duong: AmDuong.DUONG,
+        ngu_hanh: NguHanh.HOA,
+        hoa_khi: "Quý", 
+        tinh_chu: [
+            Cung.QUAN_LOC
+        ],
+        y_nghia: [
+          "Biểu thị trí tuệ, sự mạnh mẽ, năng động và vươn lên.",
+          "Tượng trưng cho danh lợi"
+        ]
+      },
+    VU_KHUC: {
+        key: "VU_KHUC",
+        name: "Vũ Khúc",
+        am_duong: AmDuong.AM, 
+        ngu_hanh: NguHanh.KIM, 
+        hoa_khi: "Tài tinh", 
+        tinh_chu: [
+            Cung.TAI_BACH
+        ],
+        y_nghia: [
+          "Chủ về tiền bạc, tính toán, và sự quyết đoán."
+        ]
+    },
+    LIEM_TRINH: {
+        key: "LIEM_TRINH",
+        name: "Liêm Trinh",
+        am_duong: AmDuong.AM,
+        ngu_hanh: NguHanh.HOA,
+        hoa_khi: "Tù tinh",
+        tinh_chu: [
+            Cung.QUAN_LOC
+        ],
+        y_nghia: [
+            "Chủ về sự kiên trì, đạo đức, nhưng cũng có thể biểu thị sự gò bó, thử thách."
+        ]
+    },
+    THAI_AM: {
+        key: "THAI_AM",
+        name: "Thái Âm",
+        am_duong: AmDuong.AM,
+        ngu_hanh: AmDuong.THUY,
+        hoa_khi: "Phú",
+        tinh_chu: [
+            Cung.TAI_BACH,
+            Cung.DIEN_TRACH
+        ],
+        y_nghia: [
+            "Chủ về sự dịu dàng, cảm xúc, tài lộc, sự chiếu sáng âm thầm và hỗ trợ."
+        ]
+    },
+    THAM_LANG: {
+        key: "THAM_LANG",
+        name: "Tham Lang",
+        am_duong: AmDuong.AM,
+        ngu_hanh: NguHanh.THUY,
+        hoa_khi: "Đào hoa",
+        tinh_chu: [],
+        y_nghia: [
+            "Chủ về đam mê, thú vui, sự thu hút, và tìm kiếm những trải nghiệm mới lạ."
+        ]
+    },
+    CU_MON: {
+        key: "CU_MON",
+        name: "Cự Môn",
+        am_duong: AmDuong.AM,
+        ngu_hanh: NguHanh.THUY,
+        hoa_khi: "Ám tinh",
+        tinh_chu: [],
+        y_nghia: [
+            "Chủ về lời nói, sự đối lập, thị phi, nhưng cũng là biểu thị của tri thức và giao tiếp."
+        ]
+    },
+    THIEN_TUONG: {
+        key: "THIEN_TUONG",
+        name: "Thiên Tướng",
+        am_duong: AmDuong.DUONG,
+        ngu_hanh: NguHanh.THUY,
+        hoa_khi: "Ấn tinh",
+        tinh_chu: [
+            Cung.QUAN_LOC
+        ],
+        y_nghia: [
+          "Chủ về lòng trung thành, sự uy nghi và hỗ trợ từ quý nhân."
+        ]
+    },
+    THIEN_LUONG: {
+        key: "THIEN_LUONG",
+        name: "Thiên Lương",
+        am_duong: AmDuong.AM,
+        ngu_hanh: NguHanh.MOC,
+        hoa_khi: "Ấm tinh",
+        tinh_chu: [
+            Cung.PHU_MAU
+        ],
+        y_nghia: [
+            "Chủ về sự che chở, lòng nhân từ và sự an toàn."
+        ]
+    },
+    THAT_SAT: {
+        key: "THAT_SAT",
+        name: "Thất Sát",
+        am_duong: AmDuong.DUONG,
+        ngu_hanh: NguHanh.KIM,
+        hoa_khi: "Tướng",
+        tinh_chu: [],
+        y_nghia: [
+            "Tượng trưng cho sức mạnh, sự quyết liệt, dám đột phá và chấp nhận rủi ro."
+        ]
+    },
+    PHA_QUAN: {
+        key: "PHA_QUAN",
+        name: "Phá Quân",
+        am_duong: AmDuong.AM,
+        ngu_hanh: NguHanh.THUY,
+        hoa_khi: "Hao",
+        tinh_chu: [
+            Cung.PHU_THE,
+            Cung.TU_TUC,
+            Cung.NO_BOC
+        ],
+        y_nghia: [
+          "Chủ về sự thay đổi, phá bỏ cái cũ, làm mới, và sự quyết liệt trong hành động."
+        ]
+    }
 };
   
 
