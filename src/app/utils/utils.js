@@ -332,6 +332,7 @@ export function anChinhTinh(yinBirthDate) {
 
     saoTuViOrder.forEach(({ star, skip }) => {
         const cungKey = nextCung(currentKey, skip + 1, false);
+        console.log(star)
         result[star.name] = {
             ...ConGiap[cungKey],
             doSang: getDoSangForStar(star.key, cungKey)

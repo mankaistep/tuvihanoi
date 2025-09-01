@@ -457,6 +457,19 @@ export const ChinhTinh = {
         y_nghia: [
           "Chủ về sự thay đổi, phá bỏ cái cũ, làm mới, và sự quyết liệt trong hành động."
         ]
+    },
+    THIEN_DONG: {
+        key: "THIEN_DONG",
+        name: "Thiên Đồng",
+        am_duong: AmDuong.DUONG,
+        ngu_hanh: NguHanh.THUY,
+        hoa_khi: "Phúc tinh",
+        tinh_chu: [
+            Cung.PHUC_DUC
+        ],
+        y_nghia: [
+          "Biểu thị sự vui vẻ, lạc quan, sự dễ chịu và khả năng thích nghi linh hoạt",
+        ]
     }
 };
   
