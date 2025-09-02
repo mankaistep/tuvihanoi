@@ -9,7 +9,8 @@ import {
     ChinhTinh,
     VongTruongSinh,
     PhuTinh,
-    DoSang
+    DoSang,
+    LuuTinh
 } from "../constant/constant";
 
 import solarlunar from 'solarlunar'
@@ -332,7 +333,6 @@ export function anChinhTinh(yinBirthDate) {
 
     saoTuViOrder.forEach(({ star, skip }) => {
         const cungKey = nextCung(currentKey, skip + 1, false);
-        console.log(star)
         result[star.name] = {
             ...ConGiap[cungKey],
             doSang: getDoSangForStar(star.key, cungKey)
@@ -518,7 +518,7 @@ export function anSaoTheoThienCan(yinBirthDate) {
         BINH: { HOA_LOC: ChinhTinh.THIEN_DONG, HOA_QUYEN: ChinhTinh.THIEN_CO, HOA_KHOA: PhuTinh.VAN_XUONG, HOA_KY: ChinhTinh.LIEM_TRINH },
         DINH: { HOA_LOC: ChinhTinh.THAI_AM, HOA_QUYEN: ChinhTinh.THIEN_DONG, HOA_KHOA: ChinhTinh.THIEN_CO, HOA_KY: ChinhTinh.CU_MON },
         MAU: { HOA_LOC: ChinhTinh.THAM_LANG, HOA_QUYEN: ChinhTinh.THAI_AM, HOA_KHOA: ChinhTinh.THAI_DUONG, HOA_KY: ChinhTinh.THIEN_CO },
-        KY: { HOA_LOC: ChinhTinh.VU_KHUC, HOA_QUYEN: ChinhTinh.THAM_LANG, HOA_KHOA: ChinhTinh.THIEN_LUONG, HOA_KY: ChinhTinh.VAN_KHUC },
+        KY: { HOA_LOC: ChinhTinh.VU_KHUC, HOA_QUYEN: ChinhTinh.THAM_LANG, HOA_KHOA: ChinhTinh.THIEN_LUONG, HOA_KY: PhuTinh.VAN_KHUC },
         CANH: { HOA_LOC: ChinhTinh.THAI_DUONG, HOA_QUYEN: ChinhTinh.VU_KHUC, HOA_KHOA: ChinhTinh.THIEN_DONG, HOA_KY: ChinhTinh.THIEN_TUONG },
         TAN: { HOA_LOC: ChinhTinh.CU_MON, HOA_QUYEN: ChinhTinh.THAI_DUONG, HOA_KHOA: PhuTinh.VAN_KHUC, HOA_KY: PhuTinh.VAN_XUONG },
         NHAM: { HOA_LOC: ChinhTinh.THIEN_LUONG, HOA_QUYEN: ChinhTinh.TU_VI, HOA_KHOA: PhuTinh.TA_PHU, HOA_KY: ChinhTinh.VU_KHUC },
@@ -1204,8 +1204,126 @@ export function anSaoKhac(yinBirthDate) {
     return result;
 }
 
+export function anSaoLuuNien(yinNamHan) {
+    const year = Number(yinNamHan?.year);
+    if (!year || !Number.isFinite(year)) return null;
+  
+    // Vòng 12 chi theo đúng key trong ConGiap
+    const chiRing = [
+      "TY","SUU","DAN","MAO","THIN","TY_SNAKE",
+      "NGO","MUI","THAN","DAU","TUAT","HOI"
+    ];
+    const norm = (n) => ((n % 12) + 12) % 12;
+    const moveKey = (startKey, steps) => {
+      const i = chiRing.indexOf(startKey);
+      if (i === -1) return null;
+      return chiRing[norm(i + steps)];
+    };
+  
+    // 1) Lưu Thái Tuế: ở đúng chi năm hạn
+    const chiKey = getChiFromYear(year); // e.g. "TY_SNAKE"
+    const thaiTueKey = chiKey;
+    const res = {};
+    res[LuuTinh.L_THAI_TUE.key] = { ...ConGiap[thaiTueKey] };
+  
+    // 2) Lưu Tang Môn: từ Lưu Thái Tuế đi thuận 2 cung
+    const tangMonKey = moveKey(thaiTueKey, 2);
+    if (tangMonKey) {
+      res[LuuTinh.L_TANG_MON.key] = { ...ConGiap[tangMonKey] };
+    }
+  
+    // 3) Lưu Bạch Hổ: cung xung với Lưu Tang Môn (±6 cung)
+    const bachHoKey = tangMonKey ? moveKey(tangMonKey, 6) : null;
+    if (bachHoKey) {
+      res[LuuTinh.L_BACH_HO.key] = { ...ConGiap[bachHoKey] };
+    }
+  
+    // 4) Lưu Thiên Khốc / Lưu Thiên Hư: Ngọ = năm Tý, đếm nghịch/thuận tới năm hạn
+    const khocCung = getThienKhocCung(chiKey); // trả object ConGiap
+    if (khocCung) {
+      res[LuuTinh.L_THIEN_KHOC.key] = { ...khocCung };
+    }
+    const huCung = getThienHuCung(chiKey); // trả object ConGiap
+    if (huCung) {
+      res[LuuTinh.L_THIEN_HU.key] = { ...huCung };
+    }
+  
+    // 5) Lưu Lộc Tồn theo Thiên Can (không dấu, khớp constants)
+    const canKey = getCanFromYear(year); // e.g. "GIAP"
+    const locTonMap = {
+      GIAP: "DAN",      // Giáp ở Dần
+      AT: "MAO",        // Ất ở Mão
+      BINH: "TY_SNAKE", // Bính ở Tỵ
+      DINH: "NGO",      // Đinh ở Ngọ
+      MAU: "TY_SNAKE",  // Mậu ở Tỵ
+      KY: "NGO",        // Kỷ ở Ngọ
+      CANH: "THAN",     // Canh ở Thân
+      TAN: "DAU",       // Tân ở Dậu
+      NHAM: "HOI",      // Nhâm ở Hợi
+      QUY: "TY"         // Quý ở Tý
+    };
+    const locTonKey = locTonMap[canKey];
+    if (locTonKey) {
+      res[LuuTinh.L_LOC_TON.key] = { ...ConGiap[locTonKey] };
+      // 6) Lưu Kình Dương/Đà La: trước/sau Lưu Lộc Tồn
+      const kinhDuongKey = moveKey(locTonKey, -1);
+      const daLaKey = moveKey(locTonKey, 1);
+      if (kinhDuongKey) {
+        res[LuuTinh.L_KINH_DUONG.key] = { ...ConGiap[kinhDuongKey] };
+      }
+      if (daLaKey) {
+        res[LuuTinh.L_DA_LA.key] = { ...ConGiap[daLaKey] };
+      }
+    }
+  
+    // 7) Lưu Thiên Mã: theo nhóm tam hợp của chi năm hạn
+    const thienMaCung = getLuuThienMaFromChi(chiKey); // trả object ConGiap
+    if (thienMaCung) {
+      res[LuuTinh.L_THIEN_MA.key] = { ...thienMaCung };
+    }
+  
+    return res;
+}
 
+export function anSaoLuuTuHoa(yinBirthDate, yinNamHan) {
+    const year = Number(yinNamHan?.year);
+    if (!year || !Number.isFinite(year)) return null;
+  
+    // lấy thiên can năm hạn
+    const canKey = getCanFromYear(year); // ví dụ: "GIAP", "AT", ...
+    const tuHoaTable = {
+        GIAP: { HOA_LOC: ChinhTinh.LIEM_TRINH, HOA_QUYEN: ChinhTinh.PHA_QUAN, HOA_KHOA: ChinhTinh.VU_KHUC, HOA_KY: ChinhTinh.THAI_DUONG },
+        AT: { HOA_LOC: ChinhTinh.THIEN_CO, HOA_QUYEN: ChinhTinh.THIEN_LUONG, HOA_KHOA: ChinhTinh.TU_VI, HOA_KY: ChinhTinh.THAI_AM },
+        BINH: { HOA_LOC: ChinhTinh.THIEN_DONG, HOA_QUYEN: ChinhTinh.THIEN_CO, HOA_KHOA: PhuTinh.VAN_XUONG, HOA_KY: ChinhTinh.LIEM_TRINH },
+        DINH: { HOA_LOC: ChinhTinh.THAI_AM, HOA_QUYEN: ChinhTinh.THIEN_DONG, HOA_KHOA: ChinhTinh.THIEN_CO, HOA_KY: ChinhTinh.CU_MON },
+        MAU: { HOA_LOC: ChinhTinh.THAM_LANG, HOA_QUYEN: ChinhTinh.THAI_AM, HOA_KHOA: ChinhTinh.THAI_DUONG, HOA_KY: ChinhTinh.THIEN_CO },
+        KY: { HOA_LOC: ChinhTinh.VU_KHUC, HOA_QUYEN: ChinhTinh.THAM_LANG, HOA_KHOA: ChinhTinh.THIEN_LUONG, HOA_KY: PhuTinh.VAN_KHUC },
+        CANH: { HOA_LOC: ChinhTinh.THAI_DUONG, HOA_QUYEN: ChinhTinh.VU_KHUC, HOA_KHOA: ChinhTinh.THIEN_DONG, HOA_KY: ChinhTinh.THIEN_TUONG },
+        TAN: { HOA_LOC: ChinhTinh.CU_MON, HOA_QUYEN: ChinhTinh.THAI_DUONG, HOA_KHOA: PhuTinh.VAN_KHUC, HOA_KY: PhuTinh.VAN_XUONG },
+        NHAM: { HOA_LOC: ChinhTinh.THIEN_LUONG, HOA_QUYEN: ChinhTinh.TU_VI, HOA_KHOA: PhuTinh.TA_PHU, HOA_KY: ChinhTinh.VU_KHUC },
+        QUY: { HOA_LOC: ChinhTinh.PHA_QUAN, HOA_QUYEN: ChinhTinh.CU_MON, HOA_KHOA: ChinhTinh.THAI_AM, HOA_KY: ChinhTinh.THAM_LANG }
+    };
+    const hoaConfig = tuHoaTable[canKey];
+    if (!hoaConfig) return null;
+  
+    const result = {};
 
+    const chinhTinhMap = anChinhTinh(yinBirthDate);
+    if (!chinhTinhMap) return null;
+
+    Object.entries(hoaConfig).forEach(([hoaType, star]) => {
+        const starPosition = chinhTinhMap[star.name]; // vị trí chính tinh bị Hóa
+        if (!starPosition) return; // nếu chưa tìm thấy thì bỏ qua
+    
+        result[`L_${hoaType}`] = {
+          ...starPosition,
+          hoa: hoaType, // HOA_LOC -> HÓA LỘC
+          star: star                       // Liêm Trinh, Phá Quân...
+        };
+      });
+    
+      return result;
+  }
 
 /*
     Lap la so
@@ -1539,3 +1657,113 @@ function moveFrom(startChi, steps, direction) {
 
     return chiList[idx];
 }  
+
+// Can list: Giáp Ất Bính Đinh Mậu Kỷ Canh Tân Nhâm Quý
+function getCanFromYear(year) {
+    const canKeys = [
+      "GIAP", "AT", "BINH", "DINH", "MAU",
+      "KY", "CANH", "TAN", "NHAM", "QUY"
+    ];
+    return canKeys[(year - 4) % 10];
+}
+  
+// Chi list: Tý Sửu Dần Mão Thìn Tỵ Ngọ Mùi Thân Dậu Tuất Hợi
+function getChiFromYear(year) {
+    const chiKeys = [
+      "TY",       // Tý
+      "SUU",      // Sửu
+      "DAN",      // Dần
+      "MAO",      // Mão
+      "THIN",     // Thìn
+      "TY_SNAKE", // Tỵ
+      "NGO",      // Ngọ
+      "MUI",      // Mùi
+      "THAN",     // Thân
+      "DAU",      // Dậu
+      "TUAT",     // Tuất
+      "HOI"       // Hợi
+    ];
+    return chiKeys[(year - 4) % 12];
+}
+  
+// Lộc Tồn theo Can
+function getLuuLocTonFromCan(can) {
+  const map = {
+    GIÁP: "DẦN", ẤT: "MÃO", BÍNH: "TỴ", ĐINH: "NGỌ", MẬU: "TỴ",
+    KỶ: "NGỌ", CANH: "THÂN", TÂN: "DẬU", NHÂM: "HỢI", QUÝ: "TÝ"
+  };
+  const cung = ConGiap[map[can]];
+  return cung || null;
+}
+
+// Lưu Thiên Khốc: Ngọ = Tý, đếm nghịch
+function getThienKhocCung(chiNamHan) {
+    const chiKeys = [
+        "TY",       // Tý
+        "SUU",      // Sửu
+        "DAN",      // Dần
+        "MAO",      // Mão
+        "THIN",     // Thìn
+        "TY_SNAKE", // Tỵ
+        "NGO",      // Ngọ
+        "MUI",      // Mùi
+        "THAN",     // Thân
+        "DAU",      // Dậu
+        "TUAT",     // Tuất
+        "HOI"       // Hợi
+      ];
+    const posNgo = chiKeys.indexOf("NGO");
+    const posChi = chiKeys.indexOf(chiNamHan);
+    // từ Ngọ = Tý, đếm nghịch đến chiNamHan
+    const offset = (posNgo - posChi + 12) % 12;
+    return ConGiap[chiKeys[offset]];
+}
+
+// Lưu Thiên Hư: Ngọ = Tý, đếm thuận
+function getThienHuCung(chiNamHan) {
+    const chiKeys = [
+        "TY",       // Tý
+        "SUU",      // Sửu
+        "DAN",      // Dần
+        "MAO",      // Mão
+        "THIN",     // Thìn
+        "TY_SNAKE", // Tỵ
+        "NGO",      // Ngọ
+        "MUI",      // Mùi
+        "THAN",     // Thân
+        "DAU",      // Dậu
+        "TUAT",     // Tuất
+        "HOI"       // Hợi
+      ];
+    const posNgo = chiKeys.indexOf("NGO");
+    const posChi = chiKeys.indexOf(chiNamHan);
+    const offset = (posChi - posNgo + 12) % 12;
+    return ConGiap[chiKeys[offset]];
+}
+
+// Lưu Thiên Mã: theo nhóm tam hợp
+function getLuuThienMaFromChi(chiNamHan) {
+    const groups = {
+        // nhóm Hợi
+        TY_SNAKE: "HOI", 
+        DAU: "HOI", 
+        SUU: "HOI",
+        
+        // nhóm Tỵ
+        HOI: "TY_SNAKE", 
+        MAO: "TY_SNAKE", 
+        MUI: "TY_SNAKE",
+        
+        // nhóm Thân
+        DAN: "THAN", 
+        NGO: "THAN", 
+        TUAT: "THAN",
+        
+        // nhóm Dần
+        THAN: "DAN", 
+        TY: "DAN", 
+        THIN: "DAN",
+        };
+    const cung = ConGiap[groups[chiNamHan]];
+    return cung || null;
+}

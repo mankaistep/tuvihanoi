@@ -607,5 +607,82 @@ export const DoSang = {
     HAM: { symbol: "H", name: "Hãm" }    
 }
 
-  
+export const LuuTinh = {
+    L_THAI_TUE: {
+        key: "L_THAI_TUE",
+        original: PhuTinh.THAI_TUE
+    },
+    L_TANG_MON: {
+        key: "L_TANG_MON",
+        original: PhuTinh.TANG_MON
+    },
+    L_BACH_HO: {
+        key: "L_BACH_HO",
+        original: PhuTinh.BACH_HO
+    },
+    L_THIEN_KHOC: {
+        key: "L_THIEN_KHOC",
+        original: PhuTinh.THIEN_KHOC
+    },
+    L_THIEN_HU: {
+        key: "L_THIEN_HU",
+        original: PhuTinh.THIEN_HU
+    },
+    L_LOC_TON: {
+        key: "L_LOC_TON",
+        original: PhuTinh.LOC_TON
+    },
+    L_KINH_DUONG: {
+        key: "L_KINH_DUONG",
+        original: PhuTinh.KINH_DUONG
+    },
+    L_DA_LA: {
+        key: "L_DA_LA",
+        original: PhuTinh.DA_LA
+    },
+    L_THIEN_MA: {
+        key: "L_THIEN_MA",
+        original: PhuTinh.THIEN_MA
+    },
+    L_HOA_LOC: {
+        key: "L_HOA_LOC",
+        original: PhuTinh.HOA_LOC
+    },
+    L_HOA_QUYEN: {
+        key: "L_HOA_QUYEN",
+        original: PhuTinh.HOA_QUYEN
+    },
+    L_HOA_KHOA: {
+        key: "L_HOA_KHOA",
+        original: PhuTinh.HOA_KHOA
+    },
+    L_HOA_KY: {
+        key: "L_HOA_KY",
+        original: PhuTinh.HOA_KY
+    },
+    L_DAO_HOA: {
+        key: "L_DAO_HOA",
+        original: PhuTinh.DAO_HOA
+    },
+    L_HONG_LOAN: {
+        key: "L_HONG_LOAN",
+        original: PhuTinh.HONG_LOAN
+    },
+    L_HOA_CAI: {
+        key: "L_HOA_CAI",
+        original: PhuTinh.HOA_CAI
+    },
+    L_KIEP_SAT: {
+        key: "L_KIEP_SAT",
+        original: PhuTinh.KIEP_SAT
+    },
+    L_VAN_XUONG: {
+        key: "L_VAN_XUONG",
+        original: PhuTinh.VAN_XUONG
+    },
+    L_VAN_KHUC: {
+        key: "L_VAN_KHUC",
+        original: PhuTinh.VAN_KHUC
+    }
+}
   

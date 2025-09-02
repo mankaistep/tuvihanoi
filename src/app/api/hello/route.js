@@ -22,6 +22,8 @@ import {
     anSaoThienTaiTho,
     anSaoKhac,
     anSaoTamThaiBatToa,
+    anSaoLuuNien,
+    anSaoLuuTuHoa,
     lapLaSo
 } from '../../utils/utils'
 
@@ -34,6 +36,8 @@ export async function GET(request) {
   const minutes = searchParams.get('minutes') || '0';
 
   const genderRaw = searchParams.get('gender') || 'NAM';
+
+  const namHan = searchParams.get('namHan') || year;
 
 
   // Basic validation
@@ -79,10 +83,16 @@ export async function GET(request) {
       gender: gender
     })
 
+    const yinNamHan = convertBirthToYin({
+      year: namHan,
+      month: month,
+      day: day,
+    })
+
     // Create response data
     const data = {
-        anSaoTamThaiBatToa: anSaoTamThaiBatToa(yinBirthday),
-        anSaoKhac: anSaoKhac(yinBirthday),
+        anSaoLuuTuHoa: anSaoLuuTuHoa(yinBirthday, yinNamHan),
+        anSaoLuuNien: anSaoLuuNien(yinNamHan),
         lapLaSoTuVi: lapLaSo(yinBirthday),
     };
 
