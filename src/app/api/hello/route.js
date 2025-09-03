@@ -1,23 +1,9 @@
 import { GioiTinh } from '../../constant/constant'
 import { 
     convertBirthToYin,
-    anMenh, 
-    anThan, 
-    anCung, 
-    anCuc, 
-    anBanMenh,
-    anAmDuongNamNu,
-    anDaiVan,
-    anSaoTuVi,
-    anChinhTinh,
-    anVongTruongSinh,
-    anSaoVongLocTon,
-    anSaoVongThaiTue,
-    anSaoTheoThienCan,
-    anSaoTheoDiaChi,
-    anSaoTheoThangSinh,
-    anSaoTheoGioSinh,
-    anSaoHoaLinh
+    anSaoLuuNien,
+    anSaoLuuTuHoa,
+    lapLaSo
 } from '../../utils/utils'
 
 export async function GET(request) {
@@ -29,6 +15,8 @@ export async function GET(request) {
   const minutes = searchParams.get('minutes') || '0';
 
   const genderRaw = searchParams.get('gender') || 'NAM';
+
+  const namHan = searchParams.get('namHan') || year;
 
 
   // Basic validation
@@ -74,29 +62,15 @@ export async function GET(request) {
       gender: gender
     })
 
+    const yinNamHan = convertBirthToYin({
+      year: namHan,
+      month: month,
+      day: day,
+    })
+
     // Create response data
     const data = {
-      viTriTuVi: anSaoTuVi(yinBirthday),
-      anSaoHoaLinh: anSaoHoaLinh(yinBirthday),
-      anSaoTheoGioSinh: anSaoTheoGioSinh(yinBirthday),
-      anSaoTheoThangSinh: anSaoTheoThangSinh(yinBirthday),
-      saoTheoDiaChi: anSaoTheoDiaChi(yinBirthday),
-      saoTheoThienCan: anSaoTheoThienCan(yinBirthday),
-      saoVongLocTon: anSaoVongLocTon(yinBirthday),
-      saoVongThaiTue: anSaoVongThaiTue(yinBirthday),
-      vongTruongSinh: anVongTruongSinh(yinBirthday),
-      chinhTinh: anChinhTinh(yinBirthday),
-      birthDate: birthDate.toISOString(),
-      age,
-      status: 'success',
-      yinBirthday: yinBirthday,
-      amDuongNamNu: anAmDuongNamNu(yinBirthday),
-      menh: anMenh(yinBirthday),
-      than: anThan(yinBirthday),
-      cuc: anCuc(yinBirthday),
-      banMenh: anBanMenh(yinBirthday),
-      daiVan: anDaiVan(yinBirthday),
-      cung: anCung(yinBirthday),
+        lapLaSoTuVi: lapLaSo(yinBirthday),
     };
 
     return Response.json(data);

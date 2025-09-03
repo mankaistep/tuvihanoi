@@ -289,129 +289,414 @@ export const TuViTable = {
 }
 
 export const ChinhTinh = {
-    TU_VI: { name: "Tử Vi" },
-    THIEN_PHU: { name: "Thiên Phủ" },
-    THIEN_CO: { name: "Thiên Cơ" },
-    THAI_DUONG: { name: "Thái Dương" },
-    VU_KHUC: { name: "Vũ Khúc" },
-    THIEN_DONG: { name: "Thiên Đồng" },
-    LIEM_TRINH: { name: "Liêm Trinh" },
-    THAI_AM: { name: "Thái Âm" },
-    THAM_LANG: { name: "Tham Lang" },
-    CU_MON: { name: "Cự Môn" },
-    THIEN_TUONG: { name: "Thiên Tướng" },
-    THIEN_LUONG: { name: "Thiên Lương" },
-    THAT_SAT: { name: "Thất Sát" },
-    PHA_QUAN: { name: "Phá Quân" },
-}
+    TU_VI: { 
+        key: "TU_VI", 
+        name: "Tử Vi", 
+        am_duong: AmDuong.DUONG, 
+        ngu_hanh: NguHanh.THO,
+        hoa_khi: "Tôn Quý",
+        tinh_chu: [
+            Cung.PHUC_DUC,
+            Cung.QUAN_LOC
+        ],
+        y_nghia: [
+            "Tượng trưng cho quyền lực tối cao, sự uy nghiêm, lãnh đạo và sự cai quản."
+        ]
+    },
+    THIEN_PHU: {
+        key: "THIEN_PHU", 
+        name: "Thiên Phủ", 
+        am_duong: AmDuong.AM, 
+        ngu_hanh: NguHanh.THO,
+        hoa_khi: "Lệnh",
+        tinh_chu: [
+            Cung.TAI_BACH,
+            Cung.DIEN_TRACH
+        ],
+        y_nghia: [
+            "Tượng trưng cho sự ổn định, giàu có, quản lý và bảo vệ tài sản."
+        ]
+    },
+    THIEN_CO: {
+        key: "THIEN_CO",
+        name: "Thiên Cơ",
+        am_duong: AmDuong.AM,
+        ngu_hanh: NguHanh.MOC,
+        hoa_khi: "Thiện",
+        tinh_chu: [
+            Cung.HUYNH_DE
+        ],
+        y_nghia: [
+          "Trưng cho sự sáng tạo, thông minh, khả năng lập kế hoạch và thích nghi."
+        ]
+      },
+    THAI_DUONG: {
+        key: "THAI_DUONG",
+        name: "Thái Dương",
+        am_duong: AmDuong.DUONG,
+        ngu_hanh: NguHanh.HOA,
+        hoa_khi: "Quý", 
+        tinh_chu: [
+            Cung.QUAN_LOC
+        ],
+        y_nghia: [
+          "Biểu thị trí tuệ, sự mạnh mẽ, năng động và vươn lên.",
+          "Tượng trưng cho danh lợi"
+        ]
+      },
+    VU_KHUC: {
+        key: "VU_KHUC",
+        name: "Vũ Khúc",
+        am_duong: AmDuong.AM, 
+        ngu_hanh: NguHanh.KIM, 
+        hoa_khi: "Tài tinh", 
+        tinh_chu: [
+            Cung.TAI_BACH
+        ],
+        y_nghia: [
+          "Chủ về tiền bạc, tính toán, và sự quyết đoán."
+        ]
+    },
+    LIEM_TRINH: {
+        key: "LIEM_TRINH",
+        name: "Liêm Trinh",
+        am_duong: AmDuong.AM,
+        ngu_hanh: NguHanh.HOA,
+        hoa_khi: "Tù tinh",
+        tinh_chu: [
+            Cung.QUAN_LOC
+        ],
+        y_nghia: [
+            "Chủ về sự kiên trì, đạo đức, nhưng cũng có thể biểu thị sự gò bó, thử thách."
+        ]
+    },
+    THAI_AM: {
+        key: "THAI_AM",
+        name: "Thái Âm",
+        am_duong: AmDuong.AM,
+        ngu_hanh: AmDuong.THUY,
+        hoa_khi: "Phú",
+        tinh_chu: [
+            Cung.TAI_BACH,
+            Cung.DIEN_TRACH
+        ],
+        y_nghia: [
+            "Chủ về sự dịu dàng, cảm xúc, tài lộc, sự chiếu sáng âm thầm và hỗ trợ."
+        ]
+    },
+    THAM_LANG: {
+        key: "THAM_LANG",
+        name: "Tham Lang",
+        am_duong: AmDuong.AM,
+        ngu_hanh: NguHanh.THUY,
+        hoa_khi: "Đào hoa",
+        tinh_chu: [],
+        y_nghia: [
+            "Chủ về đam mê, thú vui, sự thu hút, và tìm kiếm những trải nghiệm mới lạ."
+        ]
+    },
+    CU_MON: {
+        key: "CU_MON",
+        name: "Cự Môn",
+        am_duong: AmDuong.AM,
+        ngu_hanh: NguHanh.THUY,
+        hoa_khi: "Ám tinh",
+        tinh_chu: [],
+        y_nghia: [
+            "Chủ về lời nói, sự đối lập, thị phi, nhưng cũng là biểu thị của tri thức và giao tiếp."
+        ]
+    },
+    THIEN_TUONG: {
+        key: "THIEN_TUONG",
+        name: "Thiên Tướng",
+        am_duong: AmDuong.DUONG,
+        ngu_hanh: NguHanh.THUY,
+        hoa_khi: "Ấn tinh",
+        tinh_chu: [
+            Cung.QUAN_LOC
+        ],
+        y_nghia: [
+          "Chủ về lòng trung thành, sự uy nghi và hỗ trợ từ quý nhân."
+        ]
+    },
+    THIEN_LUONG: {
+        key: "THIEN_LUONG",
+        name: "Thiên Lương",
+        am_duong: AmDuong.AM,
+        ngu_hanh: NguHanh.MOC,
+        hoa_khi: "Ấm tinh",
+        tinh_chu: [
+            Cung.PHU_MAU
+        ],
+        y_nghia: [
+            "Chủ về sự che chở, lòng nhân từ và sự an toàn."
+        ]
+    },
+    THAT_SAT: {
+        key: "THAT_SAT",
+        name: "Thất Sát",
+        am_duong: AmDuong.DUONG,
+        ngu_hanh: NguHanh.KIM,
+        hoa_khi: "Tướng",
+        tinh_chu: [],
+        y_nghia: [
+            "Tượng trưng cho sức mạnh, sự quyết liệt, dám đột phá và chấp nhận rủi ro."
+        ]
+    },
+    PHA_QUAN: {
+        key: "PHA_QUAN",
+        name: "Phá Quân",
+        am_duong: AmDuong.AM,
+        ngu_hanh: NguHanh.THUY,
+        hoa_khi: "Hao",
+        tinh_chu: [
+            Cung.PHU_THE,
+            Cung.TU_TUC,
+            Cung.NO_BOC
+        ],
+        y_nghia: [
+          "Chủ về sự thay đổi, phá bỏ cái cũ, làm mới, và sự quyết liệt trong hành động."
+        ]
+    },
+    THIEN_DONG: {
+        key: "THIEN_DONG",
+        name: "Thiên Đồng",
+        am_duong: AmDuong.DUONG,
+        ngu_hanh: NguHanh.THUY,
+        hoa_khi: "Phúc tinh",
+        tinh_chu: [
+            Cung.PHUC_DUC
+        ],
+        y_nghia: [
+          "Biểu thị sự vui vẻ, lạc quan, sự dễ chịu và khả năng thích nghi linh hoạt",
+        ]
+    }
+};
+  
 
 export const VongTruongSinh = {
-    TRUONG_SINH: { name: "Trường Sinh" },
-    MOC_DUC: { name: "Mộc Dục" },
-    QUAN_DOI: { name: "Quan Đới" },
-    LAM_QUAN: { name: "Lâm Quan" },
-    DE_VUONG: { name: "Đế Vượng" },
-    SUY: { name: "Suy" },
-    BENH: { name: "Bệnh" },
-    TU: { name: "Tử" },
-    MO: { name: "Mộ" },
-    TUYET: { name: "Tuyệt" },
-    THAI: { name: "Thai" },
-    DUONG: { name: "Dưỡng" }
-}
+    TRUONG_SINH: { key: "TRUONG_SINH", name: "Trường Sinh" },
+    MOC_DUC:     { key: "MOC_DUC", name: "Mộc Dục" },
+    QUAN_DOI:    { key: "QUAN_DOI", name: "Quan Đới" },
+    LAM_QUAN:    { key: "LAM_QUAN", name: "Lâm Quan" },
+    DE_VUONG:    { key: "DE_VUONG", name: "Đế Vượng" },
+    SUY:         { key: "SUY", name: "Suy" },
+    BENH:        { key: "BENH", name: "Bệnh" },
+    TU:          { key: "TU", name: "Tử" },
+    MO:          { key: "MO", name: "Mộ" },
+    TUYET:       { key: "TUYET", name: "Tuyệt" },
+    THAI:        { key: "THAI", name: "Thai" },
+    DUONG:       { key: "DUONG", name: "Dưỡng" }
+  };
+  
 
 export const PhuTinh = {
     // Vòng Lộc Tồn
-    LOC_TON: { name: "Lộc Tồn" },
-    BAC_SI: { name: "Bác Sĩ" },
-    LUC_SI: { name: "Lực Sĩ" },
-    THANH_LONG: { name: "Thanh Long" },
-    TIEU_HAO: { name: "Tiểu Hao" },
-    TUONG_QUAN: { name: "Tướng Quân" },
-    TAU_THU: { name: "Tấu Thư" },
-    PHI_LIEM: { name: "Phi Liêm" },
-    HI_THANH: { name: "Hỷ Thần" },
-    BENH_PHU: { name: "Bệnh Phù" },
-    DAI_HAO: { name: "Đại Hao" },
-    PHUC_BINH: { name: "Phục Binh" },
-    QUAN_PHU: { name: "Quan Phủ" },
+    LOC_TON:    { key: "LOC_TON", name: "Lộc Tồn", type: "cat", ngu_hanh: NguHanh.THO, sao_key: true },
+    BAC_SI:     { key: "BAC_SI", name: "Bác Sĩ", type: "cat", ngu_hanh: NguHanh.THUY, sao_key: false },
+    LUC_SI:     { key: "LUC_SI", name: "Lực Sĩ", type: "cat", ngu_hanh: NguHanh.HOA, sao_key: false },
+    THANH_LONG: { key: "THANH_LONG", name: "Thanh Long", type: "cat", ngu_hanh: NguHanh.THUY, sao_key: false },
+    TIEU_HAO:   { key: "TIEU_HAO", name: "Tiểu Hao", type: "sat", ngu_hanh: NguHanh.HOA, sao_key: false },
+    TUONG_QUAN: { key: "TUONG_QUAN", name: "Tướng Quân", type: "sat", ngu_hanh: NguHanh.MOC, sao_key: false },
+    TAU_THU:    { key: "TAU_THU", name: "Tấu Thư", type: "cat", ngu_hanh: NguHanh.KIM, sao_key: false },
+    PHI_LIEM:   { key: "PHI_LIEM", name: "Phi Liêm", type: "sat", ngu_hanh: NguHanh.HOA, sao_key: false },
+    HI_THAN:   { key: "HI_THAN", name: "Hỷ Thần", type: "cat", ngu_hanh: NguHanh.HOA, sao_key: false },
+    BENH_PHU:   { key: "BENH_PHU", name: "Bệnh Phù", type: "sat", ngu_hanh: NguHanh.THO, sao_key: false },
+    DAI_HAO:    { key: "DAI_HAO", name: "Đại Hao", type: "sat", ngu_hanh: NguHanh.HOA, sao_key: false },
+    PHUC_BINH:  { key: "PHUC_BINH", name: "Phục Binh", type: "sat", ngu_hanh: NguHanh.HOA, sao_key: false },
+    QUAN_PHU:   { key: "QUAN_PHU", name: "Quan Phủ", type: "sat", ngu_hanh: NguHanh.HOA, sao_key: false },
   
     // Vòng Thái Tuế
-    THAI_TUE: { name: "Thái Tuế" },
-    THIEU_DUONG: { name: "Thiếu Dương" },
-    TANG_MON: { name: "Tang Môn" },
-    THIEU_AM: { name: "Thiếu Âm" },
-    QUAN_PHU_TT: { name: "Quan Phù" },
-    TU_PHU: { name: "Tử Phù" },
-    TUE_PHA: { name: "Tuế Phá" },
-    LONG_DUC: { name: "Long Đức" },
-    BACH_HO: { name: "Bạch Hổ" },
-    PHUC_DUC_TT: { name: "Phúc Đức" },
-    DIEU_KHACH: { name: "Điếu Khách" },
-    TRUC_PHU: { name: "Trực Phù" },
-    
-    // Tứ Hóa
-    HOA_LOC: { name: "Hóa Lộc" },
-    HOA_QUYEN: { name: "Hóa Quyền" },
-    HOA_KHOA: { name: "Hóa Khoa" },
-    HOA_KY: { name: "Hóa Kỵ" },
-
-    // Tuần Không
-    TUAN_KHONG: { name: "Tuần Không" },
-
-    // Các sao theo Thiên Can
-    DA_LA: { name: "Đà La" },
-    KINH_DUONG: { name: "Kình Dương" },
-    LUU_HA: { name: "Lưu Hà" },
-    QUOC_AN: { name: "Quốc Ấn" },
-    DUONG_PHU: { name: "Đường Phù" },
-    VAN_TINH: { name: "Văn Tinh" },
-    THIEN_KHOI: { name: "Thiên Khôi" },
-    THIEN_VIET: { name: "Thiên Việt" },
-    THIEN_QUAN: { name: "Thiên Quan" },
-    THIEN_PHUC: { name: "Thiên Phúc" },
-    THIEN_TRU: { name: "Thiên Trù" },
-    TRIET_KHONG: { name: "Triệt Không" },
-    TUAN_KHONG: { name: "Tuần Không"},
-
-    // Sao theo Địa Chi
-    PHUONG_CAC: { name: "Phượng Các" },
-    GIAI_THAN: { name: "Giải Thần" },
-    LONG_TRI: { name: "Long Trì" },
-    NGUYET_DUC: { name: "Nguyệt Đức" },
-    THIEN_DUC: { name: "Thiên Đức" },
-    THIEN_HY: { name: "Thiên Hỷ" },
-    THIEN_MA: { name: "Thiên Mã" },
-    THIEN_KHOC: { name: "Thiên Khốc" },
-    THIEN_HU: { name: "Thiên Hư" },
-    DAO_HOA: { name: "Đào Hoa" },
-    HONG_LOAN: { name: "Hồng Loan" },
-    HOA_CAI: { name: "Hoa Cái" },
-    KIEP_SAT: { name: "Kiếp Sát" },
-    PHA_TOAI: { name: "Phá Toái" },
-    CO_THAN: { name: "Cô Thần" },
-    QUA_TU: { name: "Quả Tú" },
-
-    // Thang sinh
-    TA_PHU: { name: "Tả Phù" },
-    HUU_BAT: { name: "Hữu Bật" },
-    THIEN_HINH: { name: "Thiên Hình" },
-    THIEN_RIEU: { name: "Thiên Riêu" },
-    THIEN_Y: { name: "Thiên Y" },
-    THIEN_GIAI: { name: "Thiên Giải" },
-    DIA_GIAI: { name: "Địa Giải" },
-
-    // Gio sinh
-    VAN_XUONG: { name: "Văn Xương" },
-    VAN_KHUC:  { name: "Văn Khúc" },
-    DIA_KHONG: { name: "Địa Không" },
-    DIA_KIEP:  { name: "Địa Kiếp" },
-    THAI_PHU:  { name: "Thai Phụ" },
-    PHONG_CAO: { name: "Phong Cáo" },
-
-    // Hoa Linh
-    HOA_TINH: { name: "Hỏa Tinh" },
-    LINH_TINH: { name: "Linh Tinh" }
-}
+    THAI_TUE:    { key: "THAI_TUE", name: "Thái Tuế", type: "sat", ngu_hanh: NguHanh.HOA, sao_key: true },
+    THIEU_DUONG: { key: "THIEU_DUONG", name: "Thiếu Dương", type: "cat", ngu_hanh: NguHanh.HOA, sao_key: false },
+    TANG_MON:    { key: "TANG_MON", name: "Tang Môn", type: "sat", ngu_hanh: NguHanh.MOC, sao_key: false },
+    THIEU_AM:    { key: "THIEU_AM", name: "Thiếu Âm", type: "cat", ngu_hanh: NguHanh.THUY, sao_key: false },
+    QUAN_PHU_TT: { key: "QUAN_PHU_TT", name: "Quan Phù", type: "sat", ngu_hanh: NguHanh.HOA, sao_key: false },
+    TU_PHU:      { key: "TU_PHU", name: "Tử Phù", type: "sat", ngu_hanh: NguHanh.KIM, sao_key: false },
+    TUE_PHA:     { key: "TUE_PHA", name: "Tuế Phá", type: "sat", ngu_hanh: NguHanh.HOA, sao_key: true },
+    LONG_DUC:    { key: "LONG_DUC", name: "Long Đức", type: "cat", ngu_hanh: NguHanh.THUY, sao_key: true },
+    BACH_HO:     { key: "BACH_HO", name: "Bạch Hổ", type: "sat", ngu_hanh: NguHanh.KIM, sao_key: false },
+    PHUC_DUC: { key: "PHUC_DUC", name: "Phúc Đức", type: "cat", ngu_hanh: NguHanh.THO, sao_key: true },
+    DIEU_KHACH:  { key: "DIEU_KHACH", name: "Điếu Khách", type: "sat", ngu_hanh: NguHanh.HOA, sao_key: false },
+    TRUC_PHU:    { key: "TRUC_PHU", name: "Trực Phù", type: "sat", ngu_hanh: NguHanh.KIM, sao_key: false },
   
+    // Tứ Hóa
+    HOA_LOC:   { key: "HOA_LOC", name: "Hóa Lộc", type: "cat", ngu_hanh: NguHanh.MOC, sao_key: true },
+    HOA_QUYEN: { key: "HOA_QUYEN", name: "Hóa Quyền", type: "cat", ngu_hanh: NguHanh.THUY, sao_key: true },
+    HOA_KHOA:  { key: "HOA_KHOA", name: "Hóa Khoa", type: "cat", ngu_hanh: NguHanh.THUY, sao_key: true },
+    HOA_KY:    { key: "HOA_KY", name: "Hóa Kỵ", type: "sat", ngu_hanh: NguHanh.THUY, sao_key: true },
+  
+    // Tuần Không
+    TUAN_KHONG: { key: "TUAN_KHONG", name: "Tuần Không", type: "sat", ngu_hanh: NguHanh.HOA, sao_key: false },
+    TRIET_KHONG:{ key: "TRIET_KHONG", name: "Triệt Không", type: "sat", ngu_hanh: NguHanh.KIM, sao_key: false },
+  
+    // Các sao theo Thiên Can
+    DA_LA:      { key: "DA_LA", name: "Đà La", type: "sat", ngu_hanh: NguHanh.KIM, sao_key: true },
+    KINH_DUONG: { key: "KINH_DUONG", name: "Kình Dương", type: "sat", ngu_hanh: NguHanh.KIM, sao_key: true },
+    LUU_HA:     { key: "LUU_HA", name: "Lưu Hà", type: "sat", ngu_hanh: NguHanh.THUY, sao_key: false },
+    QUOC_AN:    { key: "QUOC_AN", name: "Quốc Ấn", type: "cat", ngu_hanh: NguHanh.MOC, sao_key: false },
+    DUONG_PHU:  { key: "DUONG_PHU", name: "Đường Phù", type: "cat", ngu_hanh: NguHanh.MOC, sao_key: false },
+    VAN_TINH:   { key: "VAN_TINH", name: "Văn Tinh", type: "cat", ngu_hanh: NguHanh.HOA, sao_key: false },
+    THIEN_KHOI: { key: "THIEN_KHOI", name: "Thiên Khôi", type: "cat", ngu_hanh: NguHanh.HOA, sao_key: true },
+    THIEN_VIET: { key: "THIEN_VIET", name: "Thiên Việt", type: "cat", ngu_hanh: NguHanh.HOA, sao_key: true },
+    THIEN_QUAN: { key: "THIEN_QUAN", name: "Thiên Quan", type: "cat", ngu_hanh: NguHanh.HOA, sao_key: false },
+    THIEN_PHUC: { key: "THIEN_PHUC", name: "Thiên Phúc", type: "cat", ngu_hanh: NguHanh.THO, sao_key: true },
+    THIEN_TRU:  { key: "THIEN_TRU", name: "Thiên Trù", type: "cat", ngu_hanh: NguHanh.THO, sao_key: true },
+  
+    // Sao theo Địa Chi
+    PHUONG_CAC:{ key: "PHUONG_CAC", name: "Phượng Các", type: "cat", ngu_hanh: NguHanh.THO, sao_key: true },
+    GIAI_THAN: { key: "GIAI_THAN", name: "Giải Thần", type: "cat", ngu_hanh: NguHanh.MOC, sao_key: false },
+    LONG_TRI:  { key: "LONG_TRI", name: "Long Trì", type: "cat", ngu_hanh: NguHanh.THUY, sao_key: true },
+    NGUYET_DUC:{ key: "NGUYET_DUC", name: "Nguyệt Đức", type: "cat", ngu_hanh: NguHanh.HOA, sao_key: false },
+    THIEN_DUC: { key: "THIEN_DUC", name: "Thiên Đức", type: "cat", ngu_hanh: NguHanh.THO, sao_key: true },
+    THIEN_HY:  { key: "THIEN_HY", name: "Thiên Hỷ", type: "cat", ngu_hanh: NguHanh.THUY, sao_key: false },
+    THIEN_MA:  { key: "THIEN_MA", name: "Thiên Mã", type: "cat", ngu_hanh: NguHanh.HOA, sao_key: true },
+    THIEN_KHOC:{ key: "THIEN_KHOC", name: "Thiên Khốc", type: "sat", ngu_hanh: NguHanh.THUY, sao_key: false },
+    THIEN_HU:  { key: "THIEN_HU", name: "Thiên Hư", type: "sat", ngu_hanh: NguHanh.THUY, sao_key: false },
+    DAO_HOA:   { key: "DAO_HOA", name: "Đào Hoa", type: "cat", ngu_hanh: NguHanh.MOC, sao_key: true }, 
+    HONG_LOAN: { key: "HONG_LOAN", name: "Hồng Loan", type: "cat", ngu_hanh: NguHanh.THUY, sao_key: true },
+    HOA_CAI:   { key: "HOA_CAI", name: "Hoa Cái", type: "cat", ngu_hanh: NguHanh.KIM, sao_key: false },
+    KIEP_SAT:  { key: "KIEP_SAT", name: "Kiếp Sát", type: "sat", ngu_hanh: NguHanh.HOA, sao_key: false },
+    PHA_TOAI:  { key: "PHA_TOAI", name: "Phá Toái", type: "sat", ngu_hanh: NguHanh.HOA, sao_key: false },
+    CO_THAN:   { key: "CO_THAN", name: "Cô Thần", type: "sat", ngu_hanh: NguHanh.THO, sao_key: true },
+    QUA_TU:    { key: "QUA_TU", name: "Quả Tú", type: "sat", ngu_hanh: NguHanh.THO, sao_key: true },
+  
+    // Tháng sinh
+    TA_PHU:    { key: "TA_PHU", name: "Tả Phù", type: "cat", ngu_hanh: NguHanh.THO, sao_key: true },
+    HUU_BAT:   { key: "HUU_BAT", name: "Hữu Bật", type: "cat", ngu_hanh: NguHanh.THO, sao_key: true },
+    THIEN_HINH:{ key: "THIEN_HINH", name: "Thiên Hình", type: "sat", ngu_hanh: NguHanh.HOA, sao_key: false },
+    THIEN_RIEU:{ key: "THIEN_RIEU", name: "Thiên Riêu", type: "sat", ngu_hanh: NguHanh.THUY, sao_key: false },
+    THIEN_Y:   { key: "THIEN_Y", name: "Thiên Y", type: "cat", ngu_hanh: NguHanh.THUY, sao_key: false },
+    THIEN_GIAI:{ key: "THIEN_GIAI", name: "Thiên Giải", type: "cat", ngu_hanh: NguHanh.HOA, sao_key: false },
+    DIA_GIAI:  { key: "DIA_GIAI", name: "Địa Giải", type: "cat", ngu_hanh: NguHanh.THO, sao_key: false },
+  
+    // Giờ sinh
+    VAN_XUONG: { key: "VAN_XUONG", name: "Văn Xương", type: "cat", ngu_hanh: NguHanh.KIM, sao_key: true },
+    VAN_KHUC:  { key: "VAN_KHUC", name: "Văn Khúc", type: "cat", ngu_hanh: NguHanh.THUY, sao_key: true },
+    DIA_KHONG: { key: "DIA_KHONG", name: "Địa Không", type: "sat", ngu_hanh: NguHanh.HOA, sao_key: true },
+    DIA_KIEP:  { key: "DIA_KIEP", name: "Địa Kiếp", type: "sat", ngu_hanh: NguHanh.HOA, sao_key: true },
+    THAI_PHU:  { key: "THAI_PHU", name: "Thai Phụ", type: "cat", ngu_hanh: NguHanh.KIM, sao_key: false },
+    PHONG_CAO: { key: "PHONG_CAO", name: "Phong Cáo", type: "cat", ngu_hanh: NguHanh.THO, sao_key: false },
+  
+    // Hỏa Linh
+    HOA_TINH:  { key: "HOA_TINH", name: "Hỏa Tinh", type: "sat", ngu_hanh: NguHanh.HOA, sao_key: true },
+    LINH_TINH: { key: "LINH_TINH", name: "Linh Tinh", type: "sat", ngu_hanh: NguHanh.HOA, sao_key: true },
+
+    // Khác
+    THIEN_LA:  { key: "THIEN_LA", name: "Thiên La", type: "sat", ngu_hanh: NguHanh.KIM, sao_key: true },
+    DIA_VONG:  { key: "DIA_VONG", name: "Địa Võng", type: "sat", ngu_hanh: NguHanh.KIM, sao_key: true },
+    THIEN_SU:  { key: "THIEN_SU", name: "Thiên Sứ", type: "sat", ngu_hanh: NguHanh.THUY, sao_key: false },
+    THIEN_TAI: { key: "THIEN_TAI", name: "Thiên Tài", type: "cat", ngu_hanh: NguHanh.THO, sao_key: false },
+    THIEN_THO: { key: "THIEN_THO", name: "Thiên Thọ", type: "cat", ngu_hanh: NguHanh.THO, sao_key: false },
+    AN_QUANG:  { key: "AN_QUANG", name: "Ân Quang", type: "cat", ngu_hanh: NguHanh.MOC, sao_key: true },
+    THIEN_QUY: { key: "THIEN_QUY", name: "Thiên Quý", type: "cat", ngu_hanh: NguHanh.THO, sao_key: true },
+    THIEN_KHONG: { key: "THIEN_KHONG", name: "Thiên Không", type: "sat", ngu_hanh: NguHanh.HOA, sao_key: false },
+    TAM_THAI: { key: "TAM_THAI", name: "Tam Thai", type: "cat", ngu_hanh: NguHanh.THUY, sao_key: true },
+    BAT_TOA: { key: "BAT_TOA", name: "Bát Toạ", type: "cat", ngu_hanh: NguHanh.MOC, sao_key: true },
+    DAU_QUAN: { key: "DAU_QUAN", name: "Đẩu Quân", type: "sat", ngu_hanh: NguHanh.HOA, sao_key: false },
+    THIEN_THUONG: { key: "THIEN_THUONG", name: "Thiên Thương", type: "sat", ngu_hanh: NguHanh.THO, sao_key: false }
+
+  };
+  
+
+export const DoSang = {
+    MIEU: { symbol: "M", name: "Miếu" },
+    VUONG: { symbol: "V", name: "Vượng" },
+    DAC: { symbol: "Đ", name: "Đắc" },
+    BINH: { symbol: "B", name: "Bình" },
+    HAM: { symbol: "H", name: "Hãm" }    
+}
+
+export const LuuTinh = {
+    L_THAI_TUE: {
+        key: "L_THAI_TUE",
+        name: 'L. Thái Tuế',
+        type: "sat",
+        original: PhuTinh.THAI_TUE
+    },
+    L_TANG_MON: {
+        key: "L_TANG_MON",
+        name: 'L. Tang Môn',
+        type: "sat",
+        original: PhuTinh.TANG_MON
+    },
+    L_BACH_HO: {
+        key: "L_BACH_HO",
+        name: 'L. Bạch Hổ',
+        type: "sat",
+        original: PhuTinh.BACH_HO
+    },
+    L_THIEN_KHOC: {
+        key: "L_THIEN_KHOC",
+        name: 'L. Thiên Khốc',
+        type: "sat",
+        original: PhuTinh.THIEN_KHOC
+    },
+    L_THIEN_HU: {
+        key: "L_THIEN_HU",
+        name: 'L. Thiên Hư',
+        type: "sat",
+        original: PhuTinh.THIEN_HU
+    },
+    L_LOC_TON: {
+        key: "L_LOC_TON",
+        name: 'L. Lộc Tồn',
+        type: "cat",
+        original: PhuTinh.LOC_TON
+    },
+    L_KINH_DUONG: {
+        key: "L_KINH_DUONG",
+        name: 'L. Kình Dương',
+        type: "sat",
+        original: PhuTinh.KINH_DUONG
+    },
+    L_DA_LA: {
+        key: "L_DA_LA",
+        name: 'L. Đà La',
+        type: "sat",
+        original: PhuTinh.DA_LA
+    },
+    L_THIEN_MA: {
+        key: "L_THIEN_MA",
+        name: 'L. Thiên Mã',
+        type: "cat",
+        original: PhuTinh.THIEN_MA
+    },
+    L_HOA_LOC: {
+        key: "L_HOA_LOC",
+        name: 'L. Hoá Lộc',
+        type: "cat",
+        original: PhuTinh.HOA_LOC
+    },
+    L_HOA_QUYEN: {
+        key: "L_HOA_QUYEN",
+        name: 'L. Hoá Quyền',
+        type: "cat",
+        original: PhuTinh.HOA_QUYEN
+    },
+    L_HOA_KHOA: {
+        key: "L_HOA_KHOA",
+        name: 'L. Hoá Khoa',
+        type: "cat",
+        original: PhuTinh.HOA_KHOA
+    },
+    L_HOA_KY: {
+        key: "L_HOA_KY",
+        name: 'L. Hoá Kỵ',
+        type: "sat",
+        original: PhuTinh.HOA_KY
+    },
+    L_DAO_HOA: {
+        key: "L_DAO_HOA",
+        name: 'L. Đào Hoa',
+        type: "cat",
+        original: PhuTinh.DAO_HOA
+    },
+    L_HONG_LOAN: {
+        key: "L_HONG_LOAN",
+        name: 'L. Hồng Loan',
+        type: "cat",
+        original: PhuTinh.HONG_LOAN
+    }
+}
   
