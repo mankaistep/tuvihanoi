@@ -91,7 +91,6 @@ export async function GET(request) {
 
     // Create response data
     const data = {
-        anSaoLuuTuHoa: anSaoLuuTuHoa(yinBirthday, yinNamHan),
         anSaoLuuNien: anSaoLuuNien(yinNamHan),
         lapLaSoTuVi: lapLaSo(yinBirthday),
     };
