@@ -1,27 +1,6 @@
 import { GioiTinh } from '../../constant/constant'
 import { 
     convertBirthToYin,
-    anMenh, 
-    anThan, 
-    anCung, 
-    anCuc, 
-    anBanMenh,
-    anAmDuongNamNu,
-    anDaiVan,
-    anSaoTuVi,
-    anChinhTinh,
-    anVongTruongSinh,
-    anSaoVongLocTon,
-    anSaoVongThaiTue,
-    anSaoTheoThienCan,
-    anSaoTheoDiaChi,
-    anSaoTheoThangSinh,
-    anSaoTheoGioSinh,
-    anSaoHoaLinh,
-    anSaoQuangQuy,
-    anSaoThienTaiTho,
-    anSaoKhac,
-    anSaoTamThaiBatToa,
     anSaoLuuNien,
     anSaoLuuTuHoa,
     lapLaSo
@@ -91,7 +70,6 @@ export async function GET(request) {
 
     // Create response data
     const data = {
-        anSaoLuuNien: anSaoLuuNien(yinNamHan),
         lapLaSoTuVi: lapLaSo(yinBirthday),
     };
 

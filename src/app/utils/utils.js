@@ -1304,7 +1304,6 @@ export function anSaoLuuNien(yinNamHan) {
   
     return res;
 }
-  
 
 export function anSaoLuuTuHoa(yinBirthDate, yinNamHan) {
     const year = Number(yinNamHan?.year);
@@ -1374,7 +1373,16 @@ export function lapLaSo(yinBirthDate) {
         ...anSaoTheoThangSinh(yinBirthDate),
         ...anSaoTheoGioSinh(yinBirthDate),
         ...anSaoHoaLinh(yinBirthDate),
+        ...anSaoThienTaiTho(yinBirthDate),
+        ...anSaoQuangQuy(yinBirthDate),
+        ...anSaoTamThaiBatToa(yinBirthDate),
+        ...anSaoKhac(yinBirthDate)
     };
+
+    const luuTinhMap = {
+        ...anSaoLuuTuHoa(yinBirthDate),
+        ...anSaoLuuNien(yinBirthDate)
+    }
 
     // 5️⃣ Gom thông tin từng cung
     const cungResult = {};
@@ -1386,6 +1394,7 @@ export function lapLaSo(yinBirthDate) {
         const phuTinhTrongCung = [];
         const truongSinhTrongCung = [];
         const tuHoaTrongCung = [];
+        const luuTinhTrongCung = []
 
         function collectSao(saoMap, targetArr) {
             Object.entries(saoMap).forEach(([saoKey, val]) => {
@@ -1403,6 +1412,7 @@ export function lapLaSo(yinBirthDate) {
         collectSao(chinhTinhMap, chinhTinhTrongCung);
         collectSao(phuTinhMap, phuTinhTrongCung);
         collectSao(vongTruongSinhMap, truongSinhTrongCung);
+        collectSao(luuTinhMap, luuTinhTrongCung)
 
         // 5.1️⃣ Chính tinh -> list + độ sáng
         const chinhTinhExpanded = chinhTinhTrongCung.map(saoName => {
@@ -1423,9 +1433,15 @@ export function lapLaSo(yinBirthDate) {
             return foundKey ? { key: foundKey, ...PhuTinh[foundKey] } : { key: saoName, name: saoName };
         });
 
+        // 5.2️⃣ Lưu tinh
+        const luuTinhExpanded = luuTinhTrongCung.map(saoName => {
+            const foundKey = Object.keys(LuuTinh).find(k => LuuTinh[k].key === saoName);
+            return foundKey ? { key: foundKey, ...LuuTinh[foundKey] } : { key: saoName, name: saoName };
+        });
+
         // 5.3️⃣ Cat tinh & Sat tinh (lọc từ phuTinhExpanded)
-        const catTinh = phuTinhExpanded.filter(s => s.type === "cat");
-        const satTinh = phuTinhExpanded.filter(s => s.type === "sat");
+        const catTinh = phuTinhExpanded.concat(luuTinhExpanded).filter(s => s.type === "cat");
+        const satTinh = phuTinhExpanded.concat(luuTinhExpanded).filter(s => s.type === "sat");
 
         // 5.4️⃣ Vòng Trường Sinh
         const truongSinhExpanded = truongSinhTrongCung.map(saoName => {
@@ -1448,6 +1464,7 @@ export function lapLaSo(yinBirthDate) {
             chi: chi.name,
             chinhTinh: chinhTinhExpanded,
             phuTinh: phuTinhExpanded,   // ⭐ đã bao gồm Tứ Hóa từ constant
+            luuTinh: luuTinhExpanded,
             catTinh,
             satTinh,
             vongTruongSinh: truongSinhExpanded,
@@ -1705,16 +1722,6 @@ function getChiFromYear(year) {
       "HOI"       // Hợi
     ];
     return chiKeys[(year - 4) % 12];
-}
-  
-// Lộc Tồn theo Can
-function getLuuLocTonFromCan(can) {
-  const map = {
-    GIÁP: "DẦN", ẤT: "MÃO", BÍNH: "TỴ", ĐINH: "NGỌ", MẬU: "TỴ",
-    KỶ: "NGỌ", CANH: "THÂN", TÂN: "DẬU", NHÂM: "HỢI", QUÝ: "TÝ"
-  };
-  const cung = ConGiap[map[can]];
-  return cung || null;
 }
 
 // Lưu Thiên Khốc: Ngọ = Tý, đếm nghịch

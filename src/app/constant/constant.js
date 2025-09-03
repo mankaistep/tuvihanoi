@@ -610,62 +610,92 @@ export const DoSang = {
 export const LuuTinh = {
     L_THAI_TUE: {
         key: "L_THAI_TUE",
+        name: 'L. Thái Tuế',
+        type: "sat",
         original: PhuTinh.THAI_TUE
     },
     L_TANG_MON: {
         key: "L_TANG_MON",
+        name: 'L. Tang Môn',
+        type: "sat",
         original: PhuTinh.TANG_MON
     },
     L_BACH_HO: {
         key: "L_BACH_HO",
+        name: 'L. Bạch Hổ',
+        type: "sat",
         original: PhuTinh.BACH_HO
     },
     L_THIEN_KHOC: {
         key: "L_THIEN_KHOC",
+        name: 'L. Thiên Khốc',
+        type: "sat",
         original: PhuTinh.THIEN_KHOC
     },
     L_THIEN_HU: {
         key: "L_THIEN_HU",
+        name: 'L. Thiên Hư',
+        type: "sat",
         original: PhuTinh.THIEN_HU
     },
     L_LOC_TON: {
         key: "L_LOC_TON",
+        name: 'L. Lộc Tồn',
+        type: "cat",
         original: PhuTinh.LOC_TON
     },
     L_KINH_DUONG: {
         key: "L_KINH_DUONG",
+        name: 'L. Kình Dương',
+        type: "sat",
         original: PhuTinh.KINH_DUONG
     },
     L_DA_LA: {
         key: "L_DA_LA",
+        name: 'L. Đà La',
+        type: "sat",
         original: PhuTinh.DA_LA
     },
     L_THIEN_MA: {
         key: "L_THIEN_MA",
+        name: 'L. Thiên Mã',
+        type: "cat",
         original: PhuTinh.THIEN_MA
     },
     L_HOA_LOC: {
         key: "L_HOA_LOC",
+        name: 'L. Hoá Lộc',
+        type: "cat",
         original: PhuTinh.HOA_LOC
     },
     L_HOA_QUYEN: {
         key: "L_HOA_QUYEN",
+        name: 'L. Hoá Quyền',
+        type: "cat",
         original: PhuTinh.HOA_QUYEN
     },
     L_HOA_KHOA: {
         key: "L_HOA_KHOA",
+        name: 'L. Hoá Khoa',
+        type: "cat",
         original: PhuTinh.HOA_KHOA
     },
     L_HOA_KY: {
         key: "L_HOA_KY",
+        name: 'L. Hoá Kỵ',
+        type: "sat",
         original: PhuTinh.HOA_KY
     },
     L_DAO_HOA: {
         key: "L_DAO_HOA",
+        name: 'L. Đào Hoa',
+        type: "cat",
         original: PhuTinh.DAO_HOA
     },
     L_HONG_LOAN: {
         key: "L_HONG_LOAN",
+        name: 'L. Hồng Loan',
+        type: "cat",
         original: PhuTinh.HONG_LOAN
     }
 }
