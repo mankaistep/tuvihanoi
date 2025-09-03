@@ -1210,64 +1210,62 @@ export function anSaoLuuNien(yinNamHan) {
   
     // Vòng 12 chi theo đúng key trong ConGiap
     const chiRing = [
-      "TY","SUU","DAN","MAO","THIN","TY_SNAKE",
-      "NGO","MUI","THAN","DAU","TUAT","HOI"
+      "TY", "SUU", "DAN", "MAO", "THIN", "TY_SNAKE",
+      "NGO", "MUI", "THAN", "DAU", "TUAT", "HOI"
     ];
     const norm = (n) => ((n % 12) + 12) % 12;
-    const moveKey = (startKey, steps) => {
+    const moveKey = (startKey, steps, clockwise = true) => {
       const i = chiRing.indexOf(startKey);
       if (i === -1) return null;
-      return chiRing[norm(i + steps)];
+      return chiRing[norm(i + (clockwise ? steps : -steps))];
     };
   
-    // 1) Lưu Thái Tuế: ở đúng chi năm hạn
+    // 1) Lưu Thái Tuế
     const chiKey = getChiFromYear(year); // e.g. "TY_SNAKE"
-    const thaiTueKey = chiKey;
     const res = {};
-    res[LuuTinh.L_THAI_TUE.key] = { ...ConGiap[thaiTueKey] };
+    res[LuuTinh.L_THAI_TUE.key] = { ...ConGiap[chiKey] };
   
-    // 2) Lưu Tang Môn: từ Lưu Thái Tuế đi thuận 2 cung
-    const tangMonKey = moveKey(thaiTueKey, 2);
+    // 2) Lưu Tang Môn
+    const tangMonKey = moveKey(chiKey, 2, true);
     if (tangMonKey) {
       res[LuuTinh.L_TANG_MON.key] = { ...ConGiap[tangMonKey] };
     }
   
-    // 3) Lưu Bạch Hổ: cung xung với Lưu Tang Môn (±6 cung)
-    const bachHoKey = tangMonKey ? moveKey(tangMonKey, 6) : null;
+    // 3) Lưu Bạch Hổ
+    const bachHoKey = tangMonKey ? moveKey(tangMonKey, 6, true) : null;
     if (bachHoKey) {
       res[LuuTinh.L_BACH_HO.key] = { ...ConGiap[bachHoKey] };
     }
   
-    // 4) Lưu Thiên Khốc / Lưu Thiên Hư: Ngọ = năm Tý, đếm nghịch/thuận tới năm hạn
-    const khocCung = getThienKhocCung(chiKey); // trả object ConGiap
+    // 4) Lưu Thiên Khốc / Hư
+    const khocCung = getThienKhocCung(chiKey);
     if (khocCung) {
       res[LuuTinh.L_THIEN_KHOC.key] = { ...khocCung };
     }
-    const huCung = getThienHuCung(chiKey); // trả object ConGiap
+    const huCung = getThienHuCung(chiKey);
     if (huCung) {
       res[LuuTinh.L_THIEN_HU.key] = { ...huCung };
     }
   
-    // 5) Lưu Lộc Tồn theo Thiên Can (không dấu, khớp constants)
-    const canKey = getCanFromYear(year); // e.g. "GIAP"
+    // 5) Lưu Lộc Tồn theo Thiên Can
+    const canKey = getCanFromYear(year);
     const locTonMap = {
-      GIAP: "DAN",      // Giáp ở Dần
-      AT: "MAO",        // Ất ở Mão
-      BINH: "TY_SNAKE", // Bính ở Tỵ
-      DINH: "NGO",      // Đinh ở Ngọ
-      MAU: "TY_SNAKE",  // Mậu ở Tỵ
-      KY: "NGO",        // Kỷ ở Ngọ
-      CANH: "THAN",     // Canh ở Thân
-      TAN: "DAU",       // Tân ở Dậu
-      NHAM: "HOI",      // Nhâm ở Hợi
-      QUY: "TY"         // Quý ở Tý
+      GIAP: "DAN",
+      AT: "MAO",
+      BINH: "TY_SNAKE",
+      DINH: "NGO",
+      MAU: "TY_SNAKE",
+      KY: "NGO",
+      CANH: "THAN",
+      TAN: "DAU",
+      NHAM: "HOI",
+      QUY: "TY"
     };
     const locTonKey = locTonMap[canKey];
     if (locTonKey) {
       res[LuuTinh.L_LOC_TON.key] = { ...ConGiap[locTonKey] };
-      // 6) Lưu Kình Dương/Đà La: trước/sau Lưu Lộc Tồn
-      const kinhDuongKey = moveKey(locTonKey, -1);
-      const daLaKey = moveKey(locTonKey, 1);
+      const kinhDuongKey = moveKey(locTonKey, 1, false); // nghịch
+      const daLaKey = moveKey(locTonKey, 1, true);      // thuận
       if (kinhDuongKey) {
         res[LuuTinh.L_KINH_DUONG.key] = { ...ConGiap[kinhDuongKey] };
       }
@@ -1276,14 +1274,37 @@ export function anSaoLuuNien(yinNamHan) {
       }
     }
   
-    // 7) Lưu Thiên Mã: theo nhóm tam hợp của chi năm hạn
-    const thienMaCung = getLuuThienMaFromChi(chiKey); // trả object ConGiap
+    // 6) Lưu Thiên Mã
+    const thienMaCung = getLuuThienMaFromChi(chiKey);
     if (thienMaCung) {
       res[LuuTinh.L_THIEN_MA.key] = { ...thienMaCung };
     }
   
+    // 7) Lưu Đào Hoa (tam hợp tuổi năm hạn)
+    const daoHoaMap = {
+      "THAN": "DAU", "TY": "DAU", "THIN": "DAU",
+      "TY_SNAKE": "NGO", "DAU": "NGO", "SUU": "NGO",
+      "DAN": "MAO", "NGO": "MAO", "TUAT": "MAO",
+      "HOI": "TY", "MAO": "TY", "MUI": "TY"
+    };
+    const daoHoaKey = daoHoaMap[chiKey];
+    if (daoHoaKey) {
+      res[LuuTinh.L_DAO_HOA.key] = { ...ConGiap[daoHoaKey] };
+    }
+  
+    // 8) Lưu Hồng Loan (Mão = Tý, đếm nghịch đến chi năm hạn)
+    const chiIndex = chiRing.indexOf(chiKey); // Tý=0,...,Hợi=11
+    if (chiIndex !== -1) {
+      // Bắt đầu từ Mão, lùi (đếm nghịch) chiIndex bước
+      const hongLoanKey = moveKey("MAO", chiIndex, false);
+      if (hongLoanKey) {
+        res[LuuTinh.L_HONG_LOAN.key] = { ...ConGiap[hongLoanKey] };
+      }
+    }
+  
     return res;
 }
+  
 
 export function anSaoLuuTuHoa(yinBirthDate, yinNamHan) {
     const year = Number(yinNamHan?.year);

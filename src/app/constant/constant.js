@@ -668,10 +668,6 @@ export const LuuTinh = {
         key: "L_HONG_LOAN",
         original: PhuTinh.HONG_LOAN
     },
-    L_HOA_CAI: {
-        key: "L_HOA_CAI",
-        original: PhuTinh.HOA_CAI
-    },
     L_KIEP_SAT: {
         key: "L_KIEP_SAT",
         original: PhuTinh.KIEP_SAT
