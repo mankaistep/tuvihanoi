@@ -3,7 +3,8 @@ import {
     convertBirthToYin,
     anSaoLuuNien,
     anSaoLuuTuHoa,
-    lapLaSo
+    lapLaSo,
+    lapLaSoShort
 } from '../../utils/utils'
 
 export async function GET(request) {
@@ -70,7 +71,8 @@ export async function GET(request) {
 
     // Create response data
     const data = {
-        lapLaSoTuVi: lapLaSo(yinBirthday),
+        lapLaSoShort: lapLaSoShort(yinBirthday, yinNamHan),
+        lapLaSo: lapLaSo(yinBirthday, yinNamHan),
     };
 
     return Response.json(data);

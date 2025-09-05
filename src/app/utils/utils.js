@@ -1348,13 +1348,15 @@ export function anSaoLuuTuHoa(yinBirthDate, yinNamHan) {
 /*
     Lap la so
 */
-export function lapLaSo(yinBirthDate) {
+export function lapLaSo(yinBirthDate, yinNamHan) {
     // 1️⃣ Thông tin Mệnh bàn
     const menh = anMenh(yinBirthDate);
     const cuc = anCuc(yinBirthDate);
     const banMenh = anBanMenh(yinBirthDate);
     const amDuongNamNu = anAmDuongNamNu(yinBirthDate);
-    const menhBan = { menh, cuc, banMenh, amDuongNamNu };
+    const mqhAmDuong = checkAmDuongLy(yinBirthDate);
+    const mqhCucMenh = checkCucMenhRelation(yinBirthDate);
+    const menhBan = { menh, cuc, banMenh, amDuongNamNu, mqhAmDuong, mqhCucMenh };
 
     // 2️⃣ Cung -> con giáp
     const cungMap = anCung(yinBirthDate);
@@ -1381,7 +1383,7 @@ export function lapLaSo(yinBirthDate) {
 
     const luuTinhMap = {
         ...anSaoLuuTuHoa(yinBirthDate),
-        ...anSaoLuuNien(yinBirthDate)
+        ...anSaoLuuNien(yinBirthDate, yinNamHan)
     }
 
     // 5️⃣ Gom thông tin từng cung
@@ -1461,7 +1463,7 @@ export function lapLaSo(yinBirthDate) {
 
         cungResult[cungKey] = {
             cung: cung.name,
-            chi: chi.name,
+            chi: chi,
             chinhTinh: chinhTinhExpanded,
             phuTinh: phuTinhExpanded,   // ⭐ đã bao gồm Tứ Hóa từ constant
             luuTinh: luuTinhExpanded,
@@ -1474,6 +1476,55 @@ export function lapLaSo(yinBirthDate) {
     });
 
     return { menhBan, cung: cungResult };
+}
+
+export function lapLaSoShort(yinBirthDate, yinNamHan) {
+    const full = lapLaSo(yinBirthDate, yinNamHan);
+
+    // Rút gọn mỗi cung
+    const cungShort = {};
+    Object.entries(full.cung).forEach(([cungKey, val]) => {
+        cungShort[cungKey] = {
+            cung: val.cung,
+            chi: val.chi ? {
+                name: val.chi.name,
+                am_duong: val.chi.am_duong?.name,
+                ngu_hanh: val.chi.ngu_hanh?.name,
+            } : null,
+            chinhTinh: val.chinhTinh.map(s => ({
+                name: s.name,
+                do_sang: s.doSang?.name,
+                am_duong: s.am_duong?.name,
+                ngu_hanh: s.ngu_hanh?.name,
+            })),
+            catTinh: val.catTinh.map(s => ({
+                name: s.name,
+                ngu_hanh: s.ngu_hanh?.name,
+                sao_key: s.sao_key
+            })),
+            satTinh: val.satTinh.map(s => ({
+                name: s.name,
+                ngu_hanh: s.ngu_hanh?.name,
+                sao_key: s.sao_key
+            })),
+            vongTruongSinh: val.vongTruongSinh.map(s => s.name),
+            daiVan: val.daiVan ? {
+                start: val.daiVan.startAge,
+                end: val.daiVan.startAge + 9,
+            } : null
+        };
+    });
+
+    return {
+        menhBan: {
+            banMenh: full.menhBan.banMenh.name,
+            cuc: full.menhBan.cuc.cuc.name,
+            amDuong: full.menhBan.amDuongNamNu.name,
+            quanHeAmDuong: full.menhBan.mqhAmDuong,
+            quanHeCucMenh: full.menhBan.mqhCucMenh,
+        },
+        cung: cungShort
+    };
 }
 
 
@@ -1795,3 +1846,52 @@ function getLuuThienMaFromChi(chiNamHan) {
     const cung = ConGiap[groups[chiNamHan]];
     return cung || null;
 }
+
+export function checkAmDuongLy(yinBirthDate) {
+    const banMenh = anBanMenh(yinBirthDate); // object BanMenh (có ngu_hanh, am_duong)
+    const menhBranch = anMenh(yinBirthDate); // ConGiap object (có am_duong)
+
+    if (!banMenh || !menhBranch) return null;
+
+    const amDuongBanMenh = banMenh.am_duong; // ví dụ 'DUONG' / 'AM'
+    const amDuongCungMenh = menhBranch.am_duong;
+
+    return amDuongBanMenh === amDuongCungMenh
+        ? "Âm Dương thuận lý"
+        : "Âm Dương nghịch lý";
+}
+
+const sinhMap = {
+    MOC: "HOA",
+    HOA: "THO",
+    THO: "KIM",
+    KIM: "THUY",
+    THUY: "MOC",
+};
+
+const khacMap = {
+    MOC: "THO",
+    THO: "THUY",
+    THUY: "HOA",
+    HOA: "KIM",
+    KIM: "MOC",
+};
+
+export function checkCucMenhRelation(yinBirthDate) {
+    const banMenh = anBanMenh(yinBirthDate); // object BanMenh
+    const cucInfo = anCuc(yinBirthDate); // {cuc, chi}
+
+    if (!banMenh || !cucInfo) return null;
+
+    const hanhMenh = banMenh.ngu_hanh.key; // ví dụ 'KIM'
+    const hanhCuc = cucInfo.cuc.ngu_hanh.key; // ví dụ 'THUY'
+
+    if (hanhMenh === hanhCuc) return "Cục Mệnh Bình Hòa";
+    if (sinhMap[hanhCuc] === hanhMenh) return "Cục sinh Mệnh";
+    if (sinhMap[hanhMenh] === hanhCuc) return "Mệnh sinh Cục";
+    if (khacMap[hanhCuc] === hanhMenh) return "Cục khắc Mệnh";
+    if (khacMap[hanhMenh] === hanhCuc) return "Mệnh khắc Cục";
+
+    return "Không xác định";
+}
+

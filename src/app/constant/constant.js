@@ -9,11 +9,11 @@ export const AmDuong = {
 }
 
 export const NguHanh = {
-    KIM: { name: 'Kim' },
-    MOC: { name: 'Mộc' },
-    THUY: { name: 'Thủy' },
-    HOA: { name: 'Hỏa' },
-    THO: { name: 'Thổ' }
+    KIM: { key: "KIM", name: 'Kim' },
+    MOC: { key: "MOC", name: 'Mộc' },
+    THUY: { key: "THUY", name: 'Thủy' },
+    HOA: { key: "HOA", name: 'Hỏa' },
+    THO: { key: "THO", name: 'Thổ' }
 }
 
 // Thập Thiên Can
@@ -612,90 +612,120 @@ export const LuuTinh = {
         key: "L_THAI_TUE",
         name: 'L. Thái Tuế',
         type: "sat",
+        ngu_hanh: PhuTinh.THAI_TUE.ngu_hanh,
+        sao_key: PhuTinh.THAI_TUE.sao_key,
         original: PhuTinh.THAI_TUE
     },
     L_TANG_MON: {
         key: "L_TANG_MON",
         name: 'L. Tang Môn',
         type: "sat",
+        ngu_hanh: PhuTinh.TANG_MON.ngu_hanh,
+        sao_key: PhuTinh.TANG_MON.sao_key,
         original: PhuTinh.TANG_MON
     },
     L_BACH_HO: {
         key: "L_BACH_HO",
         name: 'L. Bạch Hổ',
         type: "sat",
+        ngu_hanh: PhuTinh.BACH_HO.ngu_hanh,
+        sao_key: PhuTinh.BACH_HO.sao_key,
         original: PhuTinh.BACH_HO
     },
     L_THIEN_KHOC: {
         key: "L_THIEN_KHOC",
         name: 'L. Thiên Khốc',
         type: "sat",
+        ngu_hanh: PhuTinh.THIEN_KHOC.ngu_hanh,
+        sao_key: PhuTinh.THIEN_KHOC.sao_key,
         original: PhuTinh.THIEN_KHOC
     },
     L_THIEN_HU: {
         key: "L_THIEN_HU",
         name: 'L. Thiên Hư',
         type: "sat",
+        ngu_hanh: PhuTinh.THIEN_HU.ngu_hanh,
+        sao_key: PhuTinh.THIEN_HU.sao_key,
         original: PhuTinh.THIEN_HU
     },
     L_LOC_TON: {
         key: "L_LOC_TON",
         name: 'L. Lộc Tồn',
         type: "cat",
+        ngu_hanh: PhuTinh.LOC_TON.ngu_hanh,
+        sao_key: PhuTinh.LOC_TON.sao_key,
         original: PhuTinh.LOC_TON
     },
     L_KINH_DUONG: {
         key: "L_KINH_DUONG",
         name: 'L. Kình Dương',
         type: "sat",
+        ngu_hanh: PhuTinh.KINH_DUONG.ngu_hanh,
+        sao_key: PhuTinh.KINH_DUONG.sao_key,
         original: PhuTinh.KINH_DUONG
     },
     L_DA_LA: {
         key: "L_DA_LA",
         name: 'L. Đà La',
         type: "sat",
+        ngu_hanh: PhuTinh.DA_LA.ngu_hanh,
+        sao_key: PhuTinh.DA_LA.sao_key,
         original: PhuTinh.DA_LA
     },
     L_THIEN_MA: {
         key: "L_THIEN_MA",
         name: 'L. Thiên Mã',
         type: "cat",
+        ngu_hanh: PhuTinh.THIEN_MA.ngu_hanh,
+        sao_key: PhuTinh.THIEN_MA.sao_key,
         original: PhuTinh.THIEN_MA
     },
     L_HOA_LOC: {
         key: "L_HOA_LOC",
         name: 'L. Hoá Lộc',
         type: "cat",
+        ngu_hanh: PhuTinh.HOA_LOC.ngu_hanh,
+        sao_key: PhuTinh.HOA_LOC.sao_key,
         original: PhuTinh.HOA_LOC
     },
     L_HOA_QUYEN: {
         key: "L_HOA_QUYEN",
         name: 'L. Hoá Quyền',
         type: "cat",
+        ngu_hanh: PhuTinh.HOA_QUYEN.ngu_hanh,
+        sao_key: PhuTinh.HOA_QUYEN.sao_key,
         original: PhuTinh.HOA_QUYEN
     },
     L_HOA_KHOA: {
         key: "L_HOA_KHOA",
         name: 'L. Hoá Khoa',
         type: "cat",
+        ngu_hanh: PhuTinh.HOA_KHOA.ngu_hanh,
+        sao_key: PhuTinh.HOA_KHOA.sao_key,
         original: PhuTinh.HOA_KHOA
     },
     L_HOA_KY: {
         key: "L_HOA_KY",
         name: 'L. Hoá Kỵ',
         type: "sat",
+        ngu_hanh: PhuTinh.HOA_KY.ngu_hanh,
+        sao_key: PhuTinh.HOA_KY.sao_key,
         original: PhuTinh.HOA_KY
     },
     L_DAO_HOA: {
         key: "L_DAO_HOA",
         name: 'L. Đào Hoa',
         type: "cat",
+        ngu_hanh: PhuTinh.DAO_HOA.ngu_hanh,
+        sao_key: PhuTinh.DAO_HOA.sao_key,
         original: PhuTinh.DAO_HOA
     },
     L_HONG_LOAN: {
         key: "L_HONG_LOAN",
         name: 'L. Hồng Loan',
         type: "cat",
+        ngu_hanh: PhuTinh.HONG_LOAN.ngu_hanh,
+        sao_key: PhuTinh.HONG_LOAN.sao_key,
         original: PhuTinh.HONG_LOAN
     }
 }
