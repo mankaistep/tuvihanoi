@@ -125,7 +125,7 @@ export function anCuc(yinBirthDate) {
             THIN: Cuc.MOC_TAM, TY_SNAKE: Cuc.MOC_TAM,
             NGO: Cuc.THO_NGU, MUI: Cuc.THO_NGU,
             THAN: Cuc.KIM_TU, DAU: Cuc.KIM_TU,
-            TUAT: Cuc.THUY_NHI, HOI: Cuc.THUY_NHI
+            TUAT: Cuc.HOA_LUC, HOI: Cuc.HOA_LUC
         },
         ATCANH: {
             TY: Cuc.HOA_LUC, SUU: Cuc.HOA_LUC,
@@ -133,7 +133,7 @@ export function anCuc(yinBirthDate) {
             THIN: Cuc.KIM_TU, TY_SNAKE: Cuc.KIM_TU,
             NGO: Cuc.MOC_TAM, MUI: Cuc.MOC_TAM,
             THAN: Cuc.THUY_NHI, DAU: Cuc.THUY_NHI,
-            TUAT: Cuc.HOA_LUC, HOI: Cuc.HOA_LUC
+            TUAT: Cuc.THO_NGU, HOI: Cuc.THO_NGU
         },
         BINHTAN: {
             TY: Cuc.THO_NGU, SUU: Cuc.THO_NGU,
@@ -141,7 +141,7 @@ export function anCuc(yinBirthDate) {
             THIN: Cuc.THUY_NHI, TY_SNAKE: Cuc.THUY_NHI,
             NGO: Cuc.KIM_TU, MUI: Cuc.KIM_TU,
             THAN: Cuc.HOA_LUC, DAU: Cuc.HOA_LUC,
-            TUAT: Cuc.THO_NGU, HOI: Cuc.THO_NGU
+            TUAT: Cuc.MOC_TAM, HOI: Cuc.MOC_TAM
         },
         DINHNHAM: {
             TY: Cuc.MOC_TAM, SUU: Cuc.MOC_TAM,
@@ -149,7 +149,7 @@ export function anCuc(yinBirthDate) {
             THIN: Cuc.HOA_LUC, TY_SNAKE: Cuc.HOA_LUC,
             NGO: Cuc.THUY_NHI, MUI: Cuc.THUY_NHI,
             THAN: Cuc.THO_NGU, DAU: Cuc.THO_NGU,
-            TUAT: Cuc.MOC_TAM, HOI: Cuc.MOC_TAM
+            TUAT: Cuc.KIM_TU, HOI: Cuc.KIM_TU
         },
         MAUQUY: {
             TY: Cuc.KIM_TU, SUU: Cuc.KIM_TU,
@@ -157,7 +157,7 @@ export function anCuc(yinBirthDate) {
             THIN: Cuc.THO_NGU, TY_SNAKE: Cuc.THO_NGU,
             NGO: Cuc.HOA_LUC, MUI: Cuc.HOA_LUC,
             THAN: Cuc.MOC_TAM, DAU: Cuc.MOC_TAM,
-            TUAT: Cuc.KIM_TU, HOI: Cuc.KIM_TU
+            TUAT: Cuc.THUY_NHI, HOI: Cuc.THUY_NHI
         }
     };
 
