@@ -1,7 +1,8 @@
 import { GioiTinh } from '../../../constant/constant'
 import { 
     convertBirthToYin,
-    anSaoTuVi
+    anThan,
+    anCung
 } from '../../../utils/utils'
 
 export async function POST(request) {
@@ -59,7 +60,8 @@ export async function POST(request) {
 
         // Create response data
         const data = {
-            debug: anSaoTuVi(yinBirthday)
+            anThan: anThan(yinBirthday),
+            anCung: anCung(yinBirthday)
         };
 
         return Response.json(data);

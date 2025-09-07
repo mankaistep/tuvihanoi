@@ -1356,7 +1356,20 @@ export function lapLaSo(yinBirthDate, yinNamHan) {
     const amDuongNamNu = anAmDuongNamNu(yinBirthDate);
     const mqhAmDuong = checkAmDuongLy(yinBirthDate);
     const mqhCucMenh = checkCucMenhRelation(yinBirthDate);
-    const menhBan = { menh, cuc, banMenh, amDuongNamNu, mqhAmDuong, mqhCucMenh };
+    const cung = anCung(yinBirthDate)          // object chứa 12 cung
+    const thanBranch = anThan(yinBirthDate)    // ví dụ: { key: "MAO", name: "Mão", ... }
+    
+    // tìm ra cung nào có chi trùng với anThan
+    let cungThan = null
+    for (const [cungKey, chiObj] of Object.entries(cung)) {
+      if (chiObj.key === thanBranch.key) {
+        // lấy ra tên cung theo constant Cung
+        cungThan = { key: cungKey, name: Cung[cungKey].name }
+        break
+      }
+    }
+    
+    const menhBan = { menh, cuc, banMenh, amDuongNamNu, mqhAmDuong, mqhCucMenh, cungThan }
 
     // 2️⃣ Cung -> con giáp
     const cungMap = anCung(yinBirthDate);
@@ -1442,8 +1455,8 @@ export function lapLaSo(yinBirthDate, yinNamHan) {
         });
 
         // 5.3️⃣ Cat tinh & Sat tinh (lọc từ phuTinhExpanded)
-        const catTinh = phuTinhExpanded.concat(luuTinhExpanded).filter(s => s.type === "cat");
-        const satTinh = phuTinhExpanded.concat(luuTinhExpanded).filter(s => s.type === "sat");
+        const catTinh = phuTinhExpanded.filter(s => s.type === "cat");
+        const satTinh = phuTinhExpanded.filter(s => s.type === "sat");
 
         // 5.4️⃣ Vòng Trường Sinh
         const truongSinhExpanded = truongSinhTrongCung.map(saoName => {
@@ -1497,16 +1510,9 @@ export function lapLaSoShort(yinBirthDate, yinNamHan) {
                 am_duong: s.am_duong?.name,
                 ngu_hanh: s.ngu_hanh?.name,
             })),
-            catTinh: val.catTinh.map(s => ({
-                name: s.name,
-                ngu_hanh: s.ngu_hanh?.name,
-                sao_key: s.sao_key
-            })),
-            satTinh: val.satTinh.map(s => ({
-                name: s.name,
-                ngu_hanh: s.ngu_hanh?.name,
-                sao_key: s.sao_key
-            })),
+            catTinh: val.catTinh.map(s => s.name),
+            satTinh: val.satTinh.map(s => s.name),
+            luuTinh: val.luuTinh.map(s => s.name),
             vongTruongSinh: val.vongTruongSinh.map(s => s.name),
             daiVan: val.daiVan ? {
                 start: val.daiVan.startAge,
@@ -1522,6 +1528,7 @@ export function lapLaSoShort(yinBirthDate, yinNamHan) {
             amDuong: full.menhBan.amDuongNamNu.name,
             quanHeAmDuong: full.menhBan.mqhAmDuong,
             quanHeCucMenh: full.menhBan.mqhCucMenh,
+            thanCu: full.menhBan.cungThan.name
         },
         cung: cungShort
     };
