@@ -6,48 +6,83 @@ export default function Home() {
   const currentYear = new Date().getFullYear();
 
   const [formData, setFormData] = useState({
-    day: "",
-    month: "",
-    year: "",
-    hours: "12",
-    minutes: "00",
-    gender: "NAM", // default
-    namHan: currentYear.toString(), // thêm năm xem hạn
+    day: "4",
+    month: "11",
+    year: "2001",
+    hours: "20",
+    minutes: "30",
+    gender: "NAM",
+    namHan: currentYear.toString(),
   });
 
-  const [apiData, setApiData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  // 3 API sections: mỗi cái có url + method
+  const [sections, setSections] = useState([
+    { url: "/api/hello", method: "POST" },
+    { url: "/api/second", method: "POST" },
+    { url: "/api/third", method: "POST" },
+    { url: "/api/", method: "POST" },
+    { url: "/api/", method: "POST" },
+    { url: "/api/", method: "POST" },
+    { url: "/api/", method: "POST" },
+    { url: "/api/", method: "POST" },
+    { url: "/api/", method: "POST" },
+    { url: "/api/", method: "POST" },
+    { url: "/api/", method: "POST" },
+  ]);
+
+  const [responses, setResponses] = useState([null, null, null]);
+  const [loading, setLoading] = useState([false, false, false]);
+  const [errors, setErrors] = useState(["", "", ""]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+  const handleSectionChange = (index, field, value) => {
+    setSections((prev) => {
+      const newSections = [...prev];
+      newSections[index][field] = value;
+      return newSections;
+    });
+  };
+
+  const handleRequest = async (index) => {
+    setLoading((prev) => prev.map((l, i) => (i === index ? true : l)));
+    setErrors((prev) => prev.map((err, i) => (i === index ? "" : err)));
 
     try {
       const params = new URLSearchParams(formData);
-      const response = await fetch(`/api/hello?${params}`);
-      const data = await response.json();
+      let response;
 
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to fetch data");
+      if (sections[index].method === "GET") {
+        response = await fetch(`${sections[index].url}?${params}`, {
+          method: "GET",
+        });
+      } else {
+        response = await fetch(sections[index].url, {
+          method: sections[index].method,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
       }
 
-      setApiData(data);
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Failed to fetch data");
+
+      setResponses((prev) => prev.map((r, i) => (i === index ? data : r)));
     } catch (err) {
-      console.error("Error:", err);
-      setError(err.message || "An error occurred");
+      setErrors((prev) =>
+        prev.map((e, i) => (i === index ? err.message : e))
+      );
     } finally {
-      setLoading(false);
+      setLoading((prev) => prev.map((l, i) => (i === index ? false : l)));
     }
+  };
+
+  const copyResponse = (index) => {
+    if (!responses[index]) return;
+    navigator.clipboard.writeText(JSON.stringify(responses[index], null, 2));
   };
 
   // Generate options
@@ -69,7 +104,8 @@ export default function Home() {
       <main className={styles.main}>
         <h1>Birth Date Analyzer</h1>
 
-        <form onSubmit={handleSubmit} style={formStyle}>
+        {/* Form nhập ngày sinh */}
+        <form style={formStyle}>
           <h2>Enter Your Birth Details</h2>
 
           {/* Day */}
@@ -77,9 +113,7 @@ export default function Home() {
             <label>Day:</label>
             <select name="day" value={formData.day} onChange={handleChange} required style={selectStyle}>
               <option value="">Select day</option>
-              {days.map((day) => (
-                <option key={day} value={day}>{day}</option>
-              ))}
+              {days.map((day) => <option key={day} value={day}>{day}</option>)}
             </select>
           </div>
 
@@ -105,7 +139,7 @@ export default function Home() {
             </select>
           </div>
 
-          {/* Nam Han (Year of reading / xem hạn) */}
+          {/* Nam Han */}
           <div>
             <label>Year to Analyze (Năm xem hạn):</label>
             <select name="namHan" value={formData.namHan} onChange={handleChange} style={selectStyle}>
@@ -143,25 +177,59 @@ export default function Home() {
               <option value="NU">Nữ</option>
             </select>
           </div>
-
-          {/* Submit */}
-          <button type="submit" disabled={loading} style={buttonStyle}>
-            {loading ? "Analyzing..." : "Analyze Birth Details"}
-          </button>
-
-          {error && <div style={{ color: "red" }}>{error}</div>}
         </form>
 
-        {/* Show raw JSON */}
-        {apiData && !error && (
-          <pre style={resultStyle}>{JSON.stringify(apiData, null, 2)}</pre>
-        )}
+        {/* 3 Sections output */}
+        {sections.map((section, index) => (
+          <div key={index} style={sectionStyle}>
+            <h3>API Section {index + 1}</h3>
+            <input
+              type="text"
+              value={section.url}
+              onChange={(e) => handleSectionChange(index, "url", e.target.value)}
+              style={inputStyle}
+            />
+            <select
+              value={section.method}
+              onChange={(e) => handleSectionChange(index, "method", e.target.value)}
+              style={{ ...inputStyle, marginTop: "8px" }}
+            >
+              <option value="GET">GET</option>
+              <option value="POST">POST</option>
+              <option value="PUT">PUT</option>
+              <option value="DELETE">DELETE</option>
+            </select>
+
+            <div style={{ marginTop: "10px" }}>
+              <button
+                onClick={() => handleRequest(index)}
+                disabled={loading[index]}
+                style={buttonStyle}
+              >
+                {loading[index] ? "Loading..." : "Send Request"}
+              </button>
+              <button
+                onClick={() => copyResponse(index)}
+                disabled={!responses[index]}
+                style={{ ...buttonStyle, marginLeft: "10px", backgroundColor: "#444" }}
+              >
+                Copy Response
+              </button>
+            </div>
+            {errors[index] && <div style={{ color: "red" }}>{errors[index]}</div>}
+            <pre style={responseStyle}>
+              {responses[index]
+                ? JSON.stringify(responses[index], null, 2)
+                : "No response yet"}
+            </pre>
+          </div>
+        ))}
       </main>
     </div>
   );
 }
 
-// Small helper styles
+// Styles
 const selectStyle = {
   width: "100%",
   padding: "8px",
@@ -169,6 +237,14 @@ const selectStyle = {
   border: "1px solid #ddd",
   borderRadius: "4px",
   fontSize: "16px",
+};
+
+const inputStyle = {
+  width: "100%",
+  padding: "8px",
+  border: "1px solid #ddd",
+  borderRadius: "4px",
+  fontSize: "14px",
 };
 
 const formStyle = {
@@ -185,25 +261,31 @@ const formStyle = {
 };
 
 const buttonStyle = {
-  padding: "12px",
-  fontSize: "16px",
+  padding: "10px 14px",
+  fontSize: "14px",
   backgroundColor: "#0070f3",
   color: "white",
   border: "none",
   borderRadius: "4px",
   cursor: "pointer",
-  marginTop: "10px",
 };
 
-const resultStyle = {
+const sectionStyle = {
   marginTop: "30px",
-  padding: "20px",
-  border: "1px solid #eaeaea",
+  padding: "15px",
+  border: "1px solid #ddd",
   borderRadius: "8px",
-  maxWidth: "600px",
-  textAlign: "left",
+  backgroundColor: "#fafafa",
+};
+
+const responseStyle = {
+  marginTop: "10px",
+  padding: "10px",
+  border: "1px solid #eaeaea",
+  borderRadius: "6px",
+  maxHeight: "400px", // updated
+  overflow: "auto",
   backgroundColor: "#f9f9f9",
-  fontSize: "14px",
+  fontSize: "13px",
   whiteSpace: "pre-wrap",
-  wordWrap: "break-word",
 };
