@@ -1,0 +1,74 @@
+import { 
+    getToChatPromptWithLaso,
+    runPromptToChat
+} from "../../../utils/prompt_utils";
+import { GioiTinh } from '../../../constant/constant'
+import { convertBirthToYin } from '../../../utils/utils'
+
+export async function POST(request) {
+    const body = await request.json();
+
+    const day = body.day;
+    const month = body.month;
+    const year = body.year;
+    const hours = body.hours || "0";
+    const minutes = body.minutes || "0";
+
+    const genderRaw = body.gender || "NAM";
+    const namHan = body.namHan || year;
+
+    // Basic validation
+    if (!day || !month || !year) {
+        return Response.json(
+            { error: 'Day, month, and year are required parameters' },
+            { status: 400 }
+        );
+    }
+
+    try {
+        // Create a Date object from the parameters
+        const birthDate = new Date(
+            parseInt(year),
+            parseInt(month) - 1, // JavaScript months are 0-indexed
+            parseInt(day),
+            parseInt(hours),
+            parseInt(minutes)
+        );
+
+        // Validate the date
+        if (isNaN(birthDate.getTime())) {
+            throw new Error('Invalid date');
+        }
+
+        // Gioi tinh
+        const gender = GioiTinh[genderRaw] || GioiTinh.NAM;
+
+        const yinBirthday = convertBirthToYin({
+            year: year,
+            month: month,
+            day: day,
+            hours: hours,
+            minutes: minutes,
+            gender: gender
+        })
+
+        const yinNamHan = convertBirthToYin({
+            year: namHan,
+            month: month,
+            day: day,
+        })
+
+        // Create response data
+        const data = {
+            prompt: await runPromptToChat(yinBirthday, yinNamHan)
+        };
+
+        return Response.json(data);
+    } catch (error) {
+        console.log(error)
+        return Response.json(
+            { error: 'Invalid date parameters', details: error.message },
+            { status: 400 }
+        );
+    }
+}
