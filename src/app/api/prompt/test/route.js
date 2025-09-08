@@ -57,11 +57,24 @@ export async function POST(request) {
             month: month,
             day: day,
         })
-
         // Create response data
-        const data = {
-            prompt: await runPromptToChat(yinBirthday, yinNamHan)
-        };
+        let data = await runPromptToChat(yinBirthday, yinNamHan);
+
+        // If runPromptToChat returns a string with ```json ... ```
+        if (typeof data === "string") {
+        data = data
+            .replace(/^```json\s*/, "")   // remove leading ```json
+            .replace(/^```/, "")          // in case it's just ```
+            .replace(/```$/, "")          // remove trailing ```
+            .trim();
+
+        try {
+            data = JSON.parse(data);
+        } catch (err) {
+            console.error("Failed to parse JSON:", err, data);
+            return Response.json({ error: "Invalid JSON from model" }, { status: 500 });
+        }
+        }
 
         return Response.json(data);
     } catch (error) {

@@ -8,9 +8,9 @@ const openai = new OpenAI({
 
 export async function runPrompt(prompt) {
   const response = await openai.chat.completions.create({
-    model: "gpt-5-mini", // latest GPT-5 model
+    model: "gpt-5-mini", 
     messages: [
-      { role: "system", content: "You are an expert assistant that follows instructions carefully." },
+      { role: "system", content: "Hãy làm theo chỉ dẫn một cách cẩn thận." },
       { role: "user", content: prompt },
     ],
   });
