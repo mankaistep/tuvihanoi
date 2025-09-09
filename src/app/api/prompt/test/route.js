@@ -1,7 +1,8 @@
 import { 
     getToChatPromptWithLaso,
     runPromptToChat,
-    runPromptLonLen
+    runPromptLonLen,
+    runPromptTinhDuyen
 } from "../../../utils/prompt_utils";
 import { GioiTinh } from '../../../constant/constant'
 import { convertBirthToYin } from '../../../utils/utils'
@@ -59,7 +60,7 @@ export async function POST(request) {
             day: day,
         })
         // Create response data
-        let data = await runPromptLonLen(yinBirthday, yinNamHan);
+        let data = await runPromptTinhDuyen(yinBirthday, yinNamHan);
 
         // If runPromptToChat returns a string with ```json ... ```
         if (typeof data === "string") {

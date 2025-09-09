@@ -1,6 +1,7 @@
 import basicPrompts from '../docs/basic-prompts.json';
 import toChatPrompt from '../docs/tochat-prompts.json';
 import lonLenPrompt from '../docs/lonlen-prompts.json';
+import tinhDuyenPrompt from '../docs/tinhduyen-prompts.json';
 import { lapLaSoShort } from './utils';
 import { runPrompt } from './gpt_utils';
 
@@ -88,6 +89,41 @@ ${JSON.stringify(laso, null, 2)}
 
 export async function runPromptLonLen(yinBirthday, yinNamHan) {
   const prompt = getLonLenPromptWithLaso(yinBirthday, yinNamHan);
+
+  return await runPrompt(prompt);
+}
+
+/*
+  Tinh duyen prompt
+*/
+export function getTinhDuyenPrompt() {
+  const beginning = getPromptBeginning();
+  const { laso } = basicPrompts;
+  const { requirement, representation, guide } = tinhDuyenPrompt;
+
+  return `
+${beginning}
+
+${section("REQUIREMENTS", requirement)}
+${section("GUIDE", guide)}
+${section("REPRESENTATION", representation)}
+${section("LÁ SỐ", laso)}
+  `.trim();
+}
+
+export function getTinhDuyenPromptWithLaso(yinBirthday, yinNamHan) {
+  const laso = lapLaSoShort(yinBirthday, yinNamHan);
+
+  return `
+${getTinhDuyenPrompt()}
+
+# GENERATED LÁ SỐ
+${JSON.stringify(laso, null, 2)}
+  `.trim();
+}
+
+export async function runPromptTinhDuyen(yinBirthday, yinNamHan) {
+  const prompt = getTinhDuyenPromptWithLaso(yinBirthday, yinNamHan);
 
   return await runPrompt(prompt);
 }
