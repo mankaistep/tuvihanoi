@@ -10,12 +10,11 @@ function section(title, content) {
 }
 
 export function getPromptBeginning() {
-  const { context, role, reasoning, output } = basicPrompts;
+  const { context, role, output } = basicPrompts;
 
   return `
 ${section("CONTEXT", context)}
 ${section("ROLE", role)}
-${section("REASONING", reasoning)}
 ${section("OUTPUT FORMAT", output)}
   `.trim();
 }
@@ -23,13 +22,14 @@ ${section("OUTPUT FORMAT", output)}
 export function getToChatPrompt() {
   const beginning = getPromptBeginning();
   const { laso } = basicPrompts;
-  const { requirement, guide } = toChatPrompt;
+  const { requirement, representation, guide } = toChatPrompt;
 
   return `
 ${beginning}
 
 ${section("REQUIREMENTS", requirement)}
 ${section("GUIDE", guide)}
+${section("REPRESENTATION", representation)}
 ${section("LÁ SỐ", laso)}
   `.trim();
 }
