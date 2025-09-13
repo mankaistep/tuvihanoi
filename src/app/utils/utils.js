@@ -1498,39 +1498,39 @@ export function lapLaSoShort(yinBirthDate, yinNamHan) {
     const cungShort = {};
     Object.entries(full.cung).forEach(([cungKey, val]) => {
         cungShort[cungKey] = {
-            cung: val.cung,
-            chi: val.chi ? {
-                name: val.chi.name,
-                am_duong: val.chi.am_duong?.name,
-                ngu_hanh: val.chi.ngu_hanh?.name,
+            "Tên cung": val.cung,
+            "Chi": val.chi ? {
+                "Tên chi": val.chi.name,
+                "Âm Dương": val.chi.am_duong?.name,
+                "Ngũ hành": val.chi.ngu_hanh?.name,
             } : null,
-            chinhTinh: val.chinhTinh.map(s => ({
-                name: s.name,
-                do_sang: s.doSang?.name,
-                am_duong: s.am_duong?.name,
-                ngu_hanh: s.ngu_hanh?.name,
+            "Chính tinh": val.chinhTinh.map(s => ({
+                "Tên": s.name,
+                "Độ sáng": s.doSang?.name,
+                "Âm Dương": s.am_duong?.name,
+                "Ngũ hành": s.ngu_hanh?.name,
             })),
-            catTinh: val.catTinh.map(s => s.name),
-            satTinh: val.satTinh.map(s => s.name),
-            luuTinh: val.luuTinh.map(s => s.name),
-            vongTruongSinh: val.vongTruongSinh.map(s => s.name),
-            daiVan: val.daiVan ? {
-                start: val.daiVan.startAge,
-                end: val.daiVan.startAge + 9,
+            "Cát tinh": val.catTinh.map(s => s.name),
+            "Sát tinh": val.satTinh.map(s => s.name),
+            "Lưu tinh": val.luuTinh.map(s => s.name),
+            "Vòng Trường sinh": val.vongTruongSinh.map(s => s.name),
+            "Đại vận": val.daiVan ? {
+                "Bắt đầu": val.daiVan.startAge,
+                "Kết thúc": val.daiVan.startAge + 9,
             } : null
         };
     });
 
     return {
-        menhBan: {
-            banMenh: full.menhBan.banMenh.name,
-            cuc: full.menhBan.cuc.cuc.name,
-            amDuong: full.menhBan.amDuongNamNu.name,
-            quanHeAmDuong: full.menhBan.mqhAmDuong,
-            quanHeCucMenh: full.menhBan.mqhCucMenh,
-            thanCu: full.menhBan.cungThan.name
+        "Mệnh bàn": {
+            "Bản mệnh": full.menhBan.banMenh.name,
+            "Cục": full.menhBan.cuc.cuc.name,
+            "Âm Dương Nam Nữ": full.menhBan.amDuongNamNu.name,
+            "Quan hệ Âm Dương": full.menhBan.mqhAmDuong,
+            "Quan hệ Cục Mệnh": full.menhBan.mqhCucMenh,
+            "Cung Thân": full.menhBan.cungThan.name
         },
-        cung: cungShort
+        "12 cung": cungShort
     };
 }
 
