@@ -18,7 +18,7 @@
     "output": [
         "#KẾT QUẢ TRẢ VỀ#",
         "Trả về kết quả dưới dạng 1 json, chỉ gồm 1 json chứ không kèm bất cứ thông tin nào khác.",
-        "Json cấu trúc như sau: {\"1\": [], \"2\": []\"\"} tuỳ vào số lượng phần có trong hướng dẫn luận giải. LƯU Ý: Mỗi phần là một array chứa số lượng ý của từng phần, kể cả có 1 ý thôi thì vẫn để trong array."
+        "Json cấu trúc như sau: {\"1\": [], \"2\": []\"\"} tuỳ vào số lượng phần có trong hướng dẫn luận giải."
     ],
     "laso": [
         "#THÔNG TIN LÁ SỐ CẦN LUẬN GIẢI#",
