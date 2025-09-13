@@ -12,9 +12,8 @@ function section(content) {
   return `${text}\n`;
 }
 
-export function getPromptBeginning() {
+function getPromptBeginning() {
   const { context, role, output } = basicPrompts;
-
   return `
 ${section(context)}
 ${section(role)}
@@ -22,145 +21,45 @@ ${section(output)}
   `.trim();
 }
 
-/*
-  To chat prompt
-*/
+/**
+ * Factory để tạo các bộ hàm cho từng loại prompt
+ */
+function createPromptHandlers(promptConfig) {
+  function getPrompt() {
+    const beginning = getPromptBeginning();
+    const { basics } = basicPrompts;
+    const { requirement, representation, guide } = promptConfig;
 
-export function getToChatPrompt() {
-  const beginning = getPromptBeginning();
-  const { basics } = basicPrompts;
-  const { requirement, representation, guide } = toChatPrompt;
-
-  return `
+    return `
 ${beginning}
 
 ${section(requirement)}
 ${section(guide)}
 ${section(representation)}
 ${section(basics)}
-  `.trim();
-}
+    `.trim();
+  }
 
-export function getToChatPromptWithLaso(yinBirthday, yinNamHan) {
-  const laso = lapLaSoShort(yinBirthday, yinNamHan);
-
-  return `
-${getToChatPrompt()}
-
-# LÁ SỐ
-${JSON.stringify(laso, null, 2)}
-  `.trim();
-}
-
-export async function runPromptToChat(yinBirthday, yinNamHan) {
-  const prompt = getToChatPromptWithLaso(yinBirthday, yinNamHan);
-
-  return await runPrompt(prompt);
-}
-
-/*
-  Lớn lên prompt
-*/
-
-export function getLonLenPrompt() {
-  const beginning = getPromptBeginning();
-  const { basics } = basicPrompts;
-  const { requirement, representation, guide } = lonLenPrompt;
-
-  return `
-${beginning}
-
-${section(requirement)}
-${section(guide)}
-${section(representation)}
-${section(basics)}
-  `.trim();
-}
-
-export function getLonLenPromptWithLaso(yinBirthday, yinNamHan) {
-  const laso = lapLaSoShort(yinBirthday, yinNamHan);
-
-  return `
-${getLonLenPrompt()}
+  function getPromptWithLaso(yinBirthday, yinNamHan) {
+    const laso = lapLaSoShort(yinBirthday, yinNamHan);
+    return `
+${getPrompt()}
 
 # LÁ SỐ
 ${JSON.stringify(laso, null, 2)}
-  `.trim();
+    `.trim();
+  }
+
+  async function run(yinBirthday, yinNamHan) {
+    const prompt = getPromptWithLaso(yinBirthday, yinNamHan);
+    return await runPrompt(prompt);
+  }
+
+  return { getPrompt, getPromptWithLaso, run };
 }
 
-export async function runPromptLonLen(yinBirthday, yinNamHan) {
-  const prompt = getLonLenPromptWithLaso(yinBirthday, yinNamHan);
-
-  return await runPrompt(prompt);
-}
-
-/*
-  Tinh duyen prompt
-*/
-export function getTinhDuyenPrompt() {
-  const beginning = getPromptBeginning();
-  const { basics } = basicPrompts;
-  const { requirement, representation, guide } = tinhDuyenPrompt;
-
-  return `
-${beginning}
-
-${section(requirement)}
-${section(guide)}
-${section(representation)}
-${section(basics)}
-  `.trim();
-}
-
-export function getTinhDuyenPromptWithLaso(yinBirthday, yinNamHan) {
-  const laso = lapLaSoShort(yinBirthday, yinNamHan);
-
-  return `
-${getTinhDuyenPrompt()}
-
-# LÁ SỐ
-${JSON.stringify(laso, null, 2)}
-  `.trim();
-}
-
-export async function runPromptTinhDuyen(yinBirthday, yinNamHan) {
-  const prompt = getTinhDuyenPromptWithLaso(yinBirthday, yinNamHan);
-
-  return await runPrompt(prompt);
-}
-
-/*
-  Su nghiep prompt
-*/
-export function getSuNghiepPrompt() {
-  const beginning = getPromptBeginning();
-  const { basics } = basicPrompts;
-  const { requirement, representation, guide } = suNghiepPrompt;
-
-  return `
-${beginning}
-
-${section(requirement)}
-${section(guide)}
-${section(representation)}
-${section(basics)}
-  `.trim();
-}
-
-export function getSuNghiepPromptWithLaso(yinBirthday, yinNamHan) {
-  const laso = lapLaSoShort(yinBirthday, yinNamHan);
-
-  return `
-${getSuNghiepPrompt()}
-
-# LÁ SỐ
-${JSON.stringify(laso, null, 2)}
-  `.trim();
-}
-
-export async function runPromptSuNghiep(yinBirthday, yinNamHan) {
-  const prompt = getSuNghiepPromptWithLaso(yinBirthday, yinNamHan);
-
-  return await runPrompt(prompt);
-}
-
+// Tạo các nhóm hàm cho từng loại prompt
+export const luanToChat = createPromptHandlers(toChatPrompt);
+export const luanLonLen = createPromptHandlers(lonLenPrompt);
+export const luanTinhDuyen = createPromptHandlers(tinhDuyenPrompt);
+export const luanSuNghiep = createPromptHandlers(suNghiepPrompt);

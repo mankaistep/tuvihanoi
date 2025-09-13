@@ -1,8 +1,8 @@
 import { 
-    runPromptSuNghiep,
-    runPromptTinhDuyen,
-    runPromptToChat,
-    runPromptLonLen
+    luanLonLen,
+    luanTinhDuyen,
+    luanToChat,
+    luanSuNghiep
 } from "../../utils/prompt_utils";
 import { GioiTinh } from '../../constant/constant'
 import { convertBirthToYin } from '../../utils/utils'
@@ -72,16 +72,16 @@ export async function POST(request) {
         let data;
         switch (type) {
             case 'sunghiep':
-                data = await runPromptSuNghiep(yinBirthday, yinNamHan);
+                data = await luanSuNghiep.run(yinBirthday, yinNamHan);
                 break;
             case 'tinhduyen':
-                data = await runPromptTinhDuyen(yinBirthday, yinNamHan);
+                data = await luanTinhDuyen.run(yinBirthday, yinNamHan);
                 break;
             case 'tochat':
-                data = await runPromptToChat(yinBirthday, yinNamHan);
+                data = await luanToChat.run(yinBirthday, yinNamHan);
                 break;
             case 'lonlen':
-                data = await runPromptLonLen(yinBirthday, yinNamHan);
+                data = await luanLonLen.run(yinBirthday, yinNamHan);
                 break;
         }
 
